@@ -3,6 +3,7 @@ import Mark from "./Mark.astro";
 import Icon from "./Icon.astro";
 import ThemeSwitch from "./ThemeSwitch.astro";
 import { useT, localizePath, stripLocale, type Locale } from "../i18n";
+import { isLive } from "../i18n/routes";
 
 interface Props {
   locale: Locale;
@@ -14,11 +15,11 @@ const path = stripLocale(Astro.url.pathname);
 const switchPath = /^\/404\/?$/.test(path) ? "/" : path;
 
 const links = [
-  { href: localizePath("/download/", locale), label: t.nav.download },
-  { href: localizePath("/docs/", locale), label: t.nav.docs },
-  { href: localizePath("/changelog/", locale), label: t.nav.changelog },
-  { href: "https://github.com/tensai-app/llama.kt", label: t.nav.llamaKt },
-];
+  { path: "/download/", href: localizePath("/download/", locale), label: t.nav.download },
+  { path: "/docs/", href: localizePath("/docs/", locale), label: t.nav.docs },
+  { path: "/changelog/", href: localizePath("/changelog/", locale), label: t.nav.changelog },
+  { path: "/llama-kt/", href: localizePath("/llama-kt/", locale), label: t.nav.llamaKt },
+].filter((l) => isLive(l.path));
 ---
 
 <header class="site-header">
@@ -35,7 +36,7 @@ const links = [
       <nav aria-label={t.nav.label}>
         <ul>
           {links.map((l) => (
-            <li><a href={l.href}>{l.label}</a></li>
+            <li><a href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
           ))}
         </ul>
       </nav>
@@ -134,6 +135,10 @@ const links = [
     color: var(--text);
     font-weight: 500;
     text-decoration: none;
+  }
+
+  nav a[aria-current="page"] {
+    color: var(--primary);
   }
 
   nav a:hover {

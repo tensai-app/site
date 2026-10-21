@@ -4,7 +4,15 @@
       "staticDistDir": "./dist",
       "url": [
         "/index.html",
-        "/fr/index.html"
+        "/fr/index.html",
+        "/download/index.html",
+        "/fr/download/index.html",
+        "/llama-kt/index.html",
+        "/fr/llama-kt/index.html",
+        "/privacy/index.html",
+        "/fr/privacy/index.html",
+        "/legal/index.html",
+        "/fr/legal/index.html"
       ],
       "numberOfRuns": 3,
       "settings": {

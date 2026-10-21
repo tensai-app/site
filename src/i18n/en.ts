@@ -29,16 +29,16 @@ export const en = {
     license: "Apache 2.0",
     motto: "Made to run free",
   },
-  home: {
-    title: "tensai, AI that runs on your phone",
-    description: "tensai runs AI models on your Android phone, with no account and no cloud. Open source.",
-    heading: "tensai",
+  banner: {
+    text: "tensai is not public yet. The first public release is 1.0.",
+    link: "Follow the changelog",
   },
   notFound: {
     title: "Page not found",
     description: "This page does not exist.",
-    heading: "Page not found",
-    back: "Back to home",
+    heading: "This page is not here.",
+    back: "Back home",
+    docs: "Docs",
   },
 };
 

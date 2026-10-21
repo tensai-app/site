@@ -1,6 +1,20 @@
 ---
 interface Props {
-  name: "github" | "sun" | "moon" | "auto" | "menu" | "globe";
+  name:
+    | "github"
+    | "sun"
+    | "moon"
+    | "auto"
+    | "menu"
+    | "globe"
+    | "download"
+    | "clock"
+    | "arrow-right"
+    | "arrow-up-right"
+    | "phone"
+    | "cube"
+    | "shield"
+    | "check";
   size?: number;
 }
 const { name, size = 20 } = Astro.props;
@@ -46,4 +60,40 @@ const { name, size = 20 } = Astro.props;
       <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
     </>
   )}
+  {name === "download" && <path d="M12 4v11M7 11l5 5 5-5M5 20h14" />}
+  {
+    name === "clock" && (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v5l3 2" />
+      </>
+    )
+  }
+  {name === "arrow-right" && <path d="M5 12h14M13 6l6 6-6 6" />}
+  {name === "arrow-up-right" && <path d="M7 17 17 7M8 7h9v9" />}
+  {
+    name === "phone" && (
+      <>
+        <rect x="7" y="2" width="10" height="20" rx="2.5" />
+        <path d="M11 18h2" />
+      </>
+    )
+  }
+  {
+    name === "cube" && (
+      <>
+        <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3Z" />
+        <path d="M4 7.5 12 12l8-4.5M12 12v9" />
+      </>
+    )
+  }
+  {
+    name === "shield" && (
+      <>
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" />
+        <path d="m9 12 2 2 4-4" />
+      </>
+    )
+  }
+  {name === "check" && <path d="m5 13 4 4L19 7" />}
 </svg>

@@ -1,0 +1,152 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { download } from "../i18n/pages/download";
+import { LLAMA_KT_REPO } from "../i18n/site";
+import { localizePath, type Locale } from "../i18n";
+import { isLive } from "../i18n/routes";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = download[locale];
+const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
+---
+
+<BaseLayout title={c.title} description={c.description}>
+  <div class="container page">
+    <h1>{c.heading}</h1>
+
+    <div class="card notice">
+      <span class="dot" aria-hidden="true"></span>
+      <div>
+        <p>{c.notice.text}</p>
+        <p class="links">
+          {
+            isLive("/changelog/") && (
+              <a class="text-link" href={localizePath("/changelog/", locale)}>
+                {c.notice.changelog}
+                <Icon name="arrow-right" size={16} />
+              </a>
+            )
+          }
+          <a class="text-link" href={LLAMA_KT_REPO}>
+            <span class="mono">llama.kt</span>
+            {c.notice.engine}
+            <Icon name="arrow-up-right" size={16} />
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <section class="req" aria-labelledby="req-h">
+      <h2 id="req-h">{c.requirements.heading}</h2>
+      <ul class="items">
+        {
+          c.requirements.items.map((item) => (
+            <li class="card">
+              <span class="tick"><Icon name="check" size={18} /></span>
+              <span class="label">{item.label}</span>
+              {item.detail && <span class="detail mono">{item.detail}</span>}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="fit">{c.requirements.fit}</p>
+      <ul class="fit-legend">
+        <li><span class="dot dot-success" aria-hidden="true"></span>{fitOk}</li>
+        <li><span class="dot dot-warning" aria-hidden="true"></span>{fitTight}</li>
+        <li><span class="dot dot-error" aria-hidden="true"></span>{fitNo}</li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 3rem 4rem;
+  }
+
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+
+  .notice {
+    display: flex;
+    gap: 1rem;
+    padding: 1.75rem 2rem;
+    max-width: 46rem;
+  }
+
+  .notice .dot {
+    margin-top: 0.7rem;
+  }
+
+  .notice p {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .notice .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .req {
+    margin-top: 4.5rem;
+  }
+
+  .items {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .items li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .tick {
+    align-self: center;
+    display: inline-flex;
+    color: var(--success);
+  }
+
+  .label {
+    font-weight: 600;
+  }
+
+  .detail {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .fit {
+    max-width: 42.5rem;
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+  }
+
+  @media (min-width: 52rem) {
+    .page {
+      padding-block: 2rem 6rem;
+    }
+
+    .items {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

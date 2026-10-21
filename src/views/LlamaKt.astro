@@ -1,0 +1,580 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { llamakt } from "../i18n/pages/llamakt";
+import { LLAMA_KT_REPO } from "../i18n/site";
+import type { Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = llamakt[locale];
+
+// Code mirrors the llama.kt README (Install and Quick start). Lines starting with a comment marker are dimmed.
+const snippets = [
+  [
+    "git submodule add https://github.com/tensai-app/llama.kt libs/llama.kt",
+    "git -C libs/llama.kt submodule update --init --recursive",
+    "# vendors the llama.cpp sources, required before the first build",
+    "bash libs/llama.kt/scripts/bootstrap.sh",
+  ],
+  [
+    "// settings.gradle.kts",
+    'include(":llama-kt")',
+    'project(":llama-kt").projectDir = file("libs/llama.kt/llama-kt")',
+    "",
+    "// app/build.gradle.kts",
+    "dependencies {",
+    '    implementation(project(":llama-kt"))',
+    "}",
+  ],
+  [
+    "import com.tensai.llamakt.*",
+    "",
+    "val engine = LlamaEngine()",
+    'engine.load(path = "/path/to/model.gguf", nGpuLayers = 0, nCtx = 4096)',
+    "",
+    'val messages = listOf(ChatMessage("user", "Who are you?"))',
+    "engine.chat(messages).collect { token -> print(token) }  // streams, stops on EOS",
+    "",
+    "engine.free()",
+  ],
+];
+const isComment = (l: string) => /^\s*(\/\/|#)/.test(l);
+
+// [model, quant, [backend, pp, tg, faster][]]
+const rows: [string, string, [string, string, string, boolean][]][] = [
+  ["Qwen2.5-0.5B-Instruct", "Q4_K_M", [["CPU", "29.5", "15.0", true], ["Vulkan", "7.0", "9.0", false]]],
+  ["Gemma-3-1B-it", "Q4_K_M", [["CPU", "10.9", "6.0", true], ["Vulkan", "3.7", "5.4", false]]],
+  ["Qwen3-1.7B", "Q4_K_M", [["CPU", "8.6", "5.9", true], ["Vulkan", "2.1", "4.2", false]]],
+  ["Llama-3.2-3B-Instruct", "Q4_K_M", [["CPU", "6.0", "3.9", true], ["Vulkan", "1.2", "2.9", false]]],
+  ["Phi-4-mini (3.8B)", "Q4_K_M", [["CPU", "3.9", "1.7", false], ["Vulkan", "0.8", "2.3", true]]],
+  ["Gemma-3n-E2B-it", "Q4_K_M", [["CPU", "1.9", "1.1", false], ["Vulkan", "1.8", "1.9", true]]],
+  ["Qwen2.5-7B-Instruct", "Q4_K_M", [["CPU", "1.4", "0.2", false]]],
+];
+const col = c.measured.columns;
+const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
+---
+
+<BaseLayout title={c.title} description={c.description}>
+  <div class="container page">
+    <header class="hero">
+      <h1 class="mono">llama<span>.kt</span></h1>
+      <p class="lead"><strong>{c.hero.lead}</strong> {c.hero.rest}</p>
+      <div class="actions">
+        <a class="btn btn-filled" href={LLAMA_KT_REPO}>
+          {c.hero.github}
+          <Icon name="arrow-up-right" size={19} />
+        </a>
+        <a class="btn btn-outlined" href={`${LLAMA_KT_REPO}#readme`}>{c.hero.readme}</a>
+      </div>
+      <p class="meta mono">{c.hero.meta}</p>
+    </header>
+
+    <div class="split">
+      <section aria-labelledby="features-h">
+        <h2 id="features-h">{c.features.heading}</h2>
+        <ul class="features">
+          {
+            c.features.items.map((f) => (
+              <li>
+                <span class="tick"><Icon name="check" size={18} /></span>
+                <div>
+                  <strong>{f.title}</strong>
+                  <span>{f.text}</span>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section class="code">
+        <div class="tabs" role="radiogroup" aria-label={c.code.label}>
+          {snippets.map((_, i) => <input type="radio" name="code-tab" id={`tab-${i}`} checked={i === 0} />)}
+          <div class="tabbar">
+            {c.code.tabs.map((name, i) => <label for={`tab-${i}`}>{name}</label>)}
+          </div>
+          {
+            snippets.map((lines, i) => (
+              <div class={`panel panel-${i}`}>
+                <pre tabindex="0" role="region" aria-label={c.code.langs[i]}><code>{lines.map((l) => <span class:list={["line", { dim: isComment(l) }]}>{l || " "}</span>)}</code></pre>
+              </div>
+            ))
+          }
+        </div>
+        <p class="code-note">{c.code.note}</p>
+      </section>
+    </div>
+
+    <section class="block" aria-labelledby="measured-h">
+      <h2 id="measured-h">{c.measured.heading}</h2>
+      <p class="setup mono">{c.measured.setup}</p>
+      <div class="card scroll" role="region" aria-label={c.measured.selection} tabindex="0">
+        <table>
+          <caption class="visually-hidden">{c.measured.selection}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{col.model}</th>
+              <th scope="col">{col.quant}</th>
+              <th scope="col">{col.backend}</th>
+              <th scope="col" class="num">{col.pp}</th>
+              <th scope="col" class="num">{col.tg}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map(([model, quant, backends]) =>
+                backends.map(([backend, pp, tg, fast], i) => (
+                  <tr class:list={{ first: i === 0 }}>
+                    {i === 0 && <th scope="row" rowspan={backends.length}>{model}</th>}
+                    {i === 0 && <td rowspan={backends.length} class="quant">{quant}</td>}
+                    <td>
+                      {backend}
+                      {fast && (
+                        <>
+                          <span class="dot fast" aria-hidden="true"></span>
+                          <span class="visually-hidden">({c.measured.faster})</span>
+                        </>
+                      )}
+                    </td>
+                    <td class="num">{num(pp)}</td>
+                    <td class="num">{num(tg)}</td>
+                  </tr>
+                )),
+              )
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="legend">{c.measured.selection} {c.measured.legend} <a href={`${LLAMA_KT_REPO}#measured-performance`}>{c.measured.more}</a></p>
+      <div class="stats">
+        {
+          c.measured.stats.map((s) => (
+            <div class="card stat">
+              <p class="value mono">{s.value}{s.versus && <span class="versus"> {s.versus}</span>}</p>
+              <p class="text">{s.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="upstream-h">
+      <h2 id="upstream-h">{c.upstream.heading}</h2>
+      <p class="intro">{c.upstream.text}</p>
+      <ul class="patches">
+        {
+          c.upstream.items.map((p) => (
+            <li class="card">
+              <div class="what">
+                <strong class:list={{ mono: p.name.startsWith("0") }}>{p.name}</strong>
+                <span>{p.text}</span>
+              </div>
+              <div class="chips">
+                <span class={`chip chip-${p.status}`}>
+                  <span class="dot" aria-hidden="true"></span>
+                  {c.upstream.status[p.status as "merged" | "local" | "proposed"]}
+                </span>
+                {p.ref && <span class="mono ref">{p.ref}</span>}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 3rem 2rem;
+  }
+
+  .hero {
+    padding-block: 1rem 3.5rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.75rem, 10vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  h1 span {
+    color: var(--primary);
+  }
+
+  .lead {
+    max-width: 38rem;
+    margin: 1.25rem 0 0;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    line-height: 1.55;
+  }
+
+  .lead strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .meta {
+    margin: 1.25rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  h2 {
+    margin-bottom: 1.25rem;
+    font-size: clamp(1.625rem, 4vw, 2rem);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    padding-bottom: 4.5rem;
+  }
+
+  .features {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .features li {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .tick {
+    display: inline-flex;
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--success);
+  }
+
+  .features div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .features span:not(.tick) {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  /* CSS-only tabs: radios first, then the bar, then the panels. */
+  .tabs {
+    position: relative;
+  }
+
+  .tabs input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    opacity: 0;
+  }
+
+  .tabbar {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.375rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card) var(--radius-card) 0 0;
+    background: var(--surface);
+  }
+
+  .tabbar label {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .tabbar label:hover {
+    color: var(--text);
+  }
+
+  .panel {
+    display: none;
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    background: var(--surface);
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .line {
+    display: block;
+    white-space: pre;
+  }
+
+  .dim {
+    color: var(--text-secondary);
+  }
+
+  /* One rule per tab. */
+  #tab-0:checked ~ .tabbar label[for="tab-0"],
+  #tab-1:checked ~ .tabbar label[for="tab-1"],
+  #tab-2:checked ~ .tabbar label[for="tab-2"] {
+    background: var(--surface-variant);
+    color: var(--text);
+  }
+
+  #tab-0:focus-visible ~ .tabbar label[for="tab-0"],
+  #tab-1:focus-visible ~ .tabbar label[for="tab-1"],
+  #tab-2:focus-visible ~ .tabbar label[for="tab-2"] {
+    outline: 3px solid var(--primary);
+  }
+
+  #tab-0:checked ~ .panel-0,
+  #tab-1:checked ~ .panel-1,
+  #tab-2:checked ~ .panel-2 {
+    display: block;
+  }
+
+  .code-note {
+    margin: 0.875rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .block {
+    padding-bottom: 4.5rem;
+  }
+
+  .setup {
+    max-width: 62rem;
+    margin: 0 0 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+
+  .scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  thead th {
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-align: start;
+  }
+
+  tbody th,
+  tbody td {
+    padding: 0.75rem 1.25rem;
+    font-weight: 400;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  tbody th {
+    font-weight: 600;
+  }
+
+  tbody tr.first {
+    border-top: 1px solid var(--border);
+  }
+
+  tbody tr.first:first-child {
+    border-top: 0;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    text-align: end;
+  }
+
+  thead th.num {
+    font-family: var(--font-sans);
+  }
+
+  .quant {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .fast {
+    margin-inline-start: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .legend {
+    margin: 0.875rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .stats {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .stat {
+    padding: 1.5rem 1.75rem;
+  }
+
+  .stat p {
+    margin: 0;
+  }
+
+  .value {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .versus {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .text {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .intro {
+    max-width: 42.5rem;
+    margin: 0 0 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .patches {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .patches li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding: 1.125rem 1.5rem;
+  }
+
+  .what {
+    display: flex;
+    flex: 1 1 22rem;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .what strong {
+    overflow-wrap: anywhere;
+    font-size: 0.9375rem;
+  }
+
+  .what span {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .chips {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .chip-merged .dot {
+    background: var(--success);
+  }
+
+  .chip-local .dot {
+    background: var(--text-secondary);
+  }
+
+  .chip-proposed .dot {
+    background: var(--warning);
+  }
+
+  .ref {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  @media (min-width: 52rem) {
+    .page {
+      padding-block: 5rem 3rem;
+    }
+
+    .split {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 39.99rem) {
+    thead th,
+    tbody th,
+    tbody td {
+      padding-inline: 0.625rem;
+    }
+
+    .actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

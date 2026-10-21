@@ -1,11 +1,5 @@
-# Linked from Header/Footer, pages land with WEB-14. Empty this file once they exist.
-/download/
+# Not built yet: the layout hides links to these (src/i18n/routes.ts) and test:links fails on any link to them. Remove a line when the page ships.
 /docs/
 /changelog/
-/privacy/
-/legal/
-/fr/download/
 /fr/docs/
 /fr/changelog/
-/fr/privacy/
-/fr/legal/

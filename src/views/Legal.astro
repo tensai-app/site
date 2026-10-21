@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { legal } from "../i18n/pages/legal";
+import { CONTACT_EMAIL, LEGAL, LLAMA_KT_REPO } from "../i18n/site";
+import type { Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = legal[locale];
+const identified = LEGAL.mode === "identified";
+---
+
+<BaseLayout title={c.title} description={c.description}>
+  <div class="container page">
+    <article class="prose">
+      <h1>{c.heading}</h1>
+      <p class="updated mono">{c.updated} <time datetime={LEGAL.updated}>{LEGAL.updated}</time></p>
+
+      {!identified && <p>{c.anonymous}</p>}
+      <dl>
+        {
+          identified && (
+            <>
+              <dt>{c.publisher}</dt>
+              <dd>{LEGAL.publisherName}</dd>
+              <dt>{c.director}</dt>
+              <dd>{LEGAL.publicationDirector}</dd>
+              <dt>{c.address}</dt>
+              <dd>{LEGAL.publisherAddress}</dd>
+              {LEGAL.publisherPhone && (
+                <>
+                  <dt>{c.phone}</dt>
+                  <dd>{LEGAL.publisherPhone}</dd>
+                </>
+              )}
+            </>
+          )
+        }
+        <dt>{c.host}</dt>
+        <dd>
+          {c.hostLines.map((line) => <>{line}<br /></>)}
+          {LEGAL.hostPhone}
+        </dd>
+        <dt>{c.contact}</dt>
+        <dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></dd>
+      </dl>
+
+      <h2>{c.licence.heading}</h2>
+      <p>{c.licence.before} <a href={LLAMA_KT_REPO}>{c.licence.link}</a>{c.licence.after}</p>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 3rem 2rem;
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .updated {
+    margin: 0 0 2rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+</style>

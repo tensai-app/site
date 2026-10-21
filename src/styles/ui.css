@@ -1,0 +1,166 @@
+/* Shared primitives for the page views: buttons, cards, section rhythm, fit dots. */
+
+:root {
+  --glow: color-mix(in srgb, var(--primary) 16%, transparent);
+  --rule: color-mix(in srgb, var(--text-secondary) 45%, transparent);
+}
+
+.section {
+  padding-block: 0 clamp(4rem, 9vw, 8.75rem);
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding-inline: 1.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-filled {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.btn-filled:hover {
+  background: color-mix(in srgb, var(--primary) 88%, var(--text));
+}
+
+.btn-outlined {
+  border-color: var(--rule);
+  background: transparent;
+  color: var(--text);
+}
+
+.btn-outlined:hover {
+  background: var(--surface-variant);
+}
+
+.btn:disabled {
+  border-color: transparent;
+  background: var(--surface-variant);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-block: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.dot {
+  display: inline-block;
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.dot-success {
+  background: var(--success);
+}
+
+.dot-warning {
+  background: var(--warning);
+}
+
+.dot-error {
+  background: var(--error);
+}
+
+.fit-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+  list-style: none;
+}
+
+.fit-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* One reading column for privacy and legal pages. */
+.prose {
+  max-width: 42.5rem;
+}
+
+.prose h2 {
+  margin-top: 2.5rem;
+  font-size: 1.5rem;
+}
+
+.prose dl {
+  margin: 0 0 1.25rem;
+}
+
+.prose dt {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.prose dd {
+  margin: 0.15rem 0 0;
+  color: var(--text-secondary);
+}
+
+.prose ul {
+  padding-inline-start: 1.25rem;
+}
+
+/* Screenshot pairs (Shot.astro): one image per theme, the forced theme wins over the system one. */
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.shot-light {
+  display: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .shot-dark {
+    display: none;
+  }
+
+  :root:not([data-theme]) .shot-light {
+    display: block;
+  }
+}
+
+:root[data-theme="light"] .shot-dark {
+  display: none;
+}
+
+:root[data-theme="light"] .shot-light {
+  display: block;
+}

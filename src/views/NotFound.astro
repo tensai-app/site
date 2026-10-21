@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Mark from "../components/Mark.astro";
+import Icon from "../components/Icon.astro";
+import { useT, localizePath, type Locale } from "../i18n";
+import { isLive } from "../i18n/routes";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useT(locale).notFound;
+---
+
+<BaseLayout title={t.title} description={t.description} noindex>
+  <div class="container page">
+    <span class="mark" aria-hidden="true"><Mark size={220} /></span>
+    <p class="code mono">404</p>
+    <h1>{t.heading}</h1>
+    <div class="actions">
+      <a class="btn btn-filled" href={localizePath("/", locale)}>
+        <Icon name="arrow-right" size={18} />
+        {t.back}
+      </a>
+      {isLive("/docs/") && <a class="text-link" href={localizePath("/docs/", locale)}>{t.docs}</a>}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 60vh;
+    padding-block: 4rem;
+    isolation: isolate;
+  }
+
+  .mark {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: var(--gutter);
+    z-index: -1;
+    display: flex;
+    color: var(--primary);
+    opacity: 0.12;
+    transform: translateY(-50%);
+  }
+
+  .mark :global(svg) {
+    width: clamp(10rem, 40vw, 22rem);
+    height: auto;
+  }
+
+  .code {
+    margin: 0 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  h1 {
+    margin-bottom: 2rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+  }
+
+  @media (max-width: 39.99rem) {
+    .actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

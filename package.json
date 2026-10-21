@@ -15,7 +15,8 @@
     "fonts": "node scripts/build-fonts.mjs",
     "test:links": "node scripts/check-links.mjs",
     "test:content": "node scripts/check-content.mjs",
-    "test:lhci": "lhci autorun"
+    "test:lhci": "lhci autorun",
+    "test:launch": "node scripts/check-launch.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

@@ -1,0 +1,40 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+// Phone screenshots, dark and light, already framed (transparent corners).
+const shots = import.meta.glob<{ default: ImageMetadata }>("../assets/shots/{hero,picker,reasoning,tool,context}-*.png", { eager: true });
+
+interface Props {
+  name: string;
+  alt: string;
+  /** `sizes` attribute: the rendered width per breakpoint. */
+  sizes: string;
+  /** Above the fold: eager, high priority. Everything else is lazy. */
+  priority?: boolean;
+}
+const { name, alt, sizes, priority = false } = Astro.props;
+
+function pick(theme: "dark" | "light"): ImageMetadata {
+  const mod = shots[`../assets/shots/${name}-${theme}.png`];
+  if (!mod) throw new Error(`missing screenshot ${name}-${theme}`);
+  return mod.default;
+}
+
+// Two images instead of <picture media="(prefers-color-scheme)">: the visitor can force a theme with the
+// switch, and a media query would ignore it. The hidden one is display:none (see ui.css), so a lazy image
+// stays unfetched. The hero is eager and fetches both (small in AVIF); high priority goes to the dark one,
+// the default scheme.
+const common = {
+  formats: ["avif", "webp"] as ["avif", "webp"],
+  fallbackFormat: "webp" as const,
+  widths: [360, 540, 720],
+  sizes,
+  alt,
+  loading: priority ? ("eager" as const) : ("lazy" as const),
+  decoding: "async" as const,
+};
+---
+
+<Picture src={pick("dark")} class="shot shot-dark" {...common} fetchpriority={priority ? "high" : "auto"} />
+<Picture src={pick("light")} class="shot shot-light" {...common} />

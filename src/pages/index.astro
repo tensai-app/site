@@ -1,18 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { useT } from "../i18n";
-
-const t = useT("en");
+import Home from "../views/Home.astro";
 ---
 
-<BaseLayout title={t.home.title} description={t.home.description}>
-  <div class="container">
-    <h1>{t.home.heading}</h1>
-  </div>
-</BaseLayout>
-
-<style>
-  div {
-    padding-block: 4rem;
-  }
-</style>
+<Home locale="en" />

@@ -31,15 +31,15 @@ export const fr: Dict = {
     license: "Apache 2.0",
     motto: "Made to run free",
   },
-  home: {
-    title: "tensai, l'IA qui tourne sur le téléphone",
-    description: "tensai fait tourner des modèles d'IA sur le téléphone Android, sans compte et sans cloud. Open source.",
-    heading: "tensai",
+  banner: {
+    text: "tensai n'est pas encore public. La première version publique sera la 1.0.",
+    link: "Suivre le changelog",
   },
   notFound: {
     title: "Page introuvable",
     description: "Cette page n'existe pas.",
-    heading: "Page introuvable",
+    heading: "Cette page n'est pas là.",
     back: "Retour à l'accueil",
+    docs: "Docs",
   },
 };

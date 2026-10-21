@@ -56,6 +56,7 @@ const ALLOWED = [
   /^https?:\/\/tensai\.page(?=[/"'?#)\s<]|$)/,
   /^https:\/\/github\.com\/tensai-app(?=[/"'?#)\s<]|$)/,
   /^http:\/\/www\.w3\.org\//,
+  /^https:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0(?=[/"'?#)\s<]|$)/,
 ];
 for (const f of walk(dist, [".html", ".css", ".js", ".webmanifest"])) {
   const text = readFileSync(f, "utf8");

@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { privacy } from "../i18n/pages/privacy";
+import { CONTACT_EMAIL, LEGAL } from "../i18n/site";
+import type { Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = privacy[locale];
+---
+
+<BaseLayout title={c.title} description={c.description}>
+  <div class="container page">
+    <article class="prose">
+      <h1>{c.heading}</h1>
+      <p class="updated mono">{c.updated} <time datetime={LEGAL.updated}>{LEGAL.updated}</time></p>
+
+      <div class="card summary" role="note" aria-label={c.summaryLabel}>
+        {
+          c.summary.map((line) => (
+            <p>
+              <span class="dot" aria-hidden="true"></span>
+              <span>{line}</span>
+            </p>
+          ))
+        }
+      </div>
+
+      <h2 id="stays">{c.stays.heading}</h2>
+      {c.stays.paragraphs.map((p) => <p>{p}</p>)}
+
+      <h2 id="leaves">{c.leaves.heading}</h2>
+      <p>{c.leaves.intro}</p>
+      <dl>
+        {
+          c.leaves.items.map((i) => (
+            <>
+              <dt>{i.term}</dt>
+              <dd>{i.text}</dd>
+            </>
+          ))
+        }
+      </dl>
+      <p>{c.leaves.outro}</p>
+
+      <h2 id="permissions">{c.permissions.heading}</h2>
+      <p>{c.permissions.intro}</p>
+      <dl>
+        {
+          c.permissions.items.map((i) => (
+            <>
+              <dt>{i.term}</dt>
+              <dd>{i.text}</dd>
+            </>
+          ))
+        }
+      </dl>
+      <p>{c.permissions.outro}</p>
+
+      <h2 id="website">{c.website.heading}</h2>
+      {c.website.paragraphs.map((p) => <p>{p}</p>)}
+
+      <h2 id="contact">{c.contact.heading}</h2>
+      <p>{c.contact.text} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 3rem 2rem;
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .updated {
+    margin: 0 0 2rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .summary {
+    display: grid;
+    gap: 0.625rem;
+    padding: 1.5rem 1.75rem;
+  }
+
+  .summary p {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-weight: 500;
+  }
+</style>

@@ -1,6 +1,6 @@
 // Offline link check on dist/: internal href/src/hreflang targets must exist.
 // External links are not fetched. Routes listed in scripts/pending-routes.txt
-// are linked from the layout but their pages come later (WEB-14).
+// are not built yet: any link to one fails (the layout hides them via src/i18n/routes.ts).
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, extname } from "node:path";
 
@@ -39,7 +39,7 @@ for (const file of walk(dist)) {
     if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(url)) {
       if (url.startsWith("https://tensai.page")) {
         const path = new URL(url).pathname;
-        if (!exists(path) && !pending.has(path)) problems.push(`${file.slice(dist.length)}: ${url}`);
+        if (!exists(path) || pending.has(path)) problems.push(`${file.slice(dist.length)}: ${url}`);
       }
       continue;
     }
@@ -51,7 +51,7 @@ for (const file of walk(dist)) {
     const path = url.split(/[?#]/)[0];
     if (!path.startsWith("/")) {
       problems.push(`${file.slice(dist.length)}: relative URL ${url}`);
-    } else if (!exists(path) && !pending.has(path)) {
+    } else if (!exists(path) || pending.has(path)) {
       problems.push(`${file.slice(dist.length)}: broken link ${url}`);
     }
   }
@@ -61,4 +61,4 @@ if (problems.length) {
   console.error(problems.join("\n"));
   process.exit(1);
 }
-console.log(`links ok (${checked} internal URLs, ${pending.size} pending routes allowed)`);
+console.log(`links ok (${checked} internal URLs, ${pending.size} pending routes unlinked)`);
