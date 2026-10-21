@@ -19,8 +19,6 @@ export const en = {
   },
   lang: {
     label: "Language",
-    switchTo: "Français",
-    switchToCode: "fr",
   },
   footer: {
     org: "GitHub",
@@ -34,7 +32,7 @@ export const en = {
     link: "Follow the changelog",
   },
   notFound: {
-    title: "Page not found",
+    title: "Page not found · tensai",
     description: "This page does not exist.",
     heading: "This page is not here.",
     back: "Back home",

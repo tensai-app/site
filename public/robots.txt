@@ -1,3 +1,5 @@
+# Everything is allowed, AI crawlers included (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, ...):
+# the content is public and meant to be read. No per-bot rule on purpose.
 User-agent: *
 Allow: /
 

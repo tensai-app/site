@@ -1,6 +1,6 @@
 const en = {
-  title: "Legal notice",
-  description: "Publisher, publication director, host and contact of tensai.page.",
+  title: "Legal notice · tensai",
+  description: "Publisher, publication director, host and contact of tensai.page, the website of the tensai app, under the French law on digital trust (LCEN).",
   heading: "Legal notice",
   updated: "Last updated",
   publisher: "Publisher",
@@ -22,8 +22,8 @@ const en = {
 };
 
 const fr: typeof en = {
-  title: "Mentions légales",
-  description: "Éditeur, directeur de la publication, hébergeur et contact de tensai.page.",
+  title: "Mentions légales · tensai",
+  description: "Éditeur, directeur de la publication, hébergeur et contact de tensai.page, le site de l'application tensai, au titre de la LCEN.",
   heading: "Mentions légales",
   updated: "Dernière mise à jour",
   publisher: "Éditeur",

@@ -1,6 +1,6 @@
 const en = {
-  title: "Download",
-  description: "tensai is not public yet. The first public release is 1.0. Requirements for Android phones.",
+  title: "Download · tensai",
+  description: "tensai is not public yet: the first public release is 1.0. Requirements: Android 10 or newer, 64-bit ARM, storage for models. Free, Apache 2.0.",
   heading: "Download",
   notice: {
     text: "tensai is not public yet. The first public release is 1.0.",
@@ -20,8 +20,8 @@ const en = {
 };
 
 const fr: typeof en = {
-  title: "Télécharger",
-  description: "tensai n'est pas encore public. La première version publique sera la 1.0. Prérequis pour les téléphones Android.",
+  title: "Télécharger · tensai",
+  description: "tensai n'est pas encore public : la première version publique sera la 1.0. Prérequis : Android 10 ou plus, ARM 64 bits, espace pour les modèles. Gratuit.",
   heading: "Télécharger",
   notice: {
     text: "tensai n'est pas encore public. La première version publique sera la 1.0.",

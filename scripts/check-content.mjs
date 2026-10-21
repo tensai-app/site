@@ -43,6 +43,8 @@ const headers = readFileSync(join(dist, "_headers"), "utf8");
 for (const f of htmlFiles) {
   const html = readFileSync(f, "utf8");
   for (const m of html.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g)) {
+    // JSON-LD is a data block: CSP script-src governs execution and never applies to non-JavaScript types.
+    if (/^<script type="application\/ld\+json">/.test(m[0])) continue;
     const hash = "sha256-" + createHash("sha256").update(m[1]).digest("base64");
     if (!headers.includes(`'${hash}'`)) problems.push(`${f.slice(root.length)}: inline script hash ${hash} not in _headers`);
   }
@@ -56,6 +58,8 @@ const ALLOWED = [
   /^https?:\/\/tensai\.page(?=[/"'?#)\s<]|$)/,
   /^https:\/\/github\.com\/tensai-app(?=[/"'?#)\s<]|$)/,
   /^http:\/\/www\.w3\.org\//,
+  // JSON-LD namespace, an identifier that is never fetched.
+  /^https:\/\/schema\.org(?=[/"'?#)\s<]|$)/,
   /^https:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0(?=[/"'?#)\s<]|$)/,
 ];
 for (const f of walk(dist, [".html", ".css", ".js", ".webmanifest"])) {

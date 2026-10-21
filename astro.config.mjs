@@ -1,5 +1,16 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import { readFileSync } from "node:fs";
+
+// Routes not built yet and error pages stay out of the sitemap.
+const pending = readFileSync(new URL("./scripts/pending-routes.txt", import.meta.url), "utf8")
+  .split("\n")
+  .map((l) => l.trim())
+  .filter((l) => l && !l.startsWith("#"));
+const excluded = (url) => {
+  const path = new URL(url).pathname;
+  return /^(\/fr)?\/404(\/|\.html)?$/.test(path) || pending.includes(path);
+};
 
 export default defineConfig({
   site: "https://tensai.page",
@@ -25,6 +36,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: { defaultLocale: "en", locales: { en: "en", fr: "fr" } },
+      filter: (page) => !excluded(page),
     }),
   ],
 });

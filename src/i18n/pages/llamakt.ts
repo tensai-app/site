@@ -1,7 +1,7 @@
 const en = {
-  title: "llama.kt, llama.cpp for Android as a Kotlin library",
+  title: "llama.kt, llama.cpp for Android in Kotlin · tensai",
   description:
-    "llama.kt is the open-source engine inside tensai: a Kotlin and JNI binding for llama.cpp on Android. CPU and Vulkan validated on device, OpenCL compiled in. Apache 2.0.",
+    "llama.kt is the open-source engine inside tensai: a Kotlin and JNI binding for llama.cpp on Android. CPU and Vulkan validated on device. Apache 2.0.",
   hero: {
     lead: "llama.cpp for Android, as a Kotlin library.",
     rest: "CPU, Vulkan and OpenCL in one native library. CPU and Vulkan are validated on a Mali-G68. OpenCL is compiled in and not yet tested on Adreno hardware. Apache 2.0.",
@@ -65,7 +65,7 @@ const en = {
   upstream: {
     heading: "Upstream",
     text: "llama.cpp and llama.rn are pinned. Fixes go upstream where they can; the rest live as patches applied at bootstrap.",
-    status: { merged: "merged", local: "local", proposed: "proposed" },
+    status: { merged: "merged", local: "local", planned: "local, PR planned" },
     items: [
       {
         name: "Vulkan UMA fix",
@@ -100,25 +100,25 @@ const en = {
       {
         name: "0006-kv-reuse-past-divergence",
         text: "Keeps the KV cache up to the point where a new prompt diverges from the cached one, instead of dropping it.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
       {
         name: "0007-vulkan-submit-mflops-env",
         text: "Makes the amount of work per Vulkan submit tunable through an environment variable.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
       {
         name: "0008-vulkan-queue-priority",
         text: "Sets an explicit priority on the Vulkan compute queue.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
       {
         name: "0009-vulkan-matmul-split",
         text: "Optionally splits large Vulkan matmuls along M into smaller dispatches for mobile drivers.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
     ],
@@ -126,9 +126,9 @@ const en = {
 };
 
 const fr: typeof en = {
-  title: "llama.kt, llama.cpp pour Android en bibliothèque Kotlin",
+  title: "llama.kt, llama.cpp pour Android en Kotlin · tensai",
   description:
-    "llama.kt est le moteur open source de tensai : un binding Kotlin et JNI pour llama.cpp sur Android. CPU et Vulkan validés sur appareil, OpenCL intégré. Apache 2.0.",
+    "llama.kt est le moteur open source de tensai : un binding Kotlin et JNI pour llama.cpp sur Android. CPU et Vulkan validés sur appareil. Apache 2.0.",
   hero: {
     lead: "llama.cpp pour Android, en bibliothèque Kotlin.",
     rest: "CPU, Vulkan et OpenCL dans une seule bibliothèque native. CPU et Vulkan sont validés sur un Mali-G68. OpenCL est intégré mais pas encore testé sur du matériel Adreno. Apache 2.0.",
@@ -192,7 +192,7 @@ const fr: typeof en = {
   upstream: {
     heading: "Upstream",
     text: "llama.cpp et llama.rn sont épinglés. Les correctifs remontent en amont quand c'est possible ; les autres vivent en patchs appliqués au bootstrap.",
-    status: { merged: "fusionné", local: "local", proposed: "proposé" },
+    status: { merged: "fusionné", local: "local", planned: "local, PR prévue" },
     items: [
       {
         name: "Correctif Vulkan UMA",
@@ -227,25 +227,25 @@ const fr: typeof en = {
       {
         name: "0006-kv-reuse-past-divergence",
         text: "Garde le cache KV jusqu'au point où un nouveau prompt diverge de celui en cache, au lieu de le jeter.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
       {
         name: "0007-vulkan-submit-mflops-env",
         text: "Rend la quantité de travail par soumission Vulkan réglable par variable d'environnement.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
       {
         name: "0008-vulkan-queue-priority",
         text: "Fixe une priorité explicite sur la file de calcul Vulkan.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
       {
         name: "0009-vulkan-matmul-split",
         text: "Découpe en option les gros matmuls Vulkan selon M en dispatches plus petits pour les pilotes mobiles.",
-        status: "proposed",
+        status: "planned",
         ref: "",
       },
     ],

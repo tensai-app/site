@@ -28,5 +28,7 @@ jobs:
         run: node scripts/check-links.mjs
       - name: Content (em-dash, CSP, third-party URLs)
         run: node scripts/check-content.mjs
+      - name: SEO (meta, OG images, JSON-LD, sitemap, llms.txt)
+        run: node scripts/check-seo.mjs
       - name: Lighthouse CI
         run: pnpm exec lhci autorun

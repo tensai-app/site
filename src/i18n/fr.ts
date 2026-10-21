@@ -21,8 +21,6 @@ export const fr: Dict = {
   },
   lang: {
     label: "Langue",
-    switchTo: "English",
-    switchToCode: "en",
   },
   footer: {
     org: "GitHub",
@@ -36,7 +34,7 @@ export const fr: Dict = {
     link: "Suivre le changelog",
   },
   notFound: {
-    title: "Page introuvable",
+    title: "Page introuvable · tensai",
     description: "Cette page n'existe pas.",
     heading: "Cette page n'est pas là.",
     back: "Retour à l'accueil",

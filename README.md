@@ -19,6 +19,7 @@ Checks run in CI on `dist/`:
 ```sh
 pnpm test:links     # offline internal link check (scripts/pending-routes.txt = routes not built yet)
 pnpm test:content   # no em-dash in src/ and dist, CSP-safe HTML, no third-party URL
+pnpm test:seo       # titles, descriptions, canonical/hreflang, OG tags and images, JSON-LD, sitemap, llms.txt
 pnpm test:lhci      # Lighthouse CI, budgets in lighthouserc.json (needs Chrome, CHROME_PATH)
 ```
 
@@ -34,6 +35,16 @@ pnpm test:lhci      # Lighthouse CI, budgets in lighthouserc.json (needs Chrome,
 | `scripts/build-fonts.mjs` | regenerates the fonts: `pnpm fonts <dir>` (needs `pip install fonttools brotli`) |
 
 If `theme-init.js` changes, update the hash in `public/_headers`: `pnpm test:content` prints the expected one.
+
+## SEO and AI readability
+
+- One source: titles and descriptions live in `src/i18n/pages/*.ts`, the page registry (OG text, JSON-LD, llms.txt) in `src/i18n/seo.ts`, the tags in `BaseLayout.astro`. A new page goes into `pages` in `seo.ts`.
+- Titles are "Page · tensai" (60 chars max), descriptions 120 to 160 chars. `pnpm test:seo` enforces both.
+- OG images: `src/pages/og/[...slug].png.ts` renders one PNG per page and locale at build (satori, then resvg-js), 1200x630, under 150 KB. Fonts are the `@fontsource` woff of Figtree and JetBrains Mono (satori reads no woff2), the mark comes from `Mark.astro`.
+- JSON-LD: one `@graph` script per page (WebSite, Organization, SoftwareApplication on home and download, SoftwareSourceCode on llama-kt, BreadcrumbList on inner pages). It is not hashed in the CSP: `script-src` applies to executed scripts, and `application/ld+json` is a data block that never runs. `test:content` skips it, every other inline script still needs its hash.
+- `/llms.txt` and `/llms-full.txt` are generated from the same dictionaries (`src/i18n/llms.ts`), English text, French pages listed under Optional.
+- `robots.txt` allows every crawler, AI crawlers included (GPTBot, ClaudeBot, PerplexityBot, Google-Extended): the content is public and meant to be read, so no per-bot rule.
+- Sitemap: `@astrojs/sitemap`, hreflang alternates, `lastmod` = build date, 404 and routes in `scripts/pending-routes.txt` excluded.
 
 ## Deploy (Cloudflare Pages)
 

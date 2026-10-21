@@ -175,7 +175,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
               <div class="chips">
                 <span class={`chip chip-${p.status}`}>
                   <span class="dot" aria-hidden="true"></span>
-                  {c.upstream.status[p.status as "merged" | "local" | "proposed"]}
+                  {c.upstream.status[p.status as "merged" | "local" | "planned"]}
                 </span>
                 {p.ref && <span class="mono ref">{p.ref}</span>}
               </div>
@@ -537,12 +537,13 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
     background: var(--success);
   }
 
-  .chip-local .dot {
+  .chip-local .dot,
+  .chip-planned .dot {
     background: var(--text-secondary);
   }
 
-  .chip-proposed .dot {
-    background: var(--warning);
+  .chip-planned {
+    color: var(--text-secondary);
   }
 
   .ref {

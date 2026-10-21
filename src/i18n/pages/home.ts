@@ -1,5 +1,5 @@
 const en = {
-  title: "tensai, your phone, your AI",
+  title: "tensai · AI models on your Android phone",
   description:
     "tensai runs open models on your Android phone: chat, reasoning and an agent that can act. No account, no cloud. Open source, public release with 1.0.",
   hero: {
@@ -84,9 +84,9 @@ const en = {
 };
 
 const fr: typeof en = {
-  title: "tensai, l'IA qui tourne sur le téléphone",
+  title: "tensai · Des modèles d'IA sur le téléphone Android",
   description:
-    "tensai fait tourner des modèles ouverts sur le téléphone Android : chat, raisonnement et un agent capable d'agir. Sans compte, sans cloud. Open source, version publique avec la 1.0.",
+    "tensai fait tourner des modèles ouverts sur Android : chat, raisonnement et agent capable d'agir. Sans compte ni cloud. Open source, publique avec la 1.0.",
   hero: {
     markLabel: "天, la marque tensai",
     heading: "Ton téléphone, ton IA.",

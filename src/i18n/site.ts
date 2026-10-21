@@ -1,5 +1,14 @@
 /** Facts shared by several pages. Not translated. */
-export const GITHUB_ORG = "https://github.com/tensai-app";
+export const SITE_URL = "https://tensai.page";
+export const APACHE_LICENSE = "https://www.apache.org/licenses/LICENSE-2.0";
+/** Current app version, shown in structured data only once the app can be obtained. */
+export const APP_VERSION = "0.3.3";
+/**
+ * Flip to true at the public release. While false, the structured data carries no offers, version or
+ * download URL (an Offer tells Google the app can be obtained), and scripts/check-seo.mjs fails if they appear.
+ */
+export const LAUNCHED: boolean = false;
+export const GITHUB_ORG ="https://github.com/tensai-app";
 export const LLAMA_KT_REPO = `${GITHUB_ORG}/llama.kt`;
 export const CONTACT_EMAIL = "contact@tensai.page";
 

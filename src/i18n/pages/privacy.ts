@@ -1,5 +1,5 @@
 const en = {
-  title: "Privacy",
+  title: "Privacy · tensai",
   description:
     "What tensai keeps on your phone, what can leave it and to whom, which Android permissions it asks for, and what this website does.",
   heading: "Privacy",
@@ -96,7 +96,7 @@ const en = {
 };
 
 const fr: typeof en = {
-  title: "Confidentialité",
+  title: "Confidentialité · tensai",
   description:
     "Ce que tensai garde sur le téléphone, ce qui peut en sortir et vers qui, les permissions Android demandées, et ce que fait ce site.",
   heading: "Confidentialité",

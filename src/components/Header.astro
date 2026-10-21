@@ -2,7 +2,7 @@
 import Mark from "./Mark.astro";
 import Icon from "./Icon.astro";
 import ThemeSwitch from "./ThemeSwitch.astro";
-import { useT, localizePath, stripLocale, type Locale } from "../i18n";
+import { useT, localizePath, stripLocale, locales, type Locale } from "../i18n";
 import { isLive } from "../i18n/routes";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 const { locale } = Astro.props;
 const t = useT(locale);
-const other: Locale = locale === "en" ? "fr" : "en";
+const langNames: Record<Locale, string> = { en: "English", fr: "Français" };
 const path = stripLocale(Astro.url.pathname);
 const switchPath = /^\/404\/?$/.test(path) ? "/" : path;
 
@@ -47,10 +47,24 @@ const links = [
         <Icon name="github" size={22} />
       </a>
       <ThemeSwitch locale={locale} />
-      <a class="lang" href={localizePath(switchPath, other)} hreflang={other} lang={other}>
+      <div class="lang" role="group" aria-label={t.lang.label}>
         <Icon name="globe" size={18} />
-        <span class="lang-name">{t.lang.switchTo}</span>
-      </a>
+        {
+          locales.map((l) =>
+            l === locale ? (
+              <span class="lang-item current" aria-current="true" lang={l}>
+                <span aria-hidden="true">{l.toUpperCase()}</span>
+                <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
+              </span>
+            ) : (
+              <a class="lang-item" href={localizePath(switchPath, l)} hreflang={l} lang={l}>
+                <span aria-hidden="true">{l.toUpperCase()}</span>
+                <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
+              </a>
+            ),
+          )
+        }
+      </div>
     </div>
   </div>
 </header>
@@ -152,57 +166,56 @@ const links = [
     gap: 0.25rem;
   }
 
-  .icon-link,
-  .lang {
+  .icon-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    justify-content: center;
+    width: 2.75rem;
     min-height: 2.75rem;
     border-radius: var(--radius-pill);
     color: var(--text);
-    font-weight: 500;
     text-decoration: none;
   }
 
-  .icon-link {
-    justify-content: center;
-    width: 2.75rem;
-  }
-
-  .lang {
-    justify-content: center;
-    min-width: 2.75rem;
-    font-size: 0.9375rem;
-  }
-
   .icon-link:hover,
-  .lang:hover {
+  a.lang-item:hover {
     background: var(--surface-variant);
   }
 
-  /* Narrow: the language name stays available to screen readers, icon only on screen. */
-  .lang-name {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  /* EN / FR: both shown, the current one is emphasised and is not a link. */
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-secondary);
+  }
+
+  .lang :global(svg) {
+    display: none;
+  }
+
+  .lang-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    min-height: 3rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .lang-item.current {
+    color: var(--text);
+    font-weight: 700;
   }
 
   @media (min-width: 40rem) {
-    .lang {
-      padding-inline: 0.85rem;
-    }
-
-    .lang-name {
-      position: static;
-      width: auto;
-      height: auto;
-      margin: 0;
-      overflow: visible;
-      clip-path: none;
+    .lang :global(svg) {
+      display: block;
+      margin-inline-end: 0.15rem;
     }
   }
 
