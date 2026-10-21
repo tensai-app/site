@@ -7,8 +7,10 @@ import { isLive } from "../i18n/routes";
 
 interface Props {
   locale: Locale;
+  /** Brand and theme switch only (404). */
+  reduced?: boolean;
 }
-const { locale } = Astro.props;
+const { locale, reduced = false } = Astro.props;
 const t = useT(locale);
 const langNames: Record<Locale, string> = { en: "English", fr: "Français" };
 const path = stripLocale(Astro.url.pathname);
@@ -29,79 +31,175 @@ const links = [
       <span class="wordmark">{t.siteName}</span>
     </a>
 
-    <details class="menu">
-      <summary aria-label={t.nav.menu}>
-        <Icon name="menu" size={24} />
-      </summary>
-      <nav aria-label={t.nav.label}>
-        <ul>
-          {links.map((l) => (
-            <li><a href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
-          ))}
-        </ul>
-      </nav>
-    </details>
+    {/* DOM order is the visual order at both widths: the wide nav sits before the tools, the menu button after. */}
+    {
+      !reduced && (
+        <nav class="nav-wide" aria-label={t.nav.label}>
+          <ul>
+            {links.map((l) => (
+              <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
 
     <div class="tools">
-      <a class="icon-link" href="https://github.com/tensai-app" aria-label={t.nav.github}>
-        <Icon name="github" size={22} />
-      </a>
+      {
+        !reduced && (
+          <a class="icon-link" href="https://github.com/tensai-app" aria-label={t.nav.github}>
+            <Icon name="github" size={22} />
+          </a>
+        )
+      }
       <ThemeSwitch locale={locale} />
-      <div class="lang" role="group" aria-label={t.lang.label}>
-        <Icon name="globe" size={18} />
-        {
-          locales.map((l) =>
-            l === locale ? (
-              <span class="lang-item current" aria-current="true" lang={l}>
-                <span aria-hidden="true">{l.toUpperCase()}</span>
-                <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
-              </span>
-            ) : (
-              <a class="lang-item" href={localizePath(switchPath, l)} hreflang={l} lang={l}>
-                <span aria-hidden="true">{l.toUpperCase()}</span>
-                <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
-              </a>
-            ),
-          )
-        }
-      </div>
+      {
+        !reduced && (
+          <div class="lang lang-bar" role="group" aria-label={t.lang.label}>
+            <Icon name="globe" size={18} />
+            {locales.map((l) =>
+              l === locale ? (
+                <span class="lang-item current" aria-current="true" lang={l}>
+                  <span aria-hidden="true">{l.toUpperCase()}</span>
+                  <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
+                </span>
+              ) : (
+                <a class="lang-item" href={localizePath(switchPath, l)} hreflang={l} lang={l}>
+                  <span aria-hidden="true">{l.toUpperCase()}</span>
+                  <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
+                </a>
+              ),
+            )}
+          </div>
+        )
+      }
     </div>
+
+    {
+      !reduced && (
+        <details class="menu">
+          <summary aria-label={t.nav.menu}>
+            <Icon name="menu" size={24} />
+          </summary>
+          <nav aria-label={t.nav.label}>
+            <ul>
+              {links.map((l) => (
+                <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
+              ))}
+            </ul>
+            <div class="lang" role="group" aria-label={t.lang.label}>
+              <Icon name="globe" size={18} />
+              {locales.map((l) =>
+                l === locale ? (
+                  <span class="lang-item current" aria-current="true" lang={l}>
+                    <span aria-hidden="true">{l.toUpperCase()}</span>
+                    <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
+                  </span>
+                ) : (
+                  <a class="lang-item" href={localizePath(switchPath, l)} hreflang={l} lang={l}>
+                    <span aria-hidden="true">{l.toUpperCase()}</span>
+                    <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
+                  </a>
+                ),
+              )}
+            </div>
+          </nav>
+        </details>
+      )
+    }
   </div>
 </header>
 
 <style>
   .site-header {
-    border-bottom: 1px solid var(--border);
+    height: 4rem;
+    border-bottom: 1px solid var(--outline);
     background: var(--background);
   }
 
+  /* One row at every width, before and after the web font loads: only the brand can shrink, the tools
+     and the menu button have fixed widths. */
   .bar {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
-    column-gap: 0.5rem;
-    min-height: 4.25rem;
+    column-gap: 0.25rem;
+    height: 100%;
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
+    flex: 1 1 auto;
+    min-width: 0;
     margin-inline-end: auto;
     padding-block: 0.5rem;
     color: var(--primary);
     text-decoration: none;
   }
 
+  .brand :global(svg) {
+    flex: none;
+  }
+
   .wordmark {
+    overflow: hidden;
+    white-space: nowrap;
     color: var(--text);
     font-size: 1.375rem;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
 
+  /* Under 24rem the three theme options, GitHub and the menu button take 228px: the mark alone is the brand
+     (the wordmark stays in the accessible name). */
+  @media (max-width: 23.99rem) {
+    .wordmark {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      clip-path: inset(50%);
+    }
+  }
+
+  ul {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    display: block;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-pill);
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  nav a.mono {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  nav a[aria-current="page"] {
+    color: var(--primary);
+  }
+
+  nav a:hover {
+    background: var(--surface-variant);
+  }
+
+  .nav-wide {
+    display: none;
+  }
+
   .menu {
     position: relative;
+    flex: none;
   }
 
   .menu summary {
@@ -130,48 +228,22 @@ const links = [
     z-index: 50;
     min-width: 13rem;
     padding: 0.5rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--outline);
     border-radius: var(--radius-card);
     background: var(--surface);
   }
 
-  ul {
-    display: grid;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  nav a {
-    display: block;
-    padding: 0.7rem 1rem;
-    border-radius: var(--radius-pill);
-    color: var(--text);
-    font-weight: 500;
-    text-decoration: none;
-  }
-
-  nav a[aria-current="page"] {
-    color: var(--primary);
-  }
-
-  nav a:hover {
-    background: var(--surface-variant);
+  .menu .lang {
+    margin-top: 0.25rem;
+    padding: 0.5rem 0.5rem 0;
+    border-top: 1px solid var(--outline);
   }
 
   .tools {
     display: flex;
-    flex-wrap: wrap;
+    flex: none;
     align-items: center;
     gap: 0.25rem;
-  }
-
-  /* Narrow: the tools always get their own row. Left to wrap on their own, they fit on the brand row
-     with the fallback font and wrap once the web font is in, which shifts the whole page. */
-  @media (max-width: 32rem) {
-    .tools {
-      flex-basis: 100%;
-    }
   }
 
   .icon-link {
@@ -197,16 +269,13 @@ const links = [
     color: var(--text-secondary);
   }
 
-  .lang :global(svg) {
-    display: none;
-  }
-
   .lang-item {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-width: 3rem;
     min-height: 3rem;
+    padding: 0;
     border-radius: var(--radius-pill);
     font-size: 0.875rem;
     font-weight: 500;
@@ -220,42 +289,32 @@ const links = [
     font-weight: 700;
   }
 
-  @media (min-width: 40rem) {
-    .lang :global(svg) {
-      display: block;
-      margin-inline-end: 0.15rem;
-    }
+  .lang.lang-bar {
+    display: none;
   }
 
-  /* Wide screens: the nav is laid out inline. Without ::details-content support the
-     summary stays and the menu keeps working as a toggle. */
-  @media (min-width: 52rem) {
-    @supports selector(::details-content) {
-      .menu {
-        margin-inline-end: 0.75rem;
-      }
+  /* Wide: the nav is inline and the language switch is in the bar; the menu button goes away. */
+  @media (min-width: 45rem) {
+    .nav-wide {
+      display: block;
+      margin-inline-end: 0.75rem;
+    }
 
-      .menu summary {
-        display: none;
-      }
+    .nav-wide ul {
+      grid-auto-flow: column;
+      gap: 0.25rem;
+    }
 
-      .menu::details-content {
-        content-visibility: visible;
-        display: contents;
-      }
+    .menu {
+      display: none;
+    }
 
-      .menu nav {
-        position: static;
-        min-width: 0;
-        padding: 0;
-        border: 0;
-        background: transparent;
-      }
+    .lang.lang-bar {
+      display: inline-flex;
+    }
 
-      ul {
-        grid-auto-flow: column;
-        gap: 0.25rem;
-      }
+    .lang-bar :global(svg) {
+      margin-inline-end: 0.15rem;
     }
   }
 </style>

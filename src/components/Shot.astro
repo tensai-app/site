@@ -2,8 +2,9 @@
 import { Picture } from "astro:assets";
 import type { ImageMetadata } from "astro";
 
-// Phone screenshots, dark and light, already framed (transparent corners).
-const shots = import.meta.glob<{ default: ImageMetadata }>("../assets/shots/{hero,picker,reasoning,tool,context}-*.png", { eager: true });
+// Phone screenshots, one `<name>-dark` and `<name>-light` file per shot, already framed. Dropping a new file in
+// src/assets/shots is enough; the rounded clip lives in ui.css.
+const shots = import.meta.glob<{ default: ImageMetadata }>("../assets/shots/*-{dark,light}.{png,jpg,jpeg,webp,avif}", { eager: true });
 
 interface Props {
   name: string;
@@ -16,7 +17,7 @@ interface Props {
 const { name, alt, sizes, priority = false } = Astro.props;
 
 function pick(theme: "dark" | "light"): ImageMetadata {
-  const mod = shots[`../assets/shots/${name}-${theme}.png`];
+  const mod = Object.entries(shots).find(([path]) => new RegExp(`/${name}-${theme}\\.[a-z]+$`).test(path))?.[1];
   if (!mod) throw new Error(`missing screenshot ${name}-${theme}`);
   return mod.default;
 }
@@ -36,5 +37,9 @@ const common = {
 };
 ---
 
-<Picture src={pick("dark")} class="shot shot-dark" {...common} fetchpriority={priority ? "high" : "auto"} />
-<Picture src={pick("light")} class="shot shot-light" {...common} />
+<span class="phone">
+  <span class="phone-clip">
+    <Picture src={pick("dark")} class="shot shot-dark" {...common} fetchpriority={priority ? "high" : "auto"} />
+    <Picture src={pick("light")} class="shot shot-light" {...common} />
+  </span>
+</span>

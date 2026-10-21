@@ -14,18 +14,18 @@ const en = {
   },
   pillars: [
     {
-      icon: "phone",
+      icon: "smartphone",
       title: "On the device",
       text: "Models run on your phone's CPU or GPU through llama.cpp. Once a model is downloaded, tensai works offline.",
     },
     {
-      icon: "cube",
+      icon: "deployed_code",
       title: "Any open model",
       text: "Import a GGUF file or pick one from Hugging Face. A fit check rates it against your phone's memory.",
       fit: true,
     },
     {
-      icon: "shield",
+      icon: "verified_user",
       title: "An agent, with guardrails",
       text: "Tools for dates, maths, memory, timers, calendar and messages. Anything that sends or deletes asks you first. Internet tools stay off until you enable them.",
     },
@@ -99,18 +99,18 @@ const fr: typeof en = {
   },
   pillars: [
     {
-      icon: "phone",
+      icon: "smartphone",
       title: "Sur l'appareil",
       text: "Les modèles tournent sur le CPU ou le GPU du téléphone, via llama.cpp. Une fois un modèle téléchargé, tensai fonctionne hors ligne.",
     },
     {
-      icon: "cube",
+      icon: "deployed_code",
       title: "Tout modèle ouvert",
       text: "Importer un fichier GGUF ou en choisir un sur Hugging Face. Un test d'adéquation le compare à la mémoire du téléphone.",
       fit: true,
     },
     {
-      icon: "shield",
+      icon: "verified_user",
       title: "Un agent, avec des garde-fous",
       text: "Des outils pour les dates, le calcul, la mémoire, les minuteurs, l'agenda et les messages. Tout ce qui envoie ou supprime demande confirmation. Les outils Internet restent désactivés tant qu'ils ne sont pas activés.",
     },

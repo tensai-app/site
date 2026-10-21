@@ -1,7 +1,6 @@
 /* Shared primitives for the page views: buttons, cards, section rhythm, fit dots. */
 
 :root {
-  --glow: color-mix(in srgb, var(--primary) 16%, transparent);
   --rule: color-mix(in srgb, var(--text-secondary) 45%, transparent);
 }
 
@@ -10,7 +9,7 @@
 }
 
 .card {
-  border: 1px solid var(--border);
+  border: 1px solid var(--outline);
   border-radius: var(--radius-card);
   background: var(--surface);
 }
@@ -108,28 +107,57 @@
   gap: 0.45rem;
 }
 
-/* One reading column for privacy and legal pages. */
+/* One reading column for privacy and legal pages, centered. The page view sets --dl-col. */
 .prose {
-  max-width: 42.5rem;
+  max-width: 68ch;
+  margin-inline: auto;
+}
+
+.prose h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
 }
 
 .prose h2 {
   margin-top: 2.5rem;
-  font-size: 1.5rem;
+  font-size: 1.625rem;
 }
 
+/* Definition lists: term and definition side by side, a rule above every row. Stacked on mobile. */
 .prose dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   margin: 0 0 1.25rem;
+  border-top: 1px solid var(--outline);
 }
 
 .prose dt {
-  margin-top: 1rem;
+  padding-top: 1rem;
+  font-size: 0.96875rem;
   font-weight: 600;
 }
 
 .prose dd {
-  margin: 0.15rem 0 0;
+  margin: 0;
+  padding-block: 0.15rem 1rem;
+  border-bottom: 1px solid var(--outline);
   color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .prose dl {
+    grid-template-columns: var(--dl-col, 190px) minmax(0, 1fr);
+  }
+
+  .prose dt,
+  .prose dd {
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--outline);
+  }
+
+  .prose dd {
+    padding-inline-start: 1.5rem;
+  }
 }
 
 .prose ul {
@@ -137,6 +165,19 @@
 }
 
 /* Screenshot pairs (Shot.astro): one image per theme, the forced theme wins over the system one. */
+/* The frame is baked into the capture. The clip radius is the bezel's outer radius, 10.5% of the width (measured on the 820px captures), in cqw so it
+   follows the rendered width whatever the image ratio; no corner or edge pixel of the capture shows on either theme. */
+.phone {
+  display: block;
+  container-type: inline-size;
+}
+
+.phone-clip {
+  display: block;
+  overflow: hidden;
+  border-radius: 10.5cqw;
+}
+
 .shot {
   display: block;
   width: 100%;

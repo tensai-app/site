@@ -55,7 +55,17 @@ const identified = LEGAL.mode === "identified";
 
 <style>
   .page {
-    padding-block: 3rem 2rem;
+    padding-block: 3rem 5rem;
+  }
+
+  .prose {
+    --dl-col: 200px;
+  }
+
+  @media (min-width: 40rem) {
+    .page {
+      padding-block: 96px 128px;
+    }
   }
 
   h1 {

@@ -63,6 +63,7 @@ for (const file of walk(dist)) {
   if (!description) fail(where, "no meta description");
   else {
     const n = [...description].length;
+    // Intentional: the 404 is noindex and never shown as a search snippet, so its short description is fine.
     if (!is404 && (n < 120 || n > 160)) fail(where, `description is ${n} chars (120 to 160)`);
     if (descriptions.has(description)) fail(where, `description duplicates ${descriptions.get(description)}`);
     descriptions.set(description, where);
@@ -71,6 +72,8 @@ for (const file of walk(dist)) {
   const h1 = tags(html, /<h1[\s>]/g).length;
   if (h1 !== 1) fail(where, `${h1} h1 (expected 1)`);
   for (const [name, re] of [["main", /<main[\s>]/g], ["nav", /<nav[\s>]/g], ["footer", /<footer[\s>]/g]]) {
+    // The 404 has the reduced header (brand and theme switch) and no footer.
+    if (is404 && name !== "main") continue;
     if (!tags(html, re).length) fail(where, `no <${name}>`);
   }
   for (const img of tags(html, /<img\b[^>]*>/g)) {

@@ -21,7 +21,7 @@ const c = home[locale];
       <div class="hero-text">
         <div class="mark-wrap">
           <span class="halo" aria-hidden="true"></span>
-          <span class="mark-icon" role="img" aria-label={c.hero.markLabel}><Mark size={168} /></span>
+          <span class="mark-icon" role="img" aria-label={c.hero.markLabel}><Mark size={176} /></span>
         </div>
         <h1>{c.hero.heading}</h1>
         <p class="sub">{c.hero.sub}</p>
@@ -38,7 +38,7 @@ const c = home[locale];
           </div>
           <a class="text-link" href="#how">
             {c.hero.how}
-            <Icon name="arrow-right" size={18} />
+            <Icon name="arrow_right" size={18} />
           </a>
         </div>
         <p class="engine"><a href={localizePath("/llama-kt/", locale)}>{c.hero.engine}</a></p>
@@ -53,7 +53,7 @@ const c = home[locale];
         c.pillars.map((p) => (
           <div class="card pillar">
             <span class="pillar-icon">
-              <Icon name={p.icon as "phone" | "cube" | "shield"} size={27} />
+              <Icon name={p.icon as "smartphone" | "deployed_code" | "verified_user"} size={28} />
             </span>
             <h2>{p.title}</h2>
             <p>{p.text}</p>
@@ -125,7 +125,7 @@ const c = home[locale];
         <div class="band-actions">
           <a class="btn btn-filled" href={LLAMA_KT_REPO}>
             {c.band.github}
-            <Icon name="arrow-up-right" size={19} />
+            <Icon name="arrow_up_right" size={19} />
           </a>
           {isLive("/docs/") && <a class="btn btn-outlined" href={localizePath("/docs/", locale)}>{c.band.docs}</a>}
         </div>
@@ -137,6 +137,7 @@ const c = home[locale];
 <style>
   .hero {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 3rem;
     padding-block: 3.5rem 4rem;
   }
@@ -149,16 +150,16 @@ const c = home[locale];
 
   .mark-wrap {
     position: relative;
-    width: 6.5rem;
-    height: 6.2rem;
+    width: 176px;
+    height: 168px;
     color: var(--primary);
   }
 
   .halo {
     position: absolute;
-    inset: -3.5rem;
+    inset: -90px;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--glow) 0%, transparent 62%);
+    background: radial-gradient(circle, var(--primary-16) 0%, transparent 62%);
   }
 
   .mark-icon {
@@ -325,7 +326,7 @@ const c = home[locale];
   .setup {
     margin: 0;
     padding: 1.125rem 1.75rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--outline);
     color: var(--text-secondary);
     font-size: 0.8125rem;
   }
@@ -337,7 +338,7 @@ const c = home[locale];
   }
 
   tr + tr {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--outline);
   }
 
   th {
@@ -436,7 +437,7 @@ const c = home[locale];
 
   @media (min-width: 60rem) {
     .hero {
-      grid-template-columns: minmax(0, 1fr) 21.9rem;
+      grid-template-columns: minmax(0, 1fr) 351px;
       align-items: center;
       gap: 6rem;
       padding-block: 6rem 7.5rem;
@@ -445,6 +446,10 @@ const c = home[locale];
     .hero-shot {
       width: 100%;
       margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.75rem, 5.3vw, 4.75rem);
     }
 
     .strip {
@@ -474,6 +479,31 @@ const c = home[locale];
   }
 
   @media (max-width: 39.99rem) {
+    .hero-text,
+    .actions,
+    .cta {
+      align-items: stretch;
+    }
+
+    .actions {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .note {
+      justify-content: center;
+      padding-inline-start: 0;
+    }
+
+    .actions .text-link {
+      justify-content: center;
+      min-height: 3rem;
+    }
+
+    .engine {
+      align-self: flex-start;
+    }
+
     .strip {
       margin-inline: calc(var(--gutter) * -1);
       padding-inline: var(--gutter);

@@ -13,9 +13,11 @@ interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  /** Reduced header, no footer (404). */
+  bare?: boolean;
 }
 
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, bare = false } = Astro.props;
 const locale: Locale = localeFromPath(Astro.url.pathname);
 const t = useT(locale);
 const path = stripLocale(Astro.url.pathname);
@@ -80,10 +82,10 @@ const ogLocale = { en: "en_US", fr: "fr_FR" } as const;
   </head>
   <body>
     <a class="skip-link" href="#main">{t.skip}</a>
-    <Header locale={locale} />
+    <Header locale={locale} reduced={bare} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer locale={locale} />
+    {!bare && <Footer locale={locale} />}
   </body>
 </html>

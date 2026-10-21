@@ -11,7 +11,7 @@ interface Props {
 const { locale } = Astro.props;
 const c = llamakt[locale];
 
-// Code mirrors the llama.kt README (Install and Quick start). Lines starting with a comment marker are dimmed.
+// Code mirrors the llama.kt README (Install and Quick start). Highlighted here at build time: no client JS.
 const snippets = [
   [
     "git submodule add https://github.com/tensai-app/llama.kt libs/llama.kt",
@@ -41,7 +41,27 @@ const snippets = [
     "engine.free()",
   ],
 ];
-const isComment = (l: string) => /^\s*(\/\/|#)/.test(l);
+
+// One tokenizer per snippet: comment, string or keyword, everything else stays plain.
+const grammars = [
+  /(?<c>#.*$)|(?<k>\b(?:git|bash)\b)/,
+  /(?<c>\/\/.*$)|(?<s>"(?:[^"\\]|\\.)*")/,
+  /(?<c>\/\/.*$)|(?<s>"(?:[^"\\]|\\.)*")|(?<k>\b(?:import|val|var|fun)\b)/,
+];
+type Token = { text: string; kind?: "c" | "s" | "k" };
+function highlight(line: string, grammar: RegExp): Token[] {
+  const out: Token[] = [];
+  let rest = line;
+  for (let m = grammar.exec(rest); m; m = grammar.exec(rest)) {
+    if (m.index > 0) out.push({ text: rest.slice(0, m.index) });
+    const kind = (["c", "s", "k"] as const).find((k) => m.groups?.[k] !== undefined);
+    out.push(kind ? { text: m[0], kind } : { text: m[0] });
+    rest = rest.slice(m.index + m[0].length);
+  }
+  if (rest) out.push({ text: rest });
+  return out;
+}
+const featureIcons = ["description", "stream", "chat", "save", "data_object"] as const;
 
 // [model, quant, [backend, pp, tg, faster][]]
 const rows: [string, string, [string, string, string, boolean][]][] = [
@@ -65,7 +85,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
       <div class="actions">
         <a class="btn btn-filled" href={LLAMA_KT_REPO}>
           {c.hero.github}
-          <Icon name="arrow-up-right" size={19} />
+          <Icon name="arrow_up_right" size={19} />
         </a>
         <a class="btn btn-outlined" href={`${LLAMA_KT_REPO}#readme`}>{c.hero.readme}</a>
       </div>
@@ -77,9 +97,9 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
         <h2 id="features-h">{c.features.heading}</h2>
         <ul class="features">
           {
-            c.features.items.map((f) => (
+            c.features.items.map((f, i) => (
               <li>
-                <span class="tick"><Icon name="check" size={18} /></span>
+                <span class="tick"><Icon name={featureIcons[i]!} size={20} /></span>
                 <div>
                   <strong>{f.title}</strong>
                   <span>{f.text}</span>
@@ -99,7 +119,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
           {
             snippets.map((lines, i) => (
               <div class={`panel panel-${i}`}>
-                <pre tabindex="0" role="region" aria-label={c.code.langs[i]}><code>{lines.map((l) => <span class:list={["line", { dim: isComment(l) }]}>{l || " "}</span>)}</code></pre>
+                <pre tabindex="0" role="region" aria-label={c.code.langs[i]}><code>{lines.map((l) => <span class="line">{highlight(l, grammars[i]!).map((t) => (t.kind ? <span class={`tok-${t.kind}`}>{t.text}</span> : t.text))}{l ? "" : " "}</span>)}</code></pre>
               </div>
             ))
           }
@@ -130,7 +150,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
                   <tr class:list={{ first: i === 0 }}>
                     {i === 0 && <th scope="row" rowspan={backends.length}>{model}</th>}
                     {i === 0 && <td rowspan={backends.length} class="quant">{quant}</td>}
-                    <td>
+                    <td class:list={{ win: fast }}>
                       {backend}
                       {fast && (
                         <>
@@ -140,7 +160,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
                       )}
                     </td>
                     <td class="num">{num(pp)}</td>
-                    <td class="num">{num(tg)}</td>
+                    <td class:list={["num", { win: fast }]}>{num(tg)}</td>
                   </tr>
                 )),
               )
@@ -262,7 +282,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
     display: inline-flex;
     flex: none;
     margin-top: 0.2rem;
-    color: var(--success);
+    color: var(--text-secondary);
   }
 
   .features div {
@@ -294,18 +314,22 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
     display: flex;
     gap: 0.25rem;
     padding: 0.375rem;
-    border: 1px solid var(--border);
+    overflow-x: auto;
+    border: 1px solid var(--outline);
     border-radius: var(--radius-card) var(--radius-card) 0 0;
     background: var(--surface);
   }
 
   .tabbar label {
-    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding-inline: 1.25rem;
     border-radius: var(--radius-pill);
     color: var(--text-secondary);
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 14.5px;
+    font-weight: 600;
+    white-space: nowrap;
     cursor: pointer;
   }
 
@@ -315,7 +339,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
 
   .panel {
     display: none;
-    border: 1px solid var(--border);
+    border: 1px solid var(--outline);
     border-top: 0;
     border-radius: 0 0 var(--radius-card) var(--radius-card);
     background: var(--surface);
@@ -323,18 +347,38 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
 
   pre {
     margin: 0;
-    padding: 1.25rem 1.5rem;
+    padding: 22px 24px;
     overflow-x: auto;
-    font-size: 0.875rem;
+    font-size: 14px;
     line-height: 1.7;
+    counter-reset: line;
   }
 
   .line {
     display: block;
     white-space: pre;
+    counter-increment: line;
   }
 
-  .dim {
+  .line::before {
+    content: counter(line);
+    display: inline-block;
+    width: 2ch;
+    margin-inline-end: 1.5rem;
+    opacity: 0.6;
+    text-align: end;
+    user-select: none;
+  }
+
+  .tok-k {
+    color: var(--primary);
+  }
+
+  .tok-s {
+    color: var(--success);
+  }
+
+  .tok-c {
     color: var(--text-secondary);
   }
 
@@ -389,11 +433,13 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
 
   thead th {
     padding: 0.875rem 1.25rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--outline-strong);
     color: var(--text-secondary);
-    font-size: 0.8125rem;
+    font-size: 12.5px;
     font-weight: 500;
+    letter-spacing: 0.08em;
     text-align: start;
+    text-transform: uppercase;
   }
 
   tbody th,
@@ -409,13 +455,14 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
   }
 
   tbody tr.first {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--outline);
   }
 
   tbody tr.first:first-child {
     border-top: 0;
   }
 
+  tbody td.num,
   .num {
     font-family: var(--font-mono);
     text-align: end;
@@ -423,6 +470,15 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
 
   thead th.num {
     font-family: var(--font-sans);
+    text-align: end;
+  }
+
+  td.win {
+    font-weight: 600;
+  }
+
+  td.win:not(.num) {
+    font-weight: 700;
   }
 
   .quant {
@@ -527,7 +583,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
     align-items: center;
     gap: 0.4rem;
     padding: 0.2rem 0.75rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--outline);
     border-radius: var(--radius-pill);
     font-size: 0.8125rem;
     font-weight: 500;

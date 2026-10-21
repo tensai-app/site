@@ -12,6 +12,7 @@ interface Props {
 const { locale } = Astro.props;
 const c = download[locale];
 const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
+const reqIcons = ["android", "memory", "sd_storage"] as const;
 ---
 
 <BaseLayout title={c.title} description={c.description}>
@@ -27,14 +28,14 @@ const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
             isLive("/changelog/") && (
               <a class="text-link" href={localizePath("/changelog/", locale)}>
                 {c.notice.changelog}
-                <Icon name="arrow-right" size={16} />
+                <Icon name="arrow_right" size={16} />
               </a>
             )
           }
           <a class="text-link" href={LLAMA_KT_REPO}>
             <span class="mono">llama.kt</span>
             {c.notice.engine}
-            <Icon name="arrow-up-right" size={16} />
+            <Icon name="arrow_up_right" size={16} />
           </a>
         </p>
       </div>
@@ -44,9 +45,9 @@ const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
       <h2 id="req-h">{c.requirements.heading}</h2>
       <ul class="items">
         {
-          c.requirements.items.map((item) => (
+          c.requirements.items.map((item, i) => (
             <li class="card">
-              <span class="tick"><Icon name="check" size={18} /></span>
+              <span class="tick"><Icon name={reqIcons[i]!} size={22} /></span>
               <span class="label">{item.label}</span>
               {item.detail && <span class="detail mono">{item.detail}</span>}
             </li>
@@ -70,6 +71,7 @@ const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
 
   h1 {
     margin-bottom: 1.5rem;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
   }
 
   .notice {
@@ -85,9 +87,9 @@ const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
 
   .notice p {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.35;
   }
 
   .notice .links {
@@ -122,7 +124,7 @@ const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
   .tick {
     align-self: center;
     display: inline-flex;
-    color: var(--success);
+    color: var(--primary);
   }
 
   .label {

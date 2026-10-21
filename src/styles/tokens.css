@@ -14,7 +14,12 @@
   --success: #7dd3a8;
   --warning: #f0c36d;
   --error: #e8837f;
-  --border: #242231;
+  --outline: rgba(232, 230, 240, 0.1);
+  --outline-strong: rgba(232, 230, 240, 0.18);
+  --primary-08: rgba(167, 139, 250, 0.08);
+  --primary-12: rgba(167, 139, 250, 0.12);
+  --primary-16: rgba(167, 139, 250, 0.16);
+  --primary-24: rgba(167, 139, 250, 0.24);
 
   --radius-card: 20px;
   --radius-pill: 999px;
@@ -23,7 +28,7 @@
   --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, "SF Mono", Menlo, monospace;
   --font-kanji: "Noto Serif JP Ten", serif;
 
-  --max-width: 72rem;
+  --max-width: calc(1200px + 2 * var(--gutter));
   --gutter: clamp(1rem, 4vw, 2rem);
 }
 
@@ -41,7 +46,12 @@
     --success: #3e9a6c;
     --warning: #a8761a;
     --error: #c24f4a;
-    --border: #eeebf6;
+    --outline: rgba(28, 26, 38, 0.1);
+    --outline-strong: rgba(28, 26, 38, 0.16);
+    --primary-08: rgba(109, 79, 208, 0.07);
+    --primary-12: rgba(109, 79, 208, 0.1);
+    --primary-16: rgba(109, 79, 208, 0.14);
+    --primary-24: rgba(109, 79, 208, 0.2);
   }
 }
 
@@ -58,9 +68,10 @@
   --success: #3e9a6c;
   --warning: #a8761a;
   --error: #c24f4a;
-  --border: #eeebf6;
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
+  --outline: rgba(28, 26, 38, 0.1);
+  --outline-strong: rgba(28, 26, 38, 0.16);
+  --primary-08: rgba(109, 79, 208, 0.07);
+  --primary-12: rgba(109, 79, 208, 0.1);
+  --primary-16: rgba(109, 79, 208, 0.14);
+  --primary-24: rgba(109, 79, 208, 0.2);
 }

@@ -80,4 +80,17 @@ const options = [
     outline: 3px solid var(--primary);
     outline-offset: 3px;
   }
+
+  /* Narrow: 44px touch targets, no padding or gap, so the three options take 132px. */
+  @media (max-width: 44.99rem) {
+    .theme-switch {
+      gap: 0;
+      padding: 0;
+    }
+
+    .opt {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+  }
 </style>

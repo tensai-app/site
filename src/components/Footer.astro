@@ -1,4 +1,5 @@
 ---
+import Mark from "./Mark.astro";
 import { useT, localizePath, type Locale } from "../i18n";
 
 interface Props {
@@ -16,10 +17,13 @@ const t = useT(locale);
       <li><a href={localizePath("/legal/", locale)}>{t.footer.legal}</a></li>
       <li><a href="https://www.apache.org/licenses/LICENSE-2.0">{t.footer.license}</a></li>
     </ul>
-    <p class="motto">
-      <span class="kanji" lang="ja">天</span>
-      <span>{t.footer.motto}</span>
-    </p>
+    <div class="id">
+      <p class="brand">
+        <Mark size={24} />
+        <span class="wordmark">{t.siteName}</span>
+      </p>
+      <p class="motto">{t.footer.motto}</p>
+    </div>
   </div>
 </footer>
 
@@ -27,23 +31,48 @@ const t = useT(locale);
   .site-footer {
     margin-top: 4rem;
     padding-block: 2rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--outline);
     color: var(--text-secondary);
     font-size: 0.9375rem;
   }
 
+  /* DOM order is the mobile one: links in two columns, then the motto. Desktop mirrors it, motto and brand on
+     the left, links on the right; only the links are focusable, so tab order is the same at both widths. */
   .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .id {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem 2rem;
+    gap: 0.5rem 1rem;
+  }
+
+  .id p {
+    margin: 0;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+  }
+
+  .wordmark {
+    color: var(--text);
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1.75rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -53,22 +82,24 @@ const t = useT(locale);
     display: inline-block;
     padding-block: 0.5rem;
     color: var(--text-secondary);
+    text-decoration: none;
   }
 
   a:hover {
     color: var(--text);
   }
 
-  .motto {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin: 0;
-  }
+  @media (min-width: 45rem) {
+    .inner {
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  .kanji {
-    color: var(--primary);
-    font-size: 1.5rem;
-    line-height: 1;
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 1.75rem;
+    }
   }
 </style>
