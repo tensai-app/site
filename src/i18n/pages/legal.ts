@@ -8,7 +8,7 @@ const en = {
   address: "Address",
   phone: "Phone",
   anonymous:
-    "The publisher of this site has chosen to remain anonymous, as article 6-III-2 of the French law of 21 June 2004 (LCEN) allows. Their identity is held by the host named below.",
+    "This site is published by a private individual under a pseudonym, as article 6-III-2 of the French law of 21 June 2004 (LCEN) allows a non-professional publisher to do. Their identity is held by the host named below.",
   host: "Host",
   hostLines: ["Cloudflare, Inc.", "101 Townsend St, San Francisco, CA 94107, United States"],
   contact: "Contact",
@@ -31,7 +31,7 @@ const fr: typeof en = {
   address: "Adresse",
   phone: "Téléphone",
   anonymous:
-    "L'éditeur de ce site a choisi de rester anonyme, comme l'article 6, III, 2 de la loi du 21 juin 2004 (LCEN) le permet. Son identité est conservée par l'hébergeur indiqué ci-dessous.",
+    "Ce site est édité par une personne physique sous pseudonyme, comme l'article 6, III, 2 de la loi du 21 juin 2004 (LCEN) le permet à un éditeur non professionnel. Son identité est conservée par l'hébergeur indiqué ci-dessous.",
   host: "Hébergeur",
   hostLines: ["Cloudflare, Inc.", "101 Townsend St, San Francisco, CA 94107, États-Unis"],
   contact: "Contact",

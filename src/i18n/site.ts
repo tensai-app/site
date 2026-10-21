@@ -9,12 +9,14 @@ export const CONTACT_EMAIL = "contact@tensai.page";
  * - "anonymous": art. 6-III-2 LCEN, only the host is named and holds the identity.
  */
 export const LEGAL = {
-  mode: "identified" as "identified" | "anonymous",
-  publisherName: "{{PUBLISHER_NAME}}",
-  publicationDirector: "{{PUBLICATION_DIRECTOR}}",
-  publisherAddress: "{{PUBLISHER_ADDRESS}}",
-  publisherPhone: "{{PUBLISHER_PHONE}}",
-  hostPhone: "{{HOST_PHONE}}",
+  mode: "anonymous" as "identified" | "anonymous",
+  /** A pseudonym in anonymous mode: the real identity is held by the host. */
+  publisherName: "Hokanosekai",
+  publicationDirector: "Hokanosekai",
+  /** Identified mode only. */
+  publisherAddress: "",
+  publisherPhone: "",
+  hostPhone: "+1 650 319 8930",
   /** ISO date of the last edit of the privacy policy and the legal notice. */
   updated: "2026-10-21",
 };

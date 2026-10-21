@@ -20,13 +20,13 @@ const identified = LEGAL.mode === "identified";
 
       {!identified && <p>{c.anonymous}</p>}
       <dl>
+        <dt>{c.publisher}</dt>
+        <dd>{LEGAL.publisherName}</dd>
+        <dt>{c.director}</dt>
+        <dd>{LEGAL.publicationDirector}</dd>
         {
           identified && (
             <>
-              <dt>{c.publisher}</dt>
-              <dd>{LEGAL.publisherName}</dd>
-              <dt>{c.director}</dt>
-              <dd>{LEGAL.publicationDirector}</dd>
               <dt>{c.address}</dt>
               <dd>{LEGAL.publisherAddress}</dd>
               {LEGAL.publisherPhone && (
