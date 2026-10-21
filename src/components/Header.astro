@@ -1,0 +1,235 @@
+---
+import Mark from "./Mark.astro";
+import Icon from "./Icon.astro";
+import ThemeSwitch from "./ThemeSwitch.astro";
+import { useT, localizePath, stripLocale, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useT(locale);
+const other: Locale = locale === "en" ? "fr" : "en";
+const path = stripLocale(Astro.url.pathname);
+const switchPath = /^\/404\/?$/.test(path) ? "/" : path;
+
+const links = [
+  { href: localizePath("/download/", locale), label: t.nav.download },
+  { href: localizePath("/docs/", locale), label: t.nav.docs },
+  { href: localizePath("/changelog/", locale), label: t.nav.changelog },
+  { href: "https://github.com/tensai-app/llama.kt", label: t.nav.llamaKt },
+];
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href={localizePath("/", locale)}>
+      <Mark size={30} />
+      <span class="wordmark">{t.siteName}</span>
+    </a>
+
+    <details class="menu">
+      <summary aria-label={t.nav.menu}>
+        <Icon name="menu" size={24} />
+      </summary>
+      <nav aria-label={t.nav.label}>
+        <ul>
+          {links.map((l) => (
+            <li><a href={l.href}>{l.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+
+    <div class="tools">
+      <a class="icon-link" href="https://github.com/tensai-app" aria-label={t.nav.github}>
+        <Icon name="github" size={22} />
+      </a>
+      <ThemeSwitch locale={locale} />
+      <a class="lang" href={localizePath(switchPath, other)} hreflang={other} lang={other}>
+        <Icon name="globe" size={18} />
+        <span class="lang-name">{t.lang.switchTo}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.5rem;
+    min-height: 4.25rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-inline-end: auto;
+    padding-block: 0.5rem;
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .wordmark {
+    color: var(--text);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .menu {
+    position: relative;
+  }
+
+  .menu summary {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu summary:hover {
+    background: var(--surface-variant);
+  }
+
+  .menu nav {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + 0.5rem);
+    z-index: 50;
+    min-width: 13rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+  }
+
+  ul {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    display: block;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-pill);
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    background: var(--surface-variant);
+  }
+
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .icon-link,
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .icon-link {
+    justify-content: center;
+    width: 2.75rem;
+  }
+
+  .lang {
+    justify-content: center;
+    min-width: 2.75rem;
+    font-size: 0.9375rem;
+  }
+
+  .icon-link:hover,
+  .lang:hover {
+    background: var(--surface-variant);
+  }
+
+  /* Narrow: the language name stays available to screen readers, icon only on screen. */
+  .lang-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 40rem) {
+    .lang {
+      padding-inline: 0.85rem;
+    }
+
+    .lang-name {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip-path: none;
+    }
+  }
+
+  /* Wide screens: the nav is laid out inline. Without ::details-content support the
+     summary stays and the menu keeps working as a toggle. */
+  @media (min-width: 52rem) {
+    @supports selector(::details-content) {
+      .menu {
+        margin-inline-end: 0.75rem;
+      }
+
+      .menu summary {
+        display: none;
+      }
+
+      .menu::details-content {
+        content-visibility: visible;
+        display: contents;
+      }
+
+      .menu nav {
+        position: static;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+
+      ul {
+        grid-auto-flow: column;
+        gap: 0.25rem;
+      }
+    }
+  }
+</style>

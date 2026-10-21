@@ -1,0 +1,74 @@
+---
+import { useT, localizePath, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useT(locale);
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <ul>
+      <li><a href="https://github.com/tensai-app">{t.footer.org}</a></li>
+      <li><a href={localizePath("/privacy/", locale)}>{t.footer.privacy}</a></li>
+      <li><a href={localizePath("/legal/", locale)}>{t.footer.legal}</a></li>
+      <li><a href="https://github.com/tensai-app/tensai/blob/main/LICENSE">{t.footer.license}</a></li>
+    </ul>
+    <p class="motto">
+      <span class="kanji" lang="ja">天</span>
+      <span>{t.footer.motto}</span>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 4rem;
+    padding-block: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-block;
+    padding-block: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  a:hover {
+    color: var(--text);
+  }
+
+  .motto {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+  }
+
+  .kanji {
+    color: var(--primary);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+</style>

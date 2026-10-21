@@ -1,0 +1,11 @@
+# Linked from Header/Footer, pages land with WEB-14. Empty this file once they exist.
+/download/
+/docs/
+/changelog/
+/privacy/
+/legal/
+/fr/download/
+/fr/docs/
+/fr/changelog/
+/fr/privacy/
+/fr/legal/

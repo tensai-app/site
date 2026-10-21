@@ -1,0 +1,10 @@
+{
+  "name": "tensai",
+  "short_name": "tensai",
+  "description": "AI that runs on your phone. Open source.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0F0E17",
+  "theme_color": "#0F0E17",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

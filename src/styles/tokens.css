@@ -1,0 +1,66 @@
+/* Calm Night. Dark is the default; System follows prefers-color-scheme,
+   an explicit choice sets [data-theme] on <html>. */
+
+:root {
+  color-scheme: dark;
+
+  --background: #0f0e17;
+  --surface: #1a1825;
+  --surface-variant: #242231;
+  --primary: #a78bfa;
+  --on-primary: #1a1040;
+  --text: #e8e6f0;
+  --text-secondary: #9b97ad;
+  --success: #7dd3a8;
+  --warning: #f0c36d;
+  --error: #e8837f;
+  --border: #242231;
+
+  --radius-card: 20px;
+  --radius-pill: 999px;
+
+  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-kanji: "Noto Serif JP Ten", serif;
+
+  --max-width: 72rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    --background: #faf9fe;
+    --surface: #ffffff;
+    --surface-variant: #eeebf6;
+    --primary: #6d4fd0;
+    --on-primary: #ffffff;
+    --text: #1c1a26;
+    --text-secondary: #5e5a70;
+    --success: #3e9a6c;
+    --warning: #a8761a;
+    --error: #c24f4a;
+    --border: #eeebf6;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #faf9fe;
+  --surface: #ffffff;
+  --surface-variant: #eeebf6;
+  --primary: #6d4fd0;
+  --on-primary: #ffffff;
+  --text: #1c1a26;
+  --text-secondary: #5e5a70;
+  --success: #3e9a6c;
+  --warning: #a8761a;
+  --error: #c24f4a;
+  --border: #eeebf6;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}

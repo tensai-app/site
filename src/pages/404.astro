@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { useT } from "../i18n";
+
+const t = useT("en");
+---
+
+<BaseLayout title={t.notFound.title} description={t.notFound.description} noindex>
+  <div class="container">
+    <h1>{t.notFound.heading}</h1>
+    <p><a href="/">{t.notFound.back}</a></p>
+  </div>
+</BaseLayout>
+
+<style>
+  div {
+    padding-block: 4rem;
+  }
+</style>

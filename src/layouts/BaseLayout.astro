@@ -1,0 +1,75 @@
+---
+import "../styles/tokens.css";
+import "../styles/base.css";
+import themeInit from "../scripts/theme-init.js?raw";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { useT, localeFromPath, stripLocale, localizePath, locales, type Locale } from "../i18n";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Social image, absolute path under public/. Omitted until the brand assets are wired. */
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex = false } = Astro.props;
+const locale: Locale = localeFromPath(Astro.url.pathname);
+const t = useT(locale);
+const path = stripLocale(Astro.url.pathname);
+const site = Astro.site ?? new URL("https://tensai.page");
+const canonical = new URL(Astro.url.pathname, site).href;
+const imageUrl = image ? new URL(image, site).href : undefined;
+const ogLocale = { en: "en_US", fr: "fr_FR" } as const;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {
+      !noindex &&
+        locales.map((l) => (
+          <link rel="alternate" hreflang={l} href={new URL(localizePath(path, l), site).href} />
+        ))
+    }
+    {!noindex && <link rel="alternate" hreflang="x-default" href={new URL(path, site).href} />}
+
+    <meta name="theme-color" content="#0F0E17" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FAF9FE" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:site_name" content={t.siteName} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale[locale]} />
+    {locales.filter((l) => l !== locale).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+    <meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+    <slot name="head" />
+
+    <link rel="preload" href="/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline set:html={themeInit}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.skip}</a>
+    <Header locale={locale} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>
