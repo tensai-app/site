@@ -166,6 +166,14 @@ const links = [
     gap: 0.25rem;
   }
 
+  /* Narrow: the tools always get their own row. Left to wrap on their own, they fit on the brand row
+     with the fallback font and wrap once the web font is in, which shifts the whole page. */
+  @media (max-width: 32rem) {
+    .tools {
+      flex-basis: 100%;
+    }
+  }
+
   .icon-link {
     display: inline-flex;
     align-items: center;

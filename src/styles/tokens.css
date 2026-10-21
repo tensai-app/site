@@ -19,8 +19,8 @@
   --radius-card: 20px;
   --radius-pill: 999px;
 
-  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-sans: "Figtree", "Figtree Fallback", "Figtree Fallback Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", ui-monospace, "SF Mono", Menlo, monospace;
   --font-kanji: "Noto Serif JP Ten", serif;
 
   --max-width: 72rem;
