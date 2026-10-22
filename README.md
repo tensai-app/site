@@ -36,6 +36,8 @@ pnpm test:lhci      # Lighthouse CI, budgets in lighthouserc.json (needs Chrome,
 
 If `theme-init.js` changes, update the hash in `public/_headers`: `pnpm test:content` prints the expected one.
 
+Changelog: when the app ships a release, run `pnpm sync:changelog` (copies the app's `changelog.json` into `src/data/changelog.json`) and commit the result.
+
 ## SEO and AI readability
 
 - One source: titles and descriptions live in `src/i18n/pages/*.ts`, the page registry (OG text, JSON-LD, llms.txt) in `src/i18n/seo.ts`, the tags in `BaseLayout.astro`. A new page goes into `pages` in `seo.ts`.

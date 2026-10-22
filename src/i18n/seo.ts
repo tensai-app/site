@@ -1,6 +1,7 @@
 import { home } from "./pages/home";
 import { download } from "./pages/download";
 import { llamakt } from "./pages/llamakt";
+import { changelog } from "./pages/changelog";
 import { privacy } from "./pages/privacy";
 import { legal } from "./pages/legal";
 import { useT, localizePath, type Locale } from "./index";
@@ -9,7 +10,7 @@ import { APACHE_LICENSE, APP_VERSION, GITHUB_ORG, LAUNCHED, LLAMA_KT_REPO, SITE_
 /** Open Graph image size, fixed by the endpoint in src/pages/og. */
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
-type Kind = "home" | "download" | "llama-kt" | "privacy" | "legal";
+type Kind = "home" | "download" | "changelog" | "llama-kt" | "privacy" | "legal";
 
 export interface Page {
   kind: Kind;
@@ -40,6 +41,13 @@ export const pages: Page[] = [
     slug: "download",
     og: both((l) => ({ title: download[l].heading })),
     name: both((l) => download[l].heading),
+  },
+  {
+    kind: "changelog",
+    path: "/changelog/",
+    slug: "changelog",
+    og: both((l) => ({ title: changelog[l].heading })),
+    name: both((l) => changelog[l].heading),
   },
   {
     kind: "llama-kt",

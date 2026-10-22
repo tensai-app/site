@@ -1,15 +1,17 @@
 import { home } from "./pages/home";
 import { download } from "./pages/download";
 import { llamakt } from "./pages/llamakt";
+import { changelog } from "./pages/changelog";
 import { privacy } from "./pages/privacy";
 import { legal } from "./pages/legal";
+import { releases } from "../data/changelog";
 import { localizePath, type Locale } from "./index";
 import { absolute, pages, type Page } from "./seo";
 
-const dicts = { home, download, "llama-kt": llamakt, privacy, legal };
+const dicts = { home, download, changelog, "llama-kt": llamakt, privacy, legal };
 
 /** UI strings that are not content: labels, alt texts, ids, buttons. */
-const SKIP = /(^|[a-z])(Label|Alt|Note)$|^(label|alt|key|icon|tabs|langs|columns|status|ref|fit|fitLabels|updated|cta|how|engine|changelog|github|readme|docs|faster|legend|setup|more|selection|back)$/;
+const SKIP = /(^|[a-z])(Label|Alt|Note)$|^(label|alt|key|icon|tabs|langs|columns|status|ref|fit|fitLabels|updated|cta|how|engine|atom|latest|note|changelog|github|readme|docs|faster|legend|setup|more|selection|back)$/;
 
 /** Patch status as the llama-kt page words it (English). */
 const STATUS: Record<string, string> = { merged: "merged upstream", local: "local" };
@@ -44,6 +46,12 @@ function body(page: Page, locale: Locale): string {
   const dict = (dicts[page.kind] as Record<Locale, Record<string, unknown>>)[locale];
   const out: string[] = [];
   walk(dict, 0, out);
+  if (page.kind === "changelog") {
+    for (const r of releases) {
+      out.push(`## ${r.version}${r.title ? `: ${r.title}` : ""} (${r.date})`, "", r.intro, "");
+      for (const g of r.groups) out.push(`**${g.label}**`, "", ...g.items.map((i) => `- ${i}`), "");
+    }
+  }
   return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
@@ -53,7 +61,7 @@ const pageDescription = (page: Page, locale: Locale) =>
   (dicts[page.kind] as Record<Locale, { description: string }>)[locale].description;
 
 const SUMMARY =
-  "tensai is an open-source Android app (Apache 2.0) that runs GGUF language models on the phone with llama.cpp (CPU, Vulkan). It offers chat with reasoning and an agent with on-phone tools and phone actions such as setting a timer or drafting a message, which open the right app and ask before sending. Anything that sends or deletes asks for confirmation, and Internet tools are off by default. Not public yet: the first public release is 1.0 (current version 0.3.3, Android 10+, arm64, free). The engine, llama.kt, is already public.";
+  `tensai is an open-source Android app (Apache 2.0) that runs GGUF language models on the phone with llama.cpp (CPU, Vulkan). It offers chat with reasoning and an agent with on-phone tools and phone actions such as setting a timer or drafting a message, which open the right app and ask before sending. Anything that sends or deletes asks for confirmation, and Internet tools are off by default. Not public yet: the first public release is 1.0 (current version ${releases[0]!.version}, Android 10+, arm64, free). The engine, llama.kt, is already public.`;
 
 /** llmstxt.org format: H1, blockquote summary, sections of links. English first, French as optional. */
 export function llmsTxt(): string {

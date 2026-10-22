@@ -12,6 +12,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "sync:changelog": "node scripts/sync-changelog.mjs",
     "fonts": "node scripts/build-fonts.mjs",
     "icons": "node scripts/build-icons.mjs",
     "fonts:fallbacks": "node scripts/font-fallbacks.mjs",
