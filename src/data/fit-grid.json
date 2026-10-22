@@ -1,0 +1,182 @@
+[
+  {
+    "ram_gb": 4,
+    "model_label": "Qwen3 0.6B Q4_K_M",
+    "file_gb": 0.48,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 4,
+    "model_label": "Qwen3 1.7B Q4_K_M",
+    "file_gb": 1.28,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 4,
+    "model_label": "Qwen3 4B Q4_K_M",
+    "file_gb": 2.50,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 4,
+    "model_label": "Llama 3.2 3B Q4_K_M",
+    "file_gb": 2.02,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 4,
+    "model_label": "8B Q4 (Qwen3-8B shape)",
+    "file_gb": 4.50,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 4,
+    "model_label": "14B Q4 (Qwen3-14B shape)",
+    "file_gb": 8.00,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 6,
+    "model_label": "Qwen3 0.6B Q4_K_M",
+    "file_gb": 0.48,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 6,
+    "model_label": "Qwen3 1.7B Q4_K_M",
+    "file_gb": 1.28,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 6,
+    "model_label": "Qwen3 4B Q4_K_M",
+    "file_gb": 2.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 6,
+    "model_label": "Llama 3.2 3B Q4_K_M",
+    "file_gb": 2.02,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 6,
+    "model_label": "8B Q4 (Qwen3-8B shape)",
+    "file_gb": 4.50,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 6,
+    "model_label": "14B Q4 (Qwen3-14B shape)",
+    "file_gb": 8.00,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 8,
+    "model_label": "Qwen3 0.6B Q4_K_M",
+    "file_gb": 0.48,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 8,
+    "model_label": "Qwen3 1.7B Q4_K_M",
+    "file_gb": 1.28,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 8,
+    "model_label": "Qwen3 4B Q4_K_M",
+    "file_gb": 2.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 8,
+    "model_label": "Llama 3.2 3B Q4_K_M",
+    "file_gb": 2.02,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 8,
+    "model_label": "8B Q4 (Qwen3-8B shape)",
+    "file_gb": 4.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 8,
+    "model_label": "14B Q4 (Qwen3-14B shape)",
+    "file_gb": 8.00,
+    "verdict": "Won't fit"
+  },
+  {
+    "ram_gb": 12,
+    "model_label": "Qwen3 0.6B Q4_K_M",
+    "file_gb": 0.48,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 12,
+    "model_label": "Qwen3 1.7B Q4_K_M",
+    "file_gb": 1.28,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 12,
+    "model_label": "Qwen3 4B Q4_K_M",
+    "file_gb": 2.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 12,
+    "model_label": "Llama 3.2 3B Q4_K_M",
+    "file_gb": 2.02,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 12,
+    "model_label": "8B Q4 (Qwen3-8B shape)",
+    "file_gb": 4.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 12,
+    "model_label": "14B Q4 (Qwen3-14B shape)",
+    "file_gb": 8.00,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 16,
+    "model_label": "Qwen3 0.6B Q4_K_M",
+    "file_gb": 0.48,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 16,
+    "model_label": "Qwen3 1.7B Q4_K_M",
+    "file_gb": 1.28,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 16,
+    "model_label": "Qwen3 4B Q4_K_M",
+    "file_gb": 2.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 16,
+    "model_label": "Llama 3.2 3B Q4_K_M",
+    "file_gb": 2.02,
+    "verdict": "Runs well"
+  },
+  {
+    "ram_gb": 16,
+    "model_label": "8B Q4 (Qwen3-8B shape)",
+    "file_gb": 4.50,
+    "verdict": "Tight fit"
+  },
+  {
+    "ram_gb": 16,
+    "model_label": "14B Q4 (Qwen3-14B shape)",
+    "file_gb": 8.00,
+    "verdict": "Tight fit"
+  }
+]

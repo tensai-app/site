@@ -1,12 +1,12 @@
 // Copy button on code blocks. The buttons ship hidden and are revealed here, so there is no dead control without JS.
-const live = document.querySelector<HTMLElement>("[data-copy-live]");
+const live = document.querySelector<HTMLElement>("[data-copy-status]");
 let timer: number | undefined;
 
 for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
   btn.hidden = false;
   btn.addEventListener("click", async () => {
     // Line numbers are CSS counters: textContent never sees them.
-    const text = [...(btn.parentElement?.querySelectorAll(".line") ?? [])].map((l) => (l.textContent ?? "").trimEnd()).join("\n");
+    const text = btn.dataset["copyValue"] ?? [...(btn.parentElement?.querySelectorAll(".line") ?? [])].map((l) => (l.textContent ?? "").trimEnd()).join("\n");
     try {
       await navigator.clipboard.writeText(text);
     } catch {

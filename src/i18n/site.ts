@@ -8,7 +8,8 @@ export const APP_VERSION = "0.3.3";
  * download URL (an Offer tells Google the app can be obtained), and scripts/check-seo.mjs fails if they appear.
  */
 export const LAUNCHED: boolean = false;
-export const GITHUB_ORG ="https://github.com/tensai-app";
+export const GITHUB_ORG = "https://github.com/tensai-app";
+export const TENSAI_RELEASES = `${GITHUB_ORG}/tensai/releases`;
 export const LLAMA_KT_REPO = `${GITHUB_ORG}/llama.kt`;
 export const CONTACT_EMAIL = "contact@tensai.page";
 

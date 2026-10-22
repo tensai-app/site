@@ -1,47 +1,120 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
+import Shot from "../components/Shot.astro";
 import { download } from "../i18n/pages/download";
-import { LLAMA_KT_REPO } from "../i18n/site";
+import { LAUNCHED, LLAMA_KT_REPO, TENSAI_RELEASES } from "../i18n/site";
 import { localizePath, type Locale } from "../i18n";
 import { isLive } from "../i18n/routes";
+import { RELEASE } from "../data/release";
+import fitGrid from "../data/fit-grid.json";
 
 interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
 const c = download[locale];
-const [fitOk, fitTight, fitNo] = c.requirements.fitLabels;
+const [fitOk, fitTight, fitNo] = c.fit.labels;
 const reqIcons = ["android", "memory", "sd_storage"] as const;
+
+if (LAUNCHED) {
+  const empty = Object.entries(RELEASE).filter(([, v]) => !v);
+  if (empty.length) throw new Error(`LAUNCHED is true but RELEASE is incomplete (src/data/release.ts): ${empty.map(([k]) => k).join(", ")}`);
+}
+
+// Rows and columns come from the app's own verdicts (src/data/fit-grid.json), nothing is typed here.
+const verdicts = ["Runs well", "Tight fit", "Won't fit"];
+const dots = ["dot-success", "dot-warning", "dot-error"];
+const rams = [...new Set(fitGrid.map((r) => r.ram_gb))].sort((a, b) => a - b);
+const models = [...new Map(fitGrid.map((r) => [r.model_label, r.file_gb] as const))].sort((a, b) => a[1] - b[1]);
+const verdictOf = (model: string, ram: number) => {
+  const row = fitGrid.find((r) => r.model_label === model && r.ram_gb === ram);
+  const i = row ? verdicts.indexOf(row.verdict) : -1;
+  if (i < 0) throw new Error(`fit-grid.json: no known verdict for ${model} at ${ram} GB`);
+  return i;
+};
+const gb = (n: number) => `${n.toFixed(2).replace(".", locale === "fr" ? "," : ".")} ${c.fit.unit}`;
+const steps = c.install.steps;
+const snippet = [
+  `sha256sum tensai-${RELEASE.version}.apk`,
+  `apksigner verify --print-certs tensai-${RELEASE.version}.apk`,
+];
 ---
 
 <BaseLayout title={c.title} description={c.description}>
   <div class="container page">
     <h1>{c.heading}</h1>
 
-    <div class="card notice">
-      <span class="dot" aria-hidden="true"></span>
-      <div>
-        <p>{c.notice.text}</p>
-        <p class="links">
-          {
-            isLive("/changelog/") && (
-              <a class="text-link" href={localizePath("/changelog/", locale)}>
-                {c.notice.changelog}
+    {
+      LAUNCHED ? (
+        <div class="card release">
+          <div class="release-top">
+            <div class="release-id">
+              <p class="ver mono">
+                <span class="v">v{RELEASE.version}</span>
+                <span class="tag">{RELEASE.date}</span>
+              </p>
+              <p class="file mono">
+                <span class="name">tensai-{RELEASE.version}.apk</span>
+                <span class="tag">{RELEASE.size}</span>
+              </p>
+              <p class="meta">{c.release.meta}</p>
+            </div>
+            <a class="btn btn-filled" href={RELEASE.url}>
+              <Icon name="download" size={20} />
+              {c.release.button}
+            </a>
+          </div>
+          <div class="verify">
+            <h2 class="eyebrow mono">{c.release.verify}</h2>
+            {[
+              [c.release.sha, RELEASE.sha256, c.release.copySha],
+              [c.release.cert, RELEASE.certFingerprint, c.release.copyCert],
+            ].map(([label, value, copy]) => (
+              <div class="hash">
+                <span class="hash-label">{label}</span>
+                <div class="hash-row">
+                  <code class="mono">{value}</code>
+                  <button class="copy" type="button" data-copy data-copy-value={value} data-done={c.release.copied} hidden>
+                    <Icon name="content_copy" size={22} />
+                    <span class="visually-hidden">{copy}</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+            <div class="hash how">
+              <a class="text-link" href="#verify">
+                {c.release.howTo}
                 <Icon name="arrow_right" size={16} />
               </a>
-            )
-          }
-          <a class="text-link" href={LLAMA_KT_REPO}>
-            <span class="mono">llama.kt</span>
-            {c.notice.engine}
-            <Icon name="arrow_up_right" size={16} />
-          </a>
-        </p>
-      </div>
-    </div>
+            </div>
+          </div>
+          <span class="visually-hidden" role="status" aria-live="polite" data-copy-status />
+        </div>
+      ) : (
+        <div class="card notice">
+          <span class="dot" aria-hidden="true" />
+          <div>
+            <p>{c.notice.text}</p>
+            <p class="links">
+              {isLive("/changelog/") && (
+                <a class="text-link" href={localizePath("/changelog/", locale)}>
+                  {c.notice.changelog}
+                  <Icon name="arrow_right" size={16} />
+                </a>
+              )}
+              <a class="text-link" href={LLAMA_KT_REPO}>
+                <span class="mono">llama.kt</span>
+                {c.notice.engine}
+                <Icon name="arrow_up_right" size={16} />
+              </a>
+            </p>
+          </div>
+        </div>
+      )
+    }
 
-    <section class="req" aria-labelledby="req-h">
+    <section class="block" aria-labelledby="req-h">
       <h2 id="req-h">{c.requirements.heading}</h2>
       <ul class="items">
         {
@@ -54,24 +127,133 @@ const reqIcons = ["android", "memory", "sd_storage"] as const;
           ))
         }
       </ul>
-      <p class="fit">{c.requirements.fit}</p>
-      <ul class="fit-legend">
-        <li><span class="dot dot-success" aria-hidden="true"></span>{fitOk}</li>
-        <li><span class="dot dot-warning" aria-hidden="true"></span>{fitTight}</li>
-        <li><span class="dot dot-error" aria-hidden="true"></span>{fitNo}</li>
-      </ul>
     </section>
+
+    <section class="block" aria-labelledby="fit-h">
+      <h2 id="fit-h">{c.fit.heading}</h2>
+      <p class="scroll-hint" aria-hidden="true">{c.fit.scrollHint}</p>
+      <div class="card table-card">
+        <div class="scroll" role="region" aria-label={c.fit.regionLabel} tabindex="0">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" rowspan="2">{c.fit.model}</th>
+                <th scope="col" rowspan="2">{c.fit.file}</th>
+                <th scope="colgroup" colspan={rams.length} class="group">{c.fit.ram}</th>
+              </tr>
+              <tr>
+                {rams.map((r) => <th scope="col" class="ram mono">{r} {c.fit.unit}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {
+                models.map(([model, file]) => (
+                  <tr>
+                    <th scope="row">{model}</th>
+                    <td class="mono file-size">{gb(file)}</td>
+                    {rams.map((r) => {
+                      const v = verdictOf(model, r);
+                      return (
+                        <td class="verdict">
+                          <span class="cell"><span class={`dot ${dots[v]}`} aria-hidden="true" />{c.fit.labels[v]}</span>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <ul class="fit-legend" aria-hidden="true">
+          <li><span class="dot dot-success"></span>{fitOk}</li>
+          <li><span class="dot dot-warning"></span>{fitTight}</li>
+          <li><span class="dot dot-error"></span>{fitNo}</li>
+        </ul>
+      </div>
+      <p class="fit-note">{c.fit.rule}</p>
+      <p class="fit-note">{c.fit.caveat}</p>
+    </section>
+
+    <section class="block" aria-labelledby="inst-h">
+      <h2 id="inst-h">{LAUNCHED ? c.install.heading : c.install.headingSoon}</h2>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li>
+              <span class="num mono">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{s.title}</h3>
+              <p>{LAUNCHED ? s.text : s.textSoon}</p>
+              {s.shot && (
+                <div class="step-shot">
+                  <Shot name={s.shot} alt={s.alt ?? ""} sizes="(min-width: 52rem) 200px, 240px" />
+                </div>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    {
+      LAUNCHED && (
+        <section class="block" aria-labelledby="verify">
+          <h2 id="verify">{c.release.howToHeading}</h2>
+          <p class="fit-note">{c.release.howToText}</p>
+          <div class="snippet">
+            <button class="copy" type="button" data-copy data-done={c.release.copied} hidden>
+              <Icon name="content_copy" size={20} />
+              <span class="visually-hidden">{c.release.copySnippet}</span>
+            </button>
+            <pre tabindex="0" role="region" aria-label={c.release.snippetLabel}><code>{snippet.map((l) => <span class="line">{l}</span>)}</code></pre>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      LAUNCHED && (
+        <section class="block" aria-labelledby="update-h">
+          <h2 id="update-h">{c.update.heading}</h2>
+          <ul class="items updates">
+            {[c.update.obtainium, c.update.github].map((u) => (
+              <li class="card">
+                <h3>{u.title}</h3>
+                <p>{u.text}</p>
+                <a class="text-link" href={TENSAI_RELEASES}>
+                  {u.cta}
+                  <Icon name="arrow_up_right" size={16} />
+                </a>
+              </li>
+            ))}
+            <li class="card muted">
+              <h3>{c.update.fdroid.title}</h3>
+              <p>{c.update.fdroid.text}</p>
+            </li>
+          </ul>
+        </section>
+      )
+    }
   </div>
 </BaseLayout>
 
+{LAUNCHED && <script>import "../scripts/copy";</script>}
+
 <style>
   .page {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
     padding-block: 3rem 4rem;
   }
 
   h1 {
-    margin-bottom: 1.5rem;
+    margin: 0;
     font-size: clamp(2.25rem, 6vw, 3.5rem);
+  }
+
+  h2 {
+    margin: 0 0 1.5rem;
   }
 
   .notice {
@@ -101,14 +283,161 @@ const reqIcons = ["android", "memory", "sd_storage"] as const;
     font-weight: 400;
   }
 
-  .req {
-    margin-top: 4.5rem;
+  .release {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  .release-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .release-id {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .release-id p {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.375rem 0.875rem;
+  }
+
+  .ver {
+    font-size: 0.875rem;
+  }
+
+  .v {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .tag {
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: var(--surface-variant);
+    color: var(--text-secondary);
+  }
+
+  .file .name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .file .tag {
+    font-size: 0.9375rem;
+  }
+
+  .release-id .meta {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 400;
+  }
+
+  .verify h2 {
+    margin: 0 0 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .hash {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding-block: 1rem;
+    border-top: 1px solid var(--outline);
+  }
+
+  .hash-label {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .hash-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .hash code {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .how {
+    padding-block: 0.5rem 0;
+  }
+
+  .copy {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .copy[hidden] {
+    display: none;
+  }
+
+  .copy:hover {
+    background: var(--primary-08);
+  }
+
+  .snippet {
+    position: relative;
+    max-width: 46rem;
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+  }
+
+  .snippet .copy {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-end: 0.5rem;
+  }
+
+  .snippet pre {
+    margin: 0;
+    padding: 1.25rem 4rem 1.25rem 1.25rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .snippet .line {
+    display: block;
+    white-space: pre;
   }
 
   .items {
     display: grid;
     gap: 1rem;
-    margin: 1.5rem 0;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
@@ -124,7 +453,7 @@ const reqIcons = ["android", "memory", "sd_storage"] as const;
   .tick {
     align-self: center;
     display: inline-flex;
-    color: var(--primary);
+    color: var(--text-secondary);
   }
 
   .label {
@@ -136,19 +465,180 @@ const reqIcons = ["android", "memory", "sd_storage"] as const;
     font-size: 0.875rem;
   }
 
-  .fit {
-    max-width: 42.5rem;
-    margin: 0 0 1rem;
+  .updates li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .updates h3,
+  .updates p {
+    margin: 0;
+  }
+
+  .updates p {
     color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .updates .muted {
+    background: transparent;
+    color: var(--text-secondary);
+  }
+
+  .table-card {
+    overflow: hidden;
+  }
+
+  .scroll {
+    overflow-x: auto;
+    /* Edge shadows that show only while there is more to scroll to. */
+    background:
+      linear-gradient(to right, var(--surface) 30%, transparent) left / 2rem 100% no-repeat local,
+      linear-gradient(to left, var(--surface) 30%, transparent) right / 2rem 100% no-repeat local,
+      linear-gradient(to right, var(--outline-strong), transparent) left / 0.75rem 100% no-repeat scroll,
+      linear-gradient(to left, var(--outline-strong), transparent) right / 0.75rem 100% no-repeat scroll;
+  }
+
+  .scroll-hint {
+    margin: -0.75rem 0 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 56rem) {
+    .scroll-hint {
+      display: none;
+    }
+  }
+
+  table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 0.875rem 1.25rem;
+    border-top: 1px solid var(--outline);
+    font-size: 0.9375rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  thead th {
+    border-top: 0;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  thead .group {
+    padding-bottom: 0.25rem;
+  }
+
+  thead .ram {
+    padding-top: 0.25rem;
+    font-weight: 400;
+  }
+
+  tbody th {
+    position: sticky;
+    inset-inline-start: 0;
+    background: var(--surface);
+    font-weight: 600;
+  }
+
+  .file-size {
+    color: var(--text-secondary);
+  }
+
+  .cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .table-card .fit-legend {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--outline);
+    font-size: 0.875rem;
+  }
+
+  .fit-note {
+    max-width: 42.5rem;
+    margin: 1rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .steps {
+    display: grid;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .num {
+    color: var(--primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .steps h3,
+  .steps p {
+    margin: 0;
+  }
+
+  .steps p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .step-shot {
+    width: min(12.5rem, 100%);
+    margin-top: 0.75rem;
   }
 
   @media (min-width: 52rem) {
     .page {
+      gap: 6rem;
       padding-block: 2rem 6rem;
+    }
+
+    .release {
+      padding: 2.5rem 2.75rem;
+    }
+
+    .release-top {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .hash code {
+      font-size: 0.875rem;
     }
 
     .items {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .steps {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1.5rem;
     }
   }
 </style>
