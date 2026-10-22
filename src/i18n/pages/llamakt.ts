@@ -74,6 +74,7 @@ const en = {
         text: "Overflow-safe CEIL_DIV in ggml_vk_matmul for mobile drivers that report UINT32_MAX work groups. Fixed batched matmuls aborting at load.",
         status: "merged",
         ref: "#25245",
+        refHref: "https://github.com/ggml-org/llama.cpp/pull/25245",
       },
       {
         name: "0002-abort-callback-mid-graph-cancel",
@@ -203,6 +204,7 @@ const fr: typeof en = {
         text: "CEIL_DIV sans débordement dans ggml_vk_matmul pour les pilotes mobiles qui annoncent UINT32_MAX groupes de travail. Corrige l'arrêt des matmuls par lots au chargement.",
         status: "merged",
         ref: "#25245",
+        refHref: "https://github.com/ggml-org/llama.cpp/pull/25245",
       },
       {
         name: "0002-abort-callback-mid-graph-cancel",
