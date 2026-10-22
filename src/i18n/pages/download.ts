@@ -51,8 +51,8 @@ const en = {
     steps: [
       { title: "Download the APK", text: "Get the APK from this page or from GitHub releases.", textSoon: "At 1.0, the APK will be on this page and on GitHub releases.", shot: "apk-download", alt: "Browser download bar showing tensai-1.0.0.apk with an Open button" },
       { title: "Allow installs from this source", text: "Android asks once. Allow your browser or file manager to install apps.", textSoon: "Android will ask once. Allow your browser or file manager to install apps.", shot: "unknown-apps", alt: "Android Install unknown apps settings for the browser, Allow from this source switched on" },
-      { title: "Open tensai", text: "tensai starts with a short setup: theme and language.", textSoon: "tensai will start with a short setup: theme and language.", shot: "welcome", alt: "Welcome screen" },
-      { title: "Pick a first model", text: "tensai suggests one that fits your phone. Download it or import a GGUF file.", textSoon: "tensai will suggest one that fits your phone. Download it or import a GGUF file.", shot: "firstmodel", alt: "First model picker" },
+      { title: "Open tensai", text: "tensai starts with a short setup: theme and language.", textSoon: "tensai will start with a short setup: theme and language.", shot: "welcome", alt: "The welcome screen: Welcome to tensai, with the Theme and Language options, Continue and Skip" },
+      { title: "Pick a first model", text: "tensai suggests one that fits your phone. Download it or import a GGUF file.", textSoon: "tensai will suggest one that fits your phone. Download it or import a GGUF file.", shot: "firstmodel", alt: "The first-run model screen: a recommended model marked Runs well, with its Download button and the Import a GGUF file button" },
     ],
   },
   update: {
@@ -116,8 +116,8 @@ const fr: typeof en = {
     steps: [
       { title: "Télécharger l'APK", text: "L'APK se récupère sur cette page ou dans les releases GitHub.", textSoon: "À la 1.0, l'APK sera sur cette page et dans les releases GitHub.", shot: "apk-download", alt: "Barre de téléchargement du navigateur avec tensai-1.0.0.apk et un bouton Open" },
       { title: "Autoriser l'installation depuis cette source", text: "Android le demande une seule fois. Autoriser le navigateur ou le gestionnaire de fichiers à installer des apps.", textSoon: "Android le demandera une seule fois. Il faudra autoriser le navigateur ou le gestionnaire de fichiers à installer des apps.", shot: "unknown-apps", alt: "Réglage Android Install unknown apps pour le navigateur, Allow from this source activé" },
-      { title: "Ouvrir tensai", text: "tensai démarre par une courte configuration : thème et langue.", textSoon: "tensai démarrera par une courte configuration : thème et langue.", shot: "welcome", alt: "Écran d'accueil" },
-      { title: "Choisir un premier modèle", text: "tensai en propose un adapté au téléphone. Le télécharger ou importer un fichier GGUF.", textSoon: "tensai en proposera un adapté au téléphone. Le télécharger ou importer un fichier GGUF.", shot: "firstmodel", alt: "Choix du premier modèle" },
+      { title: "Ouvrir tensai", text: "tensai démarre par une courte configuration : thème et langue.", textSoon: "tensai démarrera par une courte configuration : thème et langue.", shot: "welcome", alt: "L'écran d'accueil : Bienvenue sur tensai, avec les options Thème et Langue, Continuer et Passer" },
+      { title: "Choisir un premier modèle", text: "tensai en propose un adapté au téléphone. Le télécharger ou importer un fichier GGUF.", textSoon: "tensai en proposera un adapté au téléphone. Le télécharger ou importer un fichier GGUF.", shot: "firstmodel", alt: "L'écran de modèle du premier lancement : un modèle recommandé marqué Fonctionne bien, avec son bouton Télécharger et le bouton Importer un fichier GGUF" },
     ],
   },
   update: {

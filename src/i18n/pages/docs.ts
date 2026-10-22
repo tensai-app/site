@@ -119,7 +119,7 @@ const en: DocsLocale = {
           h: "First launch",
           blocks: [
             { t: "p", x: "tensai starts with a short setup: theme and language. Then it suggests a first model that fits your phone, or lets you import a GGUF file you already have." },
-            { t: "shot", name: "welcome", alt: "The welcome screen of tensai", caption: "The welcome screen. Everything runs on the phone." },
+            { t: "shot", name: "welcome", alt: "The welcome screen of tensai: Welcome to tensai, with the Theme and Language options, Continue and Skip", caption: "The welcome screen: a local AI agent, running fully on your phone. Theme and language are set here." },
             { t: "p", x: "Next: [choose your first model](/docs/first-model/)." },
           ],
         },
@@ -129,6 +129,7 @@ const en: DocsLocale = {
           blocks: [
             { t: "p", x: "Updates are new APKs on the GitHub releases, with their checksums and release notes. [Obtainium](/download/#update-h) can watch them and update tensai for you. F-Droid is not available yet." },
             { t: "p", x: "What changed in each version is on the [changelog](/changelog/), and in the app under Settings, About, Version." },
+            { t: "shot", name: "whats-new", alt: "The What's new screen of tensai, with the release notes of the installed version", caption: "What's new, from Settings, About, Version: the notes of the installed version." },
           ],
         },
       ],
@@ -191,6 +192,7 @@ const en: DocsLocale = {
             },
             { t: "p", x: "Two more labels exist: Not supported, when the engine does not know the model's architecture yet, and Draft model, for speculative decoding heads that cannot run alone. Neither has a way to load." },
             { t: "p", x: "A red light does not forbid anything: Load anyway is there, kept quiet on purpose. On the model's detail page, Estimated memory shows the number behind the light." },
+            { t: "shot", name: "model-detail", alt: "Model details of a loaded model, On this device: Estimated memory with the memory available, Backend, File location, Saved sessions and Unload", caption: "A model's details: Estimated memory with what is available, and the backend." },
           ],
         },
         {
@@ -198,7 +200,7 @@ const en: DocsLocale = {
           h: "In the app",
           blocks: [
             { t: "p", x: "Open the model picker from the chip in the input bar. Each model shows its quantization, file size, backend and fit for this phone. Manage models and Discover models are under the list." },
-            { t: "shot", name: "picker", alt: "The model picker of tensai, with the fit label next to each model", caption: "The model picker. Each model shows its quantization, size, backend and fit for this phone." },
+            { t: "shot", name: "picker", alt: "The model picker of tensai: the loaded model with a check, another model marked Tight fit, then Manage models and Discover models", caption: "The model picker. Each model shows its quantization, size and backend, with a check on the loaded one and the fit label on the others." },
             { t: "p", x: "In Discover, Recommended for your device comes first, and the Fits my phone filter hides what would not load. See [Download from Hugging Face](/docs/huggingface/)." },
           ],
         },
@@ -215,6 +217,7 @@ const en: DocsLocale = {
           blocks: [
             { t: "ol", items: ["Open Models, then Add a model, then From this phone: Import a GGUF file. On first launch the same button sits under the recommended model.", "Pick the file.", "Wait for the copy. The screen shows how much of the file is copied."] },
             { t: "p", x: "tensai copies the file into its own storage: the original stays where it was, and you need room for a second copy. It then reads the details of the model (architecture, parameters, quantization, context length) and adds it to Models, On device, with its fit verdict." },
+            { t: "shot", name: "add-model", alt: "The Models screen with the Add a model sheet: From Hugging Face, Search and download, and From this phone, Import a GGUF file", caption: "Add a model: from this phone, or from Hugging Face." },
           ],
         },
         {
@@ -232,6 +235,7 @@ const en: DocsLocale = {
           blocks: [
             { t: "p", x: "A model needs its chat template to know where a message starts and ends. By default tensai uses the template stored in the file, or guesses one from the model's name when the file has none." },
             { t: "p", x: "If the guess is wrong, set it by hand in the model's details: ChatML, Mistral, Llama 3, Gemma or Phi-3. Changing the template clears the saved sessions of that model and applies at the next load." },
+            { t: "shot", name: "chat-template", alt: "The Chat template dialog: Auto, ChatML, Mistral, Llama 3, Gemma and Phi-3", caption: "Chat template. Auto is the template of the file, or a guess from the model name." },
             { t: "p", x: "Tools are only offered to models whose template supports them. See [Tools and permissions](/docs/tools/)." },
           ],
         },
@@ -256,7 +260,7 @@ const en: DocsLocale = {
           blocks: [
             { t: "p", x: "Models, then the Discover tab. It opens on Recommended for your device, then Popular on Hugging Face. Search by name, or paste the link of a repo or of a file: only Hugging Face links are accepted." },
             { t: "p", x: "Filter with Fits my phone, and sort by downloads, likes, recent or size. The badges tell what a model offers: Tools, Thinking, Vision, and Gated when it needs a licence." },
-            { t: "shot", name: "firstmodel", alt: "The first-run model screen: a recommended model with its Download button and the Import a GGUF file link", caption: "The first-run model screen: a recommended model, its Download button, and Import a GGUF file under it." },
+            { t: "shot", name: "discover", alt: "The Discover tab of Models: Recommended for your device with the phone's RAM, the filters above the list, and models marked Runs well", caption: "Discover: Recommended for your device comes first, with the filters above it." },
           ],
         },
         {
@@ -264,6 +268,7 @@ const en: DocsLocale = {
           h: "Choose a file",
           blocks: [
             { t: "p", x: "A repo page lists the GGUF files a phone can load, each with its fit, and marks the Recommended one. The readme is there too. Download shows the size before you tap." },
+            { t: "shot", name: "repo-files", alt: "A Hugging Face repo page in tensai: Choose a file, with the size and the fit of each quantization, and a Download button showing the size", caption: "Choose a file: size and fit for each quantization." },
           ],
         },
         {
@@ -271,6 +276,7 @@ const en: DocsLocale = {
           h: "Downloads",
           blocks: [
             { t: "ul", items: ["Downloads run in the background and show their progress in a notification, with Pause and Cancel.", "Several downloads queue up. A paused or interrupted one resumes where it stopped.", "On mobile data tensai asks first. Settings, Downloads, Download on mobile data lets you allow it for good.", "A file that does not match the expected size or checksum fails instead of being added.", "When it is done, the model is in Models, On device, ready to load."] },
+            { t: "shot", name: "download-progress", alt: "Models, On device: a download in progress with its size, speed and time left, with Pause and Cancel, above two models marked Tight fit and Runs well", caption: "A download in progress, with Pause and Cancel." },
           ],
         },
         {
@@ -280,6 +286,7 @@ const en: DocsLocale = {
             { t: "p", x: "Some models are gated: you accept their licence on the Hugging Face site, with your account. tensai cannot do that for you." },
             { t: "ol", items: ["Accept the licence on the model's Hugging Face page.", "Create a read token in your Hugging Face account settings.", "In tensai: Settings, Downloads, Hugging Face token. Paste it and save."] },
             { t: "p", x: "The token stays on the phone. tensai checks it when you save it; with no connection it says Token saved, but it could not be checked. If Hugging Face refuses it, replace it, or remove it to keep downloading public models." },
+            { t: "shot", name: "gated", alt: "A gated model's page in tensai: the Gated badge, the message to accept its licence on the Hugging Face site and add a token in Settings, and an Open Settings button", caption: "A gated model: accept its licence, then add a token in Settings." },
           ],
         },
         {
@@ -309,7 +316,9 @@ const en: DocsLocale = {
                 ["Internet (off by default)", "Web search, reading one web page, weather, Wikipedia."],
               ],
             },
-            { t: "shot", name: "tool", alt: "A confirmation card in the chat: tensai wants to delete three facts from memory, with Deny and Allow", caption: "tensai asks before it deletes. Deny, or Allow." },
+            { t: "shot", name: "tools-tiers", alt: "Settings, Tools: On this phone, Phone actions and Internet, each with its switch, and the warning about where Internet requests go", caption: "Settings, Tools: one switch per tier." },
+            { t: "p", x: "Each chat has its own switch too: Conversation settings, Tools, Let the model use tools in this chat." },
+            { t: "shot", name: "chat-tools", alt: "The Conversation settings sheet: Instructions, the Thinking toggle, response style, Sampling, the Tools toggle and Max response length", caption: "Conversation settings: the Tools switch of this chat." },
           ],
         },
         {
@@ -317,6 +326,7 @@ const en: DocsLocale = {
           h: "What asks first",
           blocks: [
             { t: "ul", items: ["Deleting a fact from memory and opening a link ask for your answer in the chat, with Deny and Allow. Stop cancels the whole turn.", "A phone action opens the other app with a draft, and you validate there. tensai never sends a message itself.", "Remembering a fact or listing the memory does not ask, but every call is shown. You can forget everything in Settings, Memory.", "A tool you turned off is not offered to the model at all."] },
+            { t: "shot", name: "tool", alt: "A confirmation card in the chat: tensai wants to delete a fact from memory, with the action and the id, and Deny and Allow", caption: "tensai asks before it deletes. Deny, or Allow." },
           ],
         },
         {
@@ -340,10 +350,11 @@ const en: DocsLocale = {
           h: "What leaves the phone",
           blocks: [
             { t: "p", x: "Only the Internet tier, and only once you turn it on. Each call shows where it went. The model writes the query from the whole conversation, so a search can contain anything that is in the chat, including the result of another tool." },
+            { t: "shot", name: "internet-on", alt: "The Internet screen: Use the internet switched on, the warning about where requests go, the search provider choice and the list of Internet tools", caption: "Settings, Tools, Internet: the warning, the search provider, the tools." },
             {
               t: "dl",
               items: [
-                ["Web search", "Your search provider: DuckDuckGo by default and without a key, with Wikipedia and Marginalia as fallbacks, or Brave or Tavily with your own API key, stored on the phone."],
+                ["Web search", "Your search provider: DuckDuckGo by default and without a key, with Wikipedia and Marginalia as fallbacks, or Brave (API key, monthly free credit, card required) or Tavily (API key, 1,000 free searches a month, no card), as Settings describes them. The key is stored on the phone."],
                 ["Reading a page", "The site of the page, over HTTPS, as a normal request."],
                 ["Weather", "Open-Meteo, with the place you asked about or your approximate location."],
                 ["Wikipedia", "The title or the term looked up."],
@@ -365,6 +376,7 @@ const en: DocsLocale = {
           blocks: [
             { t: "p", x: "Settings, Inference, Default backend: Auto picks CPU or Vulkan per model, CPU forces the processor, Vulkan runs the model on the GPU when the phone supports it. Auto is the recommended one." },
             { t: "p", x: "On the class of phone we measured, dense models (Llama, Qwen, Gemma) run fastest on the big CPU cores: this GPU has no cooperative-matrix path, so Vulkan loses on prompt processing and on generation. A few architectures are the other way round: for Phi and Gemma 3n the CPU path is slow, and Vulkan is faster at generating, though the CPU still wins on prompt processing." },
+            { t: "shot", name: "backend", alt: "The Default backend dialog: Auto, recommended, picks CPU or Vulkan per model; CPU; Vulkan", caption: "Settings, Inference, Default backend." },
           ],
         },
         {
@@ -391,7 +403,8 @@ const en: DocsLocale = {
               ],
             },
             { t: "p", x: "Changing the context clears the saved sessions of the models it applies to. The conversations stay." },
-            { t: "shot", name: "context", alt: "The context sheet: how much of the window is used, the loaded model, the backend and the KV cache", caption: "The context sheet, from the ring in the chat header: what fills the window, the runtime, and the agent's activity." },
+            { t: "shot", name: "context-length", alt: "The Context length dialog for a model: Auto with its token count, then 4K, 8K, 16K, 32K and Max, each with its cache size and total memory against the phone's", caption: "Context length: for each choice, the cache and the total memory against this phone's." },
+            { t: "shot", name: "context", alt: "The context sheet: how much of the window is used, the runtime (model, backend, context length, KV cache, last reply) and the agent's tool calls", caption: "The context sheet, from the ring in the chat header: what fills the window, the runtime, and the agent's activity." },
           ],
         },
         {
@@ -486,7 +499,7 @@ const fr: DocsLocale = {
           h: "Premier lancement",
           blocks: [
             { t: "p", x: "tensai démarre par un court réglage : thème et langue. Puis il propose un premier modèle qui tient sur ton téléphone, ou te laisse importer un fichier GGUF que tu as déjà." },
-            { t: "shot", name: "welcome", alt: "L'écran d'accueil de tensai", caption: "L'écran d'accueil. Tout tourne sur le téléphone." },
+            { t: "shot", name: "welcome", alt: "L'écran d'accueil de tensai : Bienvenue sur tensai, avec les options Thème et Langue, Continuer et Passer", caption: "L'écran d'accueil : un agent IA local, qui tourne entièrement sur le téléphone. Le thème et la langue se règlent ici." },
             { t: "p", x: "Ensuite : [choisir son premier modèle](/docs/first-model/)." },
           ],
         },
@@ -496,6 +509,7 @@ const fr: DocsLocale = {
           blocks: [
             { t: "p", x: "Les mises à jour sont de nouveaux APK sur les releases GitHub, avec leurs sommes de contrôle et leurs notes de version. [Obtainium](/download/#update-h) peut les surveiller et mettre tensai à jour pour toi. F-Droid n'est pas encore disponible." },
             { t: "p", x: "Ce qui change à chaque version est dans le [changelog](/changelog/), et dans l'app sous Paramètres, À propos, Version." },
+            { t: "shot", name: "whats-new", alt: "L'écran Nouveautés de tensai, avec les notes de la version installée", caption: "Nouveautés, depuis Paramètres, À propos, Version : les notes de la version installée." },
           ],
         },
       ],
@@ -558,6 +572,7 @@ const fr: DocsLocale = {
             },
             { t: "p", x: "Deux autres étiquettes existent : Non pris en charge, quand le moteur ne connaît pas encore l'architecture du modèle, et Modèle brouillon, pour les têtes de décodage spéculatif qui ne tournent pas seules. Aucune des deux ne peut se charger." },
             { t: "p", x: "Un voyant rouge n'interdit rien : Charger quand même est là, discret exprès. Dans la fiche du modèle, Mémoire estimée montre le chiffre derrière le voyant." },
+            { t: "shot", name: "model-detail", alt: "Détails d'un modèle chargé, Sur cet appareil : Mémoire estimée avec la mémoire disponible, Backend, Emplacement du fichier, Sessions enregistrées et Décharger", caption: "Les détails d'un modèle : la Mémoire estimée avec ce qui est disponible, et le backend." },
           ],
         },
         {
@@ -565,7 +580,7 @@ const fr: DocsLocale = {
           h: "Dans l'app",
           blocks: [
             { t: "p", x: "Ouvre le sélecteur de modèle depuis la puce de la barre de saisie. Chaque modèle montre sa quantification, la taille du fichier, le backend et l'adéquation pour ce téléphone. Gérer les modèles et Découvrir des modèles sont sous la liste." },
-            { t: "shot", name: "picker", alt: "Le sélecteur de modèle de tensai, avec l'étiquette d'adéquation à côté de chaque modèle", caption: "Le sélecteur de modèle. Chaque modèle montre sa quantification, sa taille, son backend et son adéquation pour ce téléphone." },
+            { t: "shot", name: "picker", alt: "Le sélecteur de modèle de tensai : le modèle chargé avec une coche, un autre modèle marqué Juste, puis Gérer les modèles et Découvrir des modèles", caption: "Le sélecteur de modèle. Chaque modèle montre sa quantification, sa taille et son backend, avec une coche sur le modèle chargé et l'étiquette d'adéquation sur les autres." },
             { t: "p", x: "Dans Découvrir, Recommandés pour cet appareil vient en premier, et le filtre Tient sur mon téléphone cache ce qui ne chargerait pas. Voir [Télécharger depuis Hugging Face](/docs/huggingface/)." },
           ],
         },
@@ -582,6 +597,7 @@ const fr: DocsLocale = {
           blocks: [
             { t: "ol", items: ["Ouvre Modèles, puis Ajouter un modèle, puis Depuis ce téléphone : Importer un fichier GGUF. Au premier lancement, le même bouton est sous le modèle recommandé.", "Choisis le fichier.", "Attends la copie. L'écran indique la part du fichier déjà copiée."] },
             { t: "p", x: "tensai copie le fichier dans son propre stockage : l'original reste où il était, et il faut de la place pour une seconde copie. Il lit ensuite les détails du modèle (architecture, paramètres, quantification, longueur de contexte) et l'ajoute à Modèles, Sur l'appareil, avec son verdict." },
+            { t: "shot", name: "add-model", alt: "L'écran Modèles avec la feuille Ajouter un modèle : Depuis Hugging Face, Rechercher et télécharger, et Depuis ce téléphone, Importer un fichier GGUF", caption: "Ajouter un modèle : depuis ce téléphone, ou depuis Hugging Face." },
           ],
         },
         {
@@ -599,6 +615,7 @@ const fr: DocsLocale = {
           blocks: [
             { t: "p", x: "Un modèle a besoin de son modèle de chat pour savoir où un message commence et finit. Par défaut tensai utilise celui stocké dans le fichier, ou en devine un d'après le nom du modèle quand le fichier n'en a pas." },
             { t: "p", x: "Si la devinette est fausse, règle-le à la main dans les détails du modèle : ChatML, Mistral, Llama 3, Gemma ou Phi-3. Changer le modèle de chat efface les sessions sauvegardées de ce modèle et s'applique au prochain chargement." },
+            { t: "shot", name: "chat-template", alt: "La boîte Modèle de chat : Auto, ChatML, Mistral, Llama 3, Gemma et Phi-3", caption: "Modèle de chat. Auto, c'est le modèle du fichier, ou une déduction depuis le nom du modèle." },
             { t: "p", x: "Les outils ne sont proposés qu'aux modèles dont le modèle de chat les gère. Voir [Outils et permissions](/docs/tools/)." },
           ],
         },
@@ -623,7 +640,7 @@ const fr: DocsLocale = {
           blocks: [
             { t: "p", x: "Modèles, puis l'onglet Découvrir. Il s'ouvre sur Recommandés pour cet appareil, puis Populaires sur Hugging Face. Cherche par nom, ou colle le lien d'un dépôt ou d'un fichier : seuls les liens Hugging Face sont acceptés." },
             { t: "p", x: "Filtre avec Tient sur mon téléphone, et trie par téléchargements, Likes, récence ou taille. Les badges disent ce qu'offre un modèle : Outils, Réflexion, Vision, et Restreint quand il demande une licence." },
-            { t: "shot", name: "firstmodel", alt: "L'écran de modèle du premier lancement : un modèle recommandé avec son bouton Télécharger et le lien Importer un fichier GGUF", caption: "L'écran de modèle du premier lancement : un modèle recommandé, son bouton Télécharger, et Importer un fichier GGUF dessous." },
+            { t: "shot", name: "discover", alt: "L'onglet Découvrir de Modèles : Recommandés pour cet appareil avec la RAM du téléphone, les filtres au-dessus de la liste, et des modèles marqués Fonctionne bien", caption: "Découvrir : Recommandés pour cet appareil vient en premier, avec les filtres au-dessus." },
           ],
         },
         {
@@ -631,6 +648,7 @@ const fr: DocsLocale = {
           h: "Choisir un fichier",
           blocks: [
             { t: "p", x: "La page d'un dépôt liste les fichiers GGUF qu'un téléphone peut charger, chacun avec son adéquation, et marque le Recommandé. Le readme y est aussi. Télécharger affiche la taille avant que tu touches." },
+            { t: "shot", name: "repo-files", alt: "La page d'un dépôt Hugging Face dans tensai : Choisir un fichier, avec la taille et l'adéquation de chaque quantification, et un bouton Télécharger qui affiche la taille", caption: "Choisir un fichier : taille et adéquation de chaque quantification." },
           ],
         },
         {
@@ -638,6 +656,7 @@ const fr: DocsLocale = {
           h: "Téléchargements",
           blocks: [
             { t: "ul", items: ["Les téléchargements tournent en arrière-plan et montrent leur progression dans une notification, avec Pause et Annuler.", "Plusieurs téléchargements se mettent en file. Un téléchargement en pause ou interrompu reprend là où il s'était arrêté.", "En données mobiles, tensai demande d'abord. Paramètres, Téléchargements, Télécharger en données mobiles permet de l'autoriser définitivement.", "Un fichier dont la taille ou la somme de contrôle ne correspond pas échoue au lieu d'être ajouté.", "Une fois fini, le modèle est dans Modèles, Sur l'appareil, prêt à charger."] },
+            { t: "shot", name: "download-progress", alt: "Modèles, Sur l'appareil : un téléchargement en cours avec sa taille, sa vitesse et le temps restant, avec Pause et Annuler, au-dessus de deux modèles marqués Juste et Fonctionne bien", caption: "Un téléchargement en cours, avec Pause et Annuler." },
           ],
         },
         {
@@ -647,6 +666,7 @@ const fr: DocsLocale = {
             { t: "p", x: "Certains modèles sont restreints : tu acceptes leur licence sur le site de Hugging Face, avec ton compte. tensai ne peut pas le faire à ta place." },
             { t: "ol", items: ["Accepte la licence sur la page Hugging Face du modèle.", "Crée un jeton en lecture dans les paramètres de ton compte Hugging Face.", "Dans tensai : Paramètres, Téléchargements, Jeton Hugging Face. Colle-le et enregistre."] },
             { t: "p", x: "Le jeton reste sur le téléphone. tensai le vérifie à l'enregistrement ; sans connexion, il indique Jeton enregistré, mais il n'a pas pu être vérifié. Si Hugging Face le refuse, remplace-le, ou retire-le pour continuer à télécharger les modèles publics." },
+            { t: "shot", name: "gated", alt: "La page d'un modèle restreint dans tensai : le badge Restreint, le message pour accepter sa licence sur le site de Hugging Face et ajouter un jeton dans les paramètres, et un bouton Ouvrir les réglages", caption: "Un modèle restreint : accepte sa licence, puis ajoute un jeton dans les paramètres." },
           ],
         },
         {
@@ -676,7 +696,9 @@ const fr: DocsLocale = {
                 ["Internet (désactivé par défaut)", "Recherche web, lecture d'une page web, météo, Wikipédia."],
               ],
             },
-            { t: "shot", name: "tool", alt: "Une carte de confirmation dans le chat : tensai veut supprimer trois faits de la mémoire, avec Refuser et Autoriser", caption: "tensai demande avant de supprimer. Refuser, ou Autoriser." },
+            { t: "shot", name: "tools-tiers", alt: "Paramètres, Outils : Sur ce téléphone, Actions du téléphone et Internet, chacun avec son interrupteur, et l'avertissement sur la destination des requêtes Internet", caption: "Paramètres, Outils : un interrupteur par niveau." },
+            { t: "p", x: "Chaque chat a aussi son propre interrupteur : Paramètres de la conversation, Outils, Laisser le modèle utiliser des outils dans ce chat." },
+            { t: "shot", name: "chat-tools", alt: "La feuille Paramètres de la conversation : Instructions, l'interrupteur de réflexion, le style de réponse, l'échantillonnage, l'interrupteur Outils et la longueur maximale de réponse", caption: "Paramètres de la conversation : l'interrupteur Outils de ce chat." },
           ],
         },
         {
@@ -684,6 +706,7 @@ const fr: DocsLocale = {
           h: "Ce qui demande d'abord",
           blocks: [
             { t: "ul", items: ["Supprimer un fait de la mémoire et ouvrir un lien demandent ta réponse dans le chat, avec Refuser et Autoriser. Stop annule tout le tour.", "Une action du téléphone ouvre l'autre appli avec un brouillon, et tu valides là-bas. tensai n'envoie jamais un message lui-même.", "Retenir un fait ou lister la mémoire ne demande rien, mais chaque appel est affiché. Tu peux tout oublier dans Paramètres, Mémoire.", "Un outil que tu as désactivé n'est pas du tout proposé au modèle."] },
+            { t: "shot", name: "tool", alt: "Une carte de confirmation dans le chat : tensai veut supprimer un fait de la mémoire, avec l'action et l'identifiant, et Refuser et Autoriser", caption: "tensai demande avant de supprimer. Refuser, ou Autoriser." },
           ],
         },
         {
@@ -707,10 +730,11 @@ const fr: DocsLocale = {
           h: "Ce qui sort du téléphone",
           blocks: [
             { t: "p", x: "Seulement le niveau Internet, et seulement une fois que tu l'actives. Chaque appel montre où il est parti. Le modèle écrit la requête à partir de toute la conversation : une recherche peut donc contenir tout ce qui est dans le chat, y compris le résultat d'un autre outil." },
+            { t: "shot", name: "internet-on", alt: "L'écran Internet : Utiliser internet activé, l'avertissement sur la destination des requêtes, le choix du fournisseur de recherche et la liste des outils Internet", caption: "Paramètres, Outils, Internet : l'avertissement, le fournisseur de recherche, les outils." },
             {
               t: "dl",
               items: [
-                ["Recherche web", "Ton fournisseur de recherche : DuckDuckGo par défaut et sans clé, avec Wikipédia et Marginalia en secours, ou Brave ou Tavily avec ta propre clé d'API, stockée sur le téléphone."],
+                ["Recherche web", "Ton fournisseur de recherche : DuckDuckGo par défaut et sans clé, avec Wikipédia et Marginalia en secours, ou Brave (clé d'API, crédit gratuit mensuel, carte bancaire requise) ou Tavily (clé d'API, 1 000 recherches gratuites par mois, sans carte), comme les décrit Paramètres. La clé est stockée sur le téléphone."],
                 ["Lecture d'une page", "Le site de la page, en HTTPS, comme une requête normale."],
                 ["Météo", "Open-Meteo, avec le lieu demandé ou ta position approximative."],
                 ["Wikipédia", "Le titre ou le terme cherché."],
@@ -732,6 +756,7 @@ const fr: DocsLocale = {
           blocks: [
             { t: "p", x: "Paramètres, Inférence, Backend par défaut : Auto choisit CPU ou Vulkan par modèle, CPU force le processeur, Vulkan fait tourner le modèle sur le GPU quand le téléphone le gère. Auto est le choix recommandé." },
             { t: "p", x: "Sur la classe de téléphone mesurée, les modèles denses (Llama, Qwen, Gemma) vont le plus vite sur les gros cœurs du CPU : ce GPU n'a pas de chemin cooperative-matrix, donc Vulkan perd en traitement du prompt comme en génération. Quelques architectures sont à l'inverse : pour Phi et Gemma 3n, le chemin CPU est lent et Vulkan génère plus vite, même si le CPU reste devant pour le traitement du prompt." },
+            { t: "shot", name: "backend", alt: "La boîte Backend par défaut : Auto, recommandé, choisit CPU ou Vulkan selon le modèle ; CPU ; Vulkan", caption: "Paramètres, Inférence, Backend par défaut." },
           ],
         },
         {
@@ -758,7 +783,8 @@ const fr: DocsLocale = {
               ],
             },
             { t: "p", x: "Changer le contexte efface les sessions sauvegardées des modèles concernés. Les conversations restent." },
-            { t: "shot", name: "context", alt: "La feuille Contexte : la part de fenêtre utilisée, le modèle chargé, le backend et le cache KV", caption: "La feuille Contexte, depuis l'anneau de l'en-tête du chat : ce qui remplit la fenêtre, l'exécution, et l'activité de l'agent." },
+            { t: "shot", name: "context-length", alt: "La boîte Longueur de contexte d'un modèle : Auto avec son nombre de tokens, puis 4K, 8K, 16K, 32K et Max, chacun avec la taille du cache et la mémoire totale face à celle du téléphone", caption: "Longueur de contexte : pour chaque choix, le cache et la mémoire totale face à celle de ce téléphone." },
+            { t: "shot", name: "context", alt: "La feuille Contexte : la part de fenêtre utilisée, l'exécution (modèle, backend, longueur de contexte, cache KV, dernière réponse) et les appels d'outils de l'agent", caption: "La feuille Contexte, depuis l'anneau de l'en-tête du chat : ce qui remplit la fenêtre, l'exécution, et l'activité de l'agent." },
           ],
         },
         {
