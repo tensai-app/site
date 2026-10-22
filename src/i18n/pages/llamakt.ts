@@ -67,7 +67,7 @@ const en = {
   upstream: {
     heading: "Upstream",
     text: "llama.cpp and llama.rn are pinned. Fixes go upstream where they can; the rest live as patches applied at bootstrap.",
-    status: { merged: "merged", local: "local", planned: "local, PR planned" },
+    status: { merged: "merged", local: "local" },
     items: [
       {
         name: "Vulkan UMA fix",
@@ -102,25 +102,25 @@ const en = {
       {
         name: "0006-kv-reuse-past-divergence",
         text: "Keeps the KV cache up to the point where a new prompt diverges from the cached one, instead of dropping it.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
       {
         name: "0007-vulkan-submit-mflops-env",
         text: "Makes the amount of work per Vulkan submit tunable through an environment variable.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
       {
         name: "0008-vulkan-queue-priority",
         text: "Sets an explicit priority on the Vulkan compute queue.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
       {
         name: "0009-vulkan-matmul-split",
         text: "Optionally splits large Vulkan matmuls along M into smaller dispatches for mobile drivers.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
     ],
@@ -196,7 +196,7 @@ const fr: typeof en = {
   upstream: {
     heading: "Upstream",
     text: "llama.cpp et llama.rn sont épinglés. Les correctifs remontent en amont quand c'est possible ; les autres vivent en patchs appliqués au bootstrap.",
-    status: { merged: "fusionné", local: "local", planned: "local, PR prévue" },
+    status: { merged: "fusionné", local: "local" },
     items: [
       {
         name: "Correctif Vulkan UMA",
@@ -231,25 +231,25 @@ const fr: typeof en = {
       {
         name: "0006-kv-reuse-past-divergence",
         text: "Garde le cache KV jusqu'au point où un nouveau prompt diverge de celui en cache, au lieu de le jeter.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
       {
         name: "0007-vulkan-submit-mflops-env",
         text: "Rend la quantité de travail par soumission Vulkan réglable par variable d'environnement.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
       {
         name: "0008-vulkan-queue-priority",
         text: "Fixe une priorité explicite sur la file de calcul Vulkan.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
       {
         name: "0009-vulkan-matmul-split",
         text: "Découpe en option les gros matmuls Vulkan selon M en dispatches plus petits pour les pilotes mobiles.",
-        status: "planned",
+        status: "local",
         ref: "",
       },
     ],

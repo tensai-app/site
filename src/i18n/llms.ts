@@ -12,7 +12,7 @@ const dicts = { home, download, "llama-kt": llamakt, privacy, legal };
 const SKIP = /(^|[a-z])(Label|Alt|Note)$|^(label|alt|key|icon|tabs|langs|columns|status|ref|fit|fitLabels|updated|cta|how|engine|changelog|github|readme|docs|faster|legend|setup|more|selection|back)$/;
 
 /** Patch status as the llama-kt page words it (English). */
-const STATUS: Record<string, string> = { merged: "merged upstream", local: "local", planned: "local, PR planned" };
+const STATUS: Record<string, string> = { merged: "merged upstream", local: "local" };
 
 function walk(value: unknown, level: number, out: string[]): void {
   if (typeof value === "string") {
