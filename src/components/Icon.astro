@@ -29,6 +29,7 @@ interface Props {
     | "check"
     | "chevron_right"
     | "expand_more"
+    | "expand_less"
     | "info";
   size?: number;
 }
@@ -78,6 +79,7 @@ const { name, size = 20 } = Astro.props;
   {name === "check" && <path d="M5 12.5l4.5 4.5L19 7.5" />}
   {name === "chevron_right" && <path d="M9 6l6 6-6 6" />}
   {name === "expand_more" && <path d="M6 9l6 6 6-6" />}
+  {name === "expand_less" && <path d="M6 15l6-6 6 6" />}
   {
     name === "info" && (
       <>

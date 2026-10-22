@@ -4,13 +4,14 @@ import Icon from "../components/Icon.astro";
 import Inline from "../components/Inline.astro";
 import DocsNav from "../components/DocsNav.astro";
 import Shot from "../components/Shot.astro";
+import PrereleaseBanner from "../components/PrereleaseBanner.astro";
 import { docs, nav, order, routes, type Block, type Slug } from "../i18n/pages/docs";
 import { home } from "../i18n/pages/home";
 import { llamakt } from "../i18n/pages/llamakt";
 import { privacy } from "../i18n/pages/privacy";
 import { docsFit } from "../data/fit";
 import { measuredRows } from "../data/measured";
-import { DOCS_EDIT_LINK, DOCS_SOURCE } from "../i18n/site";
+import { DOCS_EDIT_LINK, DOCS_SOURCE, LAUNCHED } from "../i18n/site";
 import { localizePath, type Locale } from "../i18n";
 
 interface Props {
@@ -56,21 +57,32 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 ---
 
 <BaseLayout title={`${a.title} · tensai`} description={a.description}>
-  <div class="docs-wrap">
+  {
+    !LAUNCHED && (
+      <div class="banner-row">
+        <PrereleaseBanner locale={locale} />
+      </div>
+    )
+  }
+  <div class="menu-bar">
     <details class="menu-m">
       <summary>
         <span class="visually-hidden">{ch.menu}: </span>
         <span class="crumb-m">
-          {groupLabel && <span>{groupLabel}</span>}
-          {groupLabel && <span aria-hidden="true">/</span>}
+          {groupLabel && <span class="grp">{groupLabel}</span>}
+          {groupLabel && <span class="grp" aria-hidden="true">/</span>}
           <span class="here">{a.title}</span>
         </span>
-        <Icon name="expand_more" size={18} />
+        <Icon name="expand_more" size={20} />
+        <Icon name="expand_less" size={20} />
       </summary>
       <nav class="panel" aria-label={ch.menu}>
         <DocsNav locale={locale} slug={slug} />
       </nav>
     </details>
+  </div>
+
+  <div class="docs-wrap">
 
     <div class="layout" data-rail={toc.length ? "" : undefined}>
       <aside class="side">
@@ -82,11 +94,11 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
       <article class="article">
         <p class="crumb">
           <span>{ch.docs}</span>
-          {groupLabel && <span aria-hidden="true">/</span>}
-          {groupLabel && <span>{groupLabel}</span>}
+          <span aria-hidden="true">/</span>
+          <span>{groupLabel ?? a.title}</span>
         </p>
         <h1>{a.title}</h1>
-        <p class="lead">{a.lead}</p>
+        <p class:list={["lead", { "faq-lead": isFaq }]}>{a.lead}</p>
 
         {
           a.sections.map((s) => (
@@ -140,8 +152,8 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
                         <thead>
                           <tr>
                             <th scope="col">{ch.fit.model}</th>
-                            <th scope="col">{ch.fit.file}</th>
-                            {docsFit.rams.map((r) => <th scope="col"><span class="mono">{r} {ch.fit.unit}</span> RAM</th>)}
+                            <th scope="col"><span class="long">{ch.fit.file}</span><span class="short">{ch.fit.fileShort}</span></th>
+                            {docsFit.rams.map((r) => <th scope="col"><span class="mono">{r} {ch.fit.unit}</span><span class="long"> RAM</span></th>)}
                           </tr>
                         </thead>
                         <tbody>
@@ -226,11 +238,12 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
                 if (b.t === "faq")
                   return (
                     <div class="faq">
-                      {b.items.map((i) => (
-                        <details>
+                      {b.items.map((i, n) => (
+                        <details open={n === 0}>
                           <summary>
                             <h2>{i.q}</h2>
-                            <Icon name="expand_more" size={20} />
+                            <Icon name="expand_more" size={22} />
+                            <Icon name="expand_less" size={22} />
                           </summary>
                           <p><Inline text={i.a} locale={locale} /></p>
                         </details>
@@ -292,28 +305,42 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 {toc.length > 0 && <script>import "../scripts/docs-spy";</script>}
 
 <style>
+  /* Metrics are the Claude Design "Docs" artboards: mobile (390) below 40rem, desktop (1440) from there. */
+  .banner-row,
   .docs-wrap {
+    --pad: 20px;
     width: 100%;
-    max-width: calc(1280px + 2 * var(--gutter));
+    max-width: calc(1280px + 2 * var(--pad));
     margin-inline: auto;
-    padding: 1.5rem var(--gutter) 5rem;
+    padding-inline: var(--pad);
   }
 
-  /* Mobile: the section menu replaces the sidebar. */
-  .menu-m {
-    margin-bottom: 1.5rem;
+  .banner-row {
+    padding-top: 16px;
+  }
+
+  .docs-wrap {
+    padding-block: 36px 72px;
+  }
+
+  /* Mobile: the section menu replaces the sidebar. A bar under the banner, a pill button, the list inline. */
+  .menu-bar {
+    margin-top: 16px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--outline);
   }
 
   .menu-m summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    min-height: 3rem;
-    padding: 0.5rem 1rem;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 16px;
     border: 1px solid var(--outline-strong);
-    border-radius: 16px;
+    border-radius: 999px;
     background: var(--surface);
+    font-size: 0.9375rem;
     cursor: pointer;
     list-style: none;
   }
@@ -324,32 +351,36 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   .menu-m summary :global(svg) {
     flex: none;
-    color: var(--text-secondary);
   }
 
-  .menu-m[open] summary :global(svg) {
-    transform: rotate(180deg);
+  .menu-m summary :global(svg:last-child),
+  .menu-m[open] summary :global(svg:nth-last-child(2)) {
+    display: none;
+  }
+
+  .menu-m[open] summary :global(svg:last-child) {
+    display: block;
   }
 
   .crumb-m {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 6px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .crumb-m .grp {
     color: var(--text-secondary);
-    font-size: 0.9375rem;
   }
 
   .crumb-m .here {
-    color: var(--text);
     font-weight: 600;
   }
 
   .panel {
-    margin-top: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid var(--outline);
-    border-radius: 16px;
-    background: var(--surface);
+    padding: 12px 0 4px;
   }
 
   .side,
@@ -364,41 +395,45 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   .crumb {
     display: flex;
-    gap: 0.5rem;
-    margin: 0 0 1rem;
+    gap: 8px;
+    margin: 0 0 16px;
     color: var(--text-secondary);
     font-size: 0.875rem;
+    line-height: 1.6;
   }
 
   h1 {
-    margin-bottom: 0;
-    font-size: clamp(2rem, 6vw, 2.75rem);
+    margin: 0;
+    font-size: 2.125rem;
+    font-weight: 700;
     letter-spacing: -0.035em;
     line-height: 1.1;
   }
 
   .lead {
-    margin: 1.25rem 0 0;
+    margin: 16px 0 0;
     color: var(--text-secondary);
-    font-size: clamp(1.125rem, 2.4vw, 1.25rem);
+    font-size: 1.125rem;
     line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .lead.faq-lead {
+    margin-bottom: 28px;
   }
 
   section > h2 {
-    margin: 3.5rem 0 0.875rem;
-    font-size: clamp(1.5rem, 3vw, 1.75rem);
+    margin: 44px 0 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.2;
     scroll-margin-top: 1.5rem;
   }
 
-  section:first-of-type > h2 {
-    margin-top: 3rem;
-  }
-
   h3 {
-    margin: 2rem 0 0.625rem;
-    font-size: 1.1875rem;
+    margin: 28px 0 10px;
+    font-size: 1.125rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     scroll-margin-top: 1.5rem;
@@ -406,12 +441,13 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   p,
   li {
-    font-size: 1.0625rem;
+    font-size: 1rem;
     line-height: 1.65;
+    text-wrap: pretty;
   }
 
   p {
-    margin: 0 0 1rem;
+    margin: 0 0 16px;
   }
 
   ul,
@@ -428,14 +464,14 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
     padding: 1px 6px;
     border-radius: 6px;
     background: var(--surface-variant);
-    font-size: 0.9em;
+    font-size: 13.5px;
   }
 
   .note {
     display: flex;
     gap: 14px;
-    margin: 1.75rem 0;
-    padding: 1.25rem 1.5rem;
+    margin: 28px 0;
+    padding: 18px;
     border-left: 3px solid var(--primary);
     border-radius: 0 16px 16px 0;
     background: var(--surface-variant);
@@ -447,19 +483,27 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
     color: var(--primary);
   }
 
+  .note > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
   .note p {
     margin: 0;
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     line-height: 1.6;
   }
 
   .note .note-title {
-    margin-bottom: 0.375rem;
     color: var(--text);
+    font-size: 15.5px;
     font-weight: 600;
+    line-height: 1.65;
   }
 
+  /* Definition lists. The mono ones ("Reading the name") are the mockup's: no rules, a fixed term column. */
   dl {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -473,11 +517,6 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
     font-weight: 600;
   }
 
-  dl.terms dt {
-    font-family: var(--font-mono);
-    font-size: 0.9375rem;
-  }
-
   dd {
     margin: 0;
     padding-block: 0.15rem 0.875rem;
@@ -487,8 +526,29 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
     line-height: 1.55;
   }
 
+  dl.terms {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 10px 16px;
+    margin: 0 0 8px;
+    border-top: 0;
+    font-size: 15.5px;
+    line-height: 1.5;
+  }
+
+  dl.terms dt {
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  dl.terms dd {
+    padding: 0;
+    border: 0;
+    font-size: inherit;
+  }
+
   .code {
-    margin: 1.25rem 0 0.5rem;
+    margin: 20px 0 8px;
     overflow: hidden;
     border: 1px solid var(--outline);
     border-radius: 16px;
@@ -505,7 +565,7 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   .code-label {
     color: var(--text-secondary);
-    font-size: 0.78rem;
+    font-size: 12.5px;
   }
 
   .copy {
@@ -532,14 +592,14 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   pre {
     margin: 0;
-    padding: 1.125rem 1.25rem;
+    padding: 16px 18px;
     overflow-x: auto;
   }
 
   pre code {
     padding: 0;
     background: none;
-    font-size: 0.97rem;
+    font-size: 14px;
   }
 
   .accent {
@@ -553,21 +613,21 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
   }
 
   .scroll {
-    margin: 1.25rem 0 0.5rem;
+    margin: 20px 0 8px;
     overflow-x: auto;
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9375rem;
+    font-size: 13.5px;
   }
 
   thead th {
-    padding: 0.875rem 1.125rem;
+    padding: 12px 10px;
     border-bottom: 1px solid var(--outline);
     color: var(--text-secondary);
-    font-size: 0.8125rem;
+    font-size: 13px;
     font-weight: 600;
     text-align: start;
     white-space: nowrap;
@@ -579,7 +639,7 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   tbody th,
   tbody td {
-    padding: 0.9375rem 1.125rem;
+    padding: 14px 10px;
     font-weight: 400;
     text-align: start;
     vertical-align: top;
@@ -606,18 +666,28 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   .muted {
     color: var(--text-secondary);
-    font-size: 0.875rem;
+    font-size: 12.5px;
   }
 
-  .nowrap,
-  .verdict {
+  .nowrap {
     white-space: nowrap;
   }
 
+  /* Mobile: the dot sits above the label. */
   .verdict {
     display: inline-flex;
-    align-items: center;
-    gap: 7px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .short {
+    display: inline;
+  }
+
+  .long {
+    display: none;
   }
 
   .num {
@@ -638,7 +708,7 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
   }
 
   .setup {
-    margin: 1rem 0 1rem;
+    margin: 1rem 0;
     color: var(--text-secondary);
     font-size: 0.8125rem;
     line-height: 1.7;
@@ -678,38 +748,44 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
   figure {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    margin: 1.5rem 0 0.5rem;
+    align-items: center;
+    gap: 14px;
+    margin: 24px 0 8px;
   }
 
   .fig-img {
     flex: none;
-    width: min(220px, 62vw);
+    width: 234px;
   }
 
   figcaption {
     max-width: 300px;
     color: var(--text-secondary);
-    font-size: 0.9375rem;
+    font-size: 15px;
     line-height: 1.55;
+    text-align: center;
+    text-wrap: pretty;
   }
 
+  /* FAQ: one surface card, rows separated by a rule. */
   .faq {
-    margin-top: 2rem;
-    border-top: 1px solid var(--outline);
+    overflow: hidden;
+    border: 1px solid var(--outline);
+    border-radius: 20px;
+    background: var(--surface);
   }
 
-  .faq details {
-    border-bottom: 1px solid var(--outline);
+  .faq details + details {
+    border-top: 1px solid var(--outline);
   }
 
   .faq summary {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    min-height: 3.5rem;
-    padding-block: 0.75rem;
+    gap: 16px;
+    min-height: 60px;
+    padding: 14px 16px 14px 20px;
     cursor: pointer;
     list-style: none;
   }
@@ -720,47 +796,54 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 
   .faq summary h2 {
     margin: 0;
-    font-size: 1.125rem;
+    font-size: 16.5px;
     font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
+    letter-spacing: normal;
+    line-height: 1.5;
   }
 
   .faq summary :global(svg) {
     flex: none;
     color: var(--text-secondary);
-    transform: rotate(-90deg);
   }
 
-  .faq details[open] summary :global(svg) {
-    transform: none;
+  .faq summary :global(svg:last-child),
+  .faq details[open] summary :global(svg:nth-last-child(2)) {
+    display: none;
+  }
+
+  .faq details[open] summary :global(svg:last-child) {
+    display: block;
   }
 
   .faq details p {
-    margin: 0 0 1.25rem;
+    margin: 0;
+    padding: 0 20px 20px;
     color: var(--text-secondary);
+    font-size: 15.5px;
+    line-height: 1.65;
   }
 
   .pager {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 4rem;
-    padding-top: 1.75rem;
+    gap: 24px;
+    margin-top: 48px;
+    padding-top: 28px;
     border-top: 1px solid var(--outline);
   }
 
   .pager-links {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 0.875rem;
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .pager-link {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 1rem 1.25rem;
+    padding: 16px 20px;
     border: 1px solid var(--outline);
     border-radius: 16px;
     background: var(--surface);
@@ -772,34 +855,75 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
     background: var(--primary-08);
   }
 
-  .pager-link.end {
-    align-items: flex-end;
-    text-align: end;
-  }
-
   .dir {
     display: flex;
     align-items: center;
     gap: 4px;
     color: var(--text-secondary);
-    font-size: 0.8125rem;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .name {
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 600;
+    line-height: 1.6;
   }
 
   .edit {
     align-self: flex-start;
     padding: 6px 2px;
     color: var(--text-secondary);
-    font-size: 0.9375rem;
+    font-size: 15px;
     font-weight: 500;
     text-decoration: none;
   }
 
   @media (min-width: 40rem) {
+    h1 {
+      font-size: 2.75rem;
+    }
+
+    .lead {
+      margin-top: 20px;
+      font-size: 1.25rem;
+    }
+
+    .lead.faq-lead {
+      margin-bottom: 36px;
+    }
+
+    section > h2 {
+      margin: 56px 0 14px;
+      font-size: 1.75rem;
+    }
+
+    h3 {
+      margin: 32px 0 10px;
+      font-size: 1.1875rem;
+    }
+
+    p,
+    li {
+      font-size: 1.0625rem;
+    }
+
+    code {
+      font-size: 14.5px;
+    }
+
+    .note {
+      padding: 20px 24px;
+    }
+
+    .note p {
+      font-size: 1rem;
+    }
+
+    .note .note-title {
+      font-size: 1rem;
+    }
+
     dl {
       grid-template-columns: minmax(7rem, 13rem) minmax(0, 1fr);
     }
@@ -818,6 +942,22 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
       padding-inline-start: 1.25rem;
     }
 
+    dl.terms {
+      grid-template-columns: 110px minmax(0, 1fr);
+      font-size: 16.5px;
+    }
+
+    dl.terms dt {
+      padding: 0;
+      border: 0;
+      font-size: 15px;
+    }
+
+    dl.terms dd {
+      padding: 0;
+      border: 0;
+    }
+
     .stat dt,
     .stat dd {
       border: 0;
@@ -828,24 +968,103 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
       padding-block: 0.25rem 0;
     }
 
-    figure {
+    pre {
+      padding: 18px 20px;
+    }
+
+    pre code {
+      font-size: 15.5px;
+    }
+
+    table {
+      font-size: 15px;
+    }
+
+    thead th {
+      padding: 14px 18px;
+    }
+
+    tbody th,
+    tbody td {
+      padding: 15px 18px;
+    }
+
+    .muted {
+      font-size: 14px;
+    }
+
+    .verdict {
       flex-direction: row;
       align-items: center;
-      gap: 2rem;
+      gap: 7px;
+    }
+
+    .short {
+      display: none;
+    }
+
+    .long {
+      display: inline;
+    }
+
+    figure {
+      flex-direction: row;
+      gap: 32px;
     }
 
     .fig-img {
       width: 254px;
     }
+
+    figcaption {
+      text-align: start;
+    }
+
+    .faq summary {
+      min-height: 64px;
+      padding: 16px 20px 16px 28px;
+    }
+
+    .faq summary h2 {
+      font-size: 18px;
+    }
+
+    .faq details p {
+      padding: 0 72px 24px 28px;
+      font-size: 16.5px;
+    }
+
+    .pager {
+      margin-top: 64px;
+    }
+
+    .pager-links {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .pager-link.end {
+      grid-column: 2;
+      align-items: flex-end;
+      text-align: end;
+    }
   }
 
   @media (min-width: 56rem) {
+    .banner-row,
     .docs-wrap {
-      padding-top: 3rem;
+      --pad: var(--gutter);
     }
 
-    .menu-m {
+    .banner-row {
+      padding-top: 20px;
+    }
+
+    .menu-bar {
       display: none;
+    }
+
+    .docs-wrap {
+      padding-block: 48px 112px;
     }
 
     .layout {
@@ -858,29 +1077,32 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
     .side {
       display: block;
       position: sticky;
-      top: 1.5rem;
-      max-height: calc(100dvh - 3rem);
-      overflow-y: auto;
+      top: 24px;
     }
   }
 
   @media (min-width: 80rem) {
+    .layout {
+      grid-template-columns: 248px minmax(0, 1fr) 0;
+      gap: 64px;
+    }
+
     .layout[data-rail] {
       grid-template-columns: 248px minmax(0, 1fr) 200px;
-      gap: 4rem;
     }
 
     .rail {
       display: block;
       position: sticky;
-      top: 1.5rem;
+      top: 24px;
     }
 
     .rail-title {
-      margin: 0 0 0.75rem;
+      margin: 0 0 12px;
       color: var(--text-secondary);
-      font-size: 0.75rem;
+      font-size: 12px;
       letter-spacing: 0.12em;
+      line-height: 1.6;
       text-transform: uppercase;
     }
 
@@ -901,7 +1123,7 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
       padding: 6px 0 6px 16px;
       border-inline-start: 2px solid transparent;
       color: var(--text-secondary);
-      font-size: 0.875rem;
+      font-size: 14px;
       line-height: 1.4;
       text-decoration: none;
     }
@@ -920,11 +1142,5 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
       font-weight: 600;
     }
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .faq summary :global(svg),
-    .menu-m summary :global(svg) {
-      transition: transform 150ms;
-    }
-  }
 </style>
+

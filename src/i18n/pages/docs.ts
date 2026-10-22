@@ -68,7 +68,7 @@ interface Chrome {
   edit: string;
   copy: string;
   copied: string;
-  fit: { classModel: string; classNote: string; model: string; file: string; ram: string; unit: string; labels: [string, string, string]; region: string };
+  fit: { classModel: string; classNote: string; model: string; file: string; fileShort: string; ram: string; unit: string; labels: [string, string, string]; region: string };
   measured: { model: string; quant: string; backend: string; pp: string; tg: string; faster: string; caption: string };
 }
 
@@ -89,7 +89,7 @@ const en: DocsLocale = {
     edit: "Edit on GitHub",
     copy: "Copy",
     copied: "Copied",
-    fit: { classModel: "{n}-class model, Q4", classNote: "The {n} row is a typical file of that class, not a model in tensai's list.", model: "Model", file: "File", ram: "Phone RAM", unit: "GB", labels: ["Runs well", "Tight fit", "Won't fit"], region: "Fit of each model by phone memory, scrolls sideways" },
+    fit: { classModel: "{n}-class model, Q4", classNote: "The {n} row is a typical file of that class, not a model in tensai's list.", model: "Model", file: "File size", fileShort: "Size", ram: "Phone RAM", unit: "GB", labels: ["Runs well", "Tight fit", "Won't fit"], region: "Fit of each model by phone memory, scrolls sideways" },
     measured: { model: "Model", quant: "Quant", backend: "Backend", pp: "pp", tg: "tg", faster: "faster backend", caption: "Measured speed in tok/s, CPU and Vulkan" },
   },
   articles: {
@@ -456,7 +456,7 @@ const fr: DocsLocale = {
     edit: "Modifier sur GitHub",
     copy: "Copier",
     copied: "Copié",
-    fit: { classModel: "Modèle de classe {n}, Q4", classNote: "La ligne {n} est un fichier typique de cette classe, pas un modèle de la liste de tensai.", model: "Modèle", file: "Fichier", ram: "RAM du téléphone", unit: "Go", labels: ["Fonctionne bien", "Juste", "Ne tiendra pas"], region: "Adéquation de chaque modèle selon la mémoire du téléphone, défile sur le côté" },
+    fit: { classModel: "Modèle de classe {n}, Q4", classNote: "La ligne {n} est un fichier typique de cette classe, pas un modèle de la liste de tensai.", model: "Modèle", file: "Taille du fichier", fileShort: "Taille", ram: "RAM du téléphone", unit: "Go", labels: ["Fonctionne bien", "Juste", "Ne tiendra pas"], region: "Adéquation de chaque modèle selon la mémoire du téléphone, défile sur le côté" },
     measured: { model: "Modèle", quant: "Quant", backend: "Backend", pp: "pp", tg: "tg", faster: "backend le plus rapide", caption: "Vitesse mesurée en tok/s, CPU et Vulkan" },
   },
   articles: {
@@ -773,7 +773,7 @@ const fr: DocsLocale = {
     faq: {
       title: "Questions fréquentes",
       description: "Réponses courtes : hors ligne, où vont tes données, pourquoi c'est lent sur certains téléphones, version iPhone, et pourquoi pas le Play Store.",
-      lead: "Des réponses courtes aux questions fréquentes.",
+      lead: "Des réponses courtes aux questions qu'on pose souvent.",
       sections: [
         {
           id: "questions",

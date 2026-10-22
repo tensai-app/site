@@ -20,10 +20,12 @@ const href = (s: Slug | "privacy") => localizePath(s === "privacy" ? "/privacy/"
     nav.map((e) =>
       "group" in e ? (
         <li>
-          <details open={e.items.includes(slug)}>
+          {/* Getting started is open everywhere, the other groups open on their own articles (as in the mockup). */}
+          <details open={e.group === "start" || e.items.includes(slug)}>
             <summary>
               <span>{c.chrome.groups[e.group as "start" | "models"]}</span>
               <Icon name="expand_more" size={16} />
+              <Icon name="chevron_right" size={16} />
             </summary>
             <ul>
               {e.items.map((s) => (
@@ -66,18 +68,18 @@ const href = (s: Slug | "privacy") => localizePath(s === "privacy" ? "/privacy/"
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    min-height: 2.75rem;
-    padding: 0.5rem 0.75rem;
+    padding: 9px 12px;
     border-radius: var(--radius-pill);
     color: var(--text);
     font-size: 0.9375rem;
+    line-height: 1.6;
     text-decoration: none;
-    cursor: pointer;
   }
 
   summary {
     font-weight: 600;
     list-style: none;
+    cursor: pointer;
   }
 
   summary::-webkit-details-marker {
@@ -88,38 +90,44 @@ const href = (s: Slug | "privacy") => localizePath(s === "privacy" ? "/privacy/"
     font-weight: 500;
   }
 
+  .leaf:hover {
+    background: var(--primary-08);
+  }
+
   summary :global(svg),
   .leaf :global(svg) {
     flex: none;
     color: var(--text-secondary);
   }
 
-  details[open] > summary :global(svg) {
-    transform: none;
+  /* Open: the group shows expand_more. Closed: chevron_right. */
+  summary :global(svg:last-child) {
+    display: none;
   }
 
-  details:not([open]) > summary :global(svg) {
-    transform: rotate(-90deg);
+  details:not([open]) > summary :global(svg:nth-of-type(1)) {
+    display: none;
   }
 
-  summary:hover,
-  .leaf:hover {
-    background: var(--primary-08);
+  details:not([open]) > summary :global(svg:last-child) {
+    display: block;
   }
 
   details ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
     margin: 0 0 6px;
-    padding-inline-start: 0.75rem;
+    padding-inline-start: 12px;
   }
 
   details a {
-    display: flex;
-    align-items: center;
-    min-height: 2.75rem;
-    padding: 0.4rem 0.75rem;
+    display: block;
+    padding: 7px 12px;
     border-radius: var(--radius-pill);
     color: var(--text-secondary);
     font-size: 0.90625rem;
+    line-height: 1.6;
     text-decoration: none;
   }
 
@@ -128,7 +136,8 @@ const href = (s: Slug | "privacy") => localizePath(s === "privacy" ? "/privacy/"
     color: var(--text);
   }
 
-  a[aria-current="page"] {
+  a[aria-current="page"],
+  details a[aria-current="page"] {
     background: var(--primary-12);
     color: var(--primary);
     font-weight: 600;
