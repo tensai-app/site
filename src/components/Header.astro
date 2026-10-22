@@ -308,13 +308,15 @@ const links = [
       gap: 28px;
     }
 
-    /* 28px gap + 2px each side: 32px between the texts. The height (padding-block) keeps the 44px hit area. */
+    /* 28px gap + 2px each side: 32px between the texts. The hover pill gets 14px of side padding, taken back by the
+       negative margin so the layout keeps the 2px footprint. The height (padding-block) keeps the 44px hit area. */
     .nav-wide a {
-      padding-inline: 2px;
+      padding-inline: 14px;
+      margin-inline: -12px;
     }
 
     .nav-wide a[aria-current="page"]::after {
-      inset-inline: 2px;
+      inset-inline: 14px;
       inset-block: auto 0.55rem;
       width: auto;
       height: 2px;
