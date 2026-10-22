@@ -119,11 +119,16 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
           {
             snippets.map((lines, i) => (
               <div class={`panel panel-${i}`}>
+                <button class="copy" type="button" data-copy data-done={c.code.copied} hidden>
+                  <Icon name="content_copy" size={20} />
+                  <span class="visually-hidden">{c.code.copy}</span>
+                </button>
                 <pre tabindex="0" role="region" aria-label={c.code.langs[i]}><code>{lines.map((l) => <span class="line">{highlight(l, grammars[i]!).map((t) => (t.kind ? <span class={`tok-${t.kind}`}>{t.text}</span> : t.text))}{l ? "" : " "}</span>)}</code></pre>
               </div>
             ))
           }
         </div>
+        <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
         <p class="code-note">{c.code.note}</p>
       </section>
     </div>
@@ -206,6 +211,10 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
     </section>
   </div>
 </BaseLayout>
+
+<script>
+  import "../scripts/copy";
+</script>
 
 <style>
   .page {
@@ -339,6 +348,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
 
   .panel {
     display: none;
+    position: relative;
     border: 1px solid var(--outline);
     border-top: 0;
     border-radius: 0 0 var(--radius-card) var(--radius-card);
@@ -347,7 +357,7 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
 
   pre {
     margin: 0;
-    padding: 22px 24px;
+    padding: 22px 64px 22px 24px;
     overflow-x: auto;
     font-size: 14px;
     line-height: 1.7;
@@ -400,6 +410,31 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
   #tab-1:checked ~ .panel-1,
   #tab-2:checked ~ .panel-2 {
     display: block;
+  }
+
+  .copy {
+    position: absolute;
+    inset-block-start: 0.5rem;
+    inset-inline-end: 0.5rem;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .copy[hidden] {
+    display: none;
+  }
+
+  .copy:hover {
+    background: var(--surface-variant);
+    color: var(--text);
   }
 
   .code-note {

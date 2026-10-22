@@ -39,6 +39,8 @@ const en = {
     tabs: ["Submodule", "Gradle", "Kotlin"],
     langs: ["Shell commands", "Gradle, Kotlin DSL", "Kotlin"],
     note: "The AAR is not published yet. The git submodule is the supported path for now. Maven Central may come later.",
+    copy: "Copy code",
+    copied: "Copied",
   },
   measured: {
     heading: "Measured",
@@ -166,6 +168,8 @@ const fr: typeof en = {
     tabs: ["Submodule", "Gradle", "Kotlin"],
     langs: ["Commandes shell", "Gradle, Kotlin DSL", "Kotlin"],
     note: "L'AAR n'est pas encore publié. Le submodule git est la voie supportée pour l'instant. Maven Central pourrait suivre.",
+    copy: "Copier le code",
+    copied: "Copié",
   },
   measured: {
     heading: "Mesures",

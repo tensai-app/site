@@ -13,6 +13,7 @@ interface Props {
     | "arrow_up_right"
     | "android"
     | "arrow_back"
+    | "content_copy"
     | "chat"
     | "data_object"
     | "deployed_code"
@@ -181,6 +182,14 @@ const { name, size = 20 } = Astro.props;
       <>
         <path d="M12 3l7 3v5.5c0 4.3-3 8-7 9.5-4-1.5-7-5.2-7-9.5V6z"/>
         <path d="M8.8 12.2l2.2 2.2 4.3-4.4"/>
+      </>
+    )
+  }
+  {
+    name === "content_copy" && (
+      <>
+        <rect x="9" y="9" width="11" height="11" rx="2.5" />
+        <path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H15" />
       </>
     )
   }

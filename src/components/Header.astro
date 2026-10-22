@@ -172,8 +172,10 @@ const links = [
   }
 
   nav a {
+    position: relative;
     display: block;
     padding: 0.7rem 1rem;
+    line-height: 1.5rem;
     border-radius: var(--radius-pill);
     color: var(--text);
     font-weight: 500;
@@ -187,6 +189,18 @@ const links = [
 
   nav a[aria-current="page"] {
     color: var(--primary);
+  }
+
+  /* Active marker: absolutely positioned, so active and inactive links have the same box. Menu: a bar on the
+     start edge; wide nav (below): a 2px underline as wide as the text. */
+  nav a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0.4rem;
+    inset-block: 1rem;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--primary);
   }
 
   nav a:hover {
@@ -300,9 +314,18 @@ const links = [
       margin-inline-end: 0.75rem;
     }
 
+    /* Baseline, not stretch: llama.kt is mono 14px next to 16px Figtree, their text must sit on one line. */
     .nav-wide ul {
       grid-auto-flow: column;
+      align-items: baseline;
       gap: 0.25rem;
+    }
+
+    .nav-wide a[aria-current="page"]::after {
+      inset-inline: 1rem;
+      inset-block: auto 0.55rem;
+      width: auto;
+      height: 2px;
     }
 
     .menu {
