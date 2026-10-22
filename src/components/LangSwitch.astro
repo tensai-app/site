@@ -1,0 +1,112 @@
+---
+import Icon from "./Icon.astro";
+import { useT, localizePath, locales, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  /** Locale-less path of the page: each segment links to the same page in the other locale. */
+  path: string;
+  /** "bar": globe + EN / FR in the header. "sheet": full width, language names, in the mobile menu. */
+  variant?: "bar" | "sheet";
+}
+const { locale, path, variant = "bar" } = Astro.props;
+const t = useT(locale);
+const names: Record<Locale, string> = { en: "English", fr: "Français" };
+const sheet = variant === "sheet";
+---
+
+<div class:list={["lang", variant]}>
+  {!sheet && <Icon name="globe" size={18} />}
+  <nav aria-label={t.lang.label}>
+    {
+      locales.map((l) => {
+        const name = `${l.toUpperCase()}, ${names[l]}`;
+        const text = sheet ? names[l] : l.toUpperCase();
+        return l === locale ? (
+          <span class="seg current" aria-current="true" lang={l}>
+            {sheet && <Icon name="check" size={18} />}
+            <span class="visually-hidden">{name}</span>
+            <span aria-hidden="true">{text}</span>
+          </span>
+        ) : (
+          <a class="seg" href={localizePath(path, l)} hreflang={l} lang={l}>
+            <span class="visually-hidden">{name}</span>
+            <span aria-hidden="true">{text}</span>
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+  }
+
+  .lang.sheet {
+    display: flex;
+  }
+
+  nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--outline-strong);
+    border-radius: 999px;
+  }
+
+  .sheet nav {
+    flex: 1;
+  }
+
+  .seg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
+    min-width: 44px;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+
+  .sheet .seg {
+    height: 44px;
+  }
+
+  .seg.current {
+    border-color: var(--outline-strong);
+    background: var(--surface-variant);
+    color: var(--text);
+    cursor: default;
+  }
+
+  a.seg:hover {
+    background: var(--primary-08);
+    color: var(--text);
+  }
+
+  a.seg:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a.seg {
+      transition: background-color 150ms, color 150ms;
+    }
+  }
+</style>

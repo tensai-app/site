@@ -2,7 +2,8 @@
 import Mark from "./Mark.astro";
 import Icon from "./Icon.astro";
 import ThemeSwitch from "./ThemeSwitch.astro";
-import { useT, localizePath, stripLocale, locales, type Locale } from "../i18n";
+import LangSwitch from "./LangSwitch.astro";
+import { useT, localizePath, stripLocale, type Locale } from "../i18n";
 import { isLive } from "../i18n/routes";
 
 interface Props {
@@ -12,9 +13,7 @@ interface Props {
 }
 const { locale, reduced = false } = Astro.props;
 const t = useT(locale);
-const langNames: Record<Locale, string> = { en: "English", fr: "Français" };
 const path = stripLocale(Astro.url.pathname);
-const switchPath = /^\/404\/?$/.test(path) ? "/" : path;
 
 const links = [
   { path: "/download/", href: localizePath("/download/", locale), label: t.nav.download },
@@ -52,24 +51,13 @@ const links = [
           </a>
         )
       }
-      <ThemeSwitch locale={locale} />
+      <div class:list={["theme-slot", { always: reduced }]}>
+        <ThemeSwitch locale={locale} />
+      </div>
       {
         !reduced && (
-          <div class="lang lang-bar" role="group" aria-label={t.lang.label}>
-            <Icon name="globe" size={18} />
-            {locales.map((l) =>
-              l === locale ? (
-                <span class="lang-item current" aria-current="true" lang={l}>
-                  <span aria-hidden="true">{l.toUpperCase()}</span>
-                  <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
-                </span>
-              ) : (
-                <a class="lang-item" href={localizePath(switchPath, l)} hreflang={l} lang={l}>
-                  <span aria-hidden="true">{l.toUpperCase()}</span>
-                  <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
-                </a>
-              ),
-            )}
+          <div class="lang-slot">
+            <LangSwitch locale={locale} path={path} />
           </div>
         )
       }
@@ -81,34 +69,30 @@ const links = [
           <summary aria-label={t.nav.menu}>
             <Icon name="menu" size={24} />
           </summary>
-          <nav aria-label={t.nav.label}>
-            <ul>
-              {links.map((l) => (
-                <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
-              ))}
-            </ul>
-            <div class="lang" role="group" aria-label={t.lang.label}>
-              <Icon name="globe" size={18} />
-              {locales.map((l) =>
-                l === locale ? (
-                  <span class="lang-item current" aria-current="true" lang={l}>
-                    <span aria-hidden="true">{l.toUpperCase()}</span>
-                    <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
-                  </span>
-                ) : (
-                  <a class="lang-item" href={localizePath(switchPath, l)} hreflang={l} lang={l}>
-                    <span aria-hidden="true">{l.toUpperCase()}</span>
-                    <span class="visually-hidden">{l.toUpperCase()} {langNames[l]}</span>
-                  </a>
-                ),
-              )}
+          <div class="panel">
+            <nav aria-label={t.nav.label}>
+              <ul>
+                {links.map((l) => (
+                  <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
+                ))}
+              </ul>
+            </nav>
+            <div class="sheet-tools">
+              <p class="sheet-label">{t.theme.label}</p>
+              <ThemeSwitch locale={locale} variant="sheet" />
+              <p class="sheet-label second">{t.lang.label}</p>
+              <LangSwitch locale={locale} path={path} variant="sheet" />
             </div>
-          </nav>
+          </div>
         </details>
       )
     }
   </div>
 </header>
+
+<script>
+  import "../scripts/menu";
+</script>
 
 <style>
   .site-header {
@@ -235,22 +219,41 @@ const links = [
     background: var(--surface-variant);
   }
 
-  .menu nav {
+  .menu .panel {
     position: absolute;
     inset-inline-end: 0;
     top: calc(100% + 0.5rem);
     z-index: 50;
-    min-width: 13rem;
-    padding: 0.5rem;
+    width: min(20rem, calc(100vw - 2rem));
+    overflow: hidden;
     border: 1px solid var(--outline);
     border-radius: var(--radius-card);
     background: var(--surface);
   }
 
-  .menu .lang {
-    margin-top: 0.25rem;
-    padding: 0.5rem 0.5rem 0;
+  /* The panel is a sheet: links on top, then theme and language in a block of their own. */
+  .menu .panel ul {
+    padding: 0.5rem;
+  }
+
+  .sheet-tools {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 20px 32px;
     border-top: 1px solid var(--outline);
+  }
+
+  .sheet-label {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .sheet-label.second {
+    margin-top: 8px;
   }
 
   .tools {
@@ -271,58 +274,45 @@ const links = [
     text-decoration: none;
   }
 
-  .icon-link:hover,
-  a.lang-item:hover {
+  .icon-link:hover {
     background: var(--surface-variant);
   }
 
-  /* EN / FR: both shown, the current one is emphasised and is not a link. */
-  .lang {
-    display: inline-flex;
-    align-items: center;
-    color: var(--text-secondary);
-  }
-
-  .lang-item {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 3rem;
-    min-height: 3rem;
-    padding: 0;
-    border-radius: var(--radius-pill);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--text-secondary);
-    text-decoration: none;
-  }
-
-  .lang-item.current {
-    color: var(--text);
-    font-weight: 700;
-  }
-
-  .lang.lang-bar {
+  /* Theme and language live in the mobile sheet below 45rem. */
+  .theme-slot:not(.always),
+  .lang-slot {
     display: none;
+  }
+
+  .theme-slot.always {
+    display: flex;
+    align-items: center;
+  }
+
+  .lang-slot {
+    padding-inline-start: 12px;
   }
 
   /* Wide: the nav is inline and the language switch is in the bar; the menu button goes away. */
   @media (min-width: 45rem) {
     .nav-wide {
       display: block;
-      margin-inline-end: 0.75rem;
     }
 
     /* Baseline, not stretch: llama.kt is mono 14px next to 16px Figtree, their text must sit on one line. */
     .nav-wide ul {
       grid-auto-flow: column;
       align-items: baseline;
-      gap: 0.25rem;
+      gap: 28px;
+    }
+
+    /* 28px gap + 2px each side: 32px between the texts. The height (padding-block) keeps the 44px hit area. */
+    .nav-wide a {
+      padding-inline: 2px;
     }
 
     .nav-wide a[aria-current="page"]::after {
-      inset-inline: 1rem;
+      inset-inline: 2px;
       inset-block: auto 0.55rem;
       width: auto;
       height: 2px;
@@ -332,12 +322,16 @@ const links = [
       display: none;
     }
 
-    .lang.lang-bar {
-      display: inline-flex;
+    /* Mockup: the group is one more item of the nav row, gap 28px and margin-left -8px. The bar already has a 4px
+       column gap and a flex gap is not shared with it, so 28 - 8 = 20px between the llama.kt box and the GitHub button. */
+    .tools {
+      margin-inline-start: 1rem;
     }
 
-    .lang-bar :global(svg) {
-      margin-inline-end: 0.15rem;
+    .theme-slot:not(.always),
+    .lang-slot {
+      display: flex;
+      align-items: center;
     }
   }
 </style>

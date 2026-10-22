@@ -27,9 +27,10 @@ function apply(mode: Mode): void {
   });
 }
 
-const group = document.querySelector<HTMLElement>("[data-theme-switch]");
-if (group) {
-  const inputs = group.querySelectorAll<HTMLInputElement>('input[name="theme"]');
+// One group per placement (header bar, mobile menu): they share the choice.
+const groups = document.querySelectorAll<HTMLElement>("[data-theme-switch]");
+if (groups.length) {
+  const inputs = document.querySelectorAll<HTMLInputElement>("[data-theme-switch] input[type=radio]");
   const mode = readMode();
   apply(mode);
   inputs.forEach((input) => {
@@ -44,7 +45,11 @@ if (group) {
         // storage blocked: the choice lasts for this page only
       }
       apply(next);
+      inputs.forEach((other) => (other.checked = other.value === next));
     });
   });
-  group.hidden = false;
+  groups.forEach((group) => {
+    group.hidden = false;
+    group.removeAttribute("data-pending");
+  });
 }

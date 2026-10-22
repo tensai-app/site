@@ -4,8 +4,11 @@ import { useT, type Locale } from "../i18n";
 
 interface Props {
   locale: Locale;
+  /** "bar": icons only, in the desktop header. "sheet": full width with labels, in the mobile menu. */
+  variant?: "bar" | "sheet";
 }
-const t = useT(Astro.props.locale).theme;
+const { locale, variant = "bar" } = Astro.props;
+const t = useT(locale).theme;
 const options = [
   { value: "system", label: t.system, icon: "auto" },
   { value: "dark", label: t.dark, icon: "moon" },
@@ -13,14 +16,14 @@ const options = [
 ] as const;
 ---
 
-<div class="theme-switch" role="radiogroup" aria-label={t.label} data-theme-switch hidden>
+<div class:list={["theme-switch", variant]} role="radiogroup" aria-label={t.label} data-theme-switch hidden={variant === "sheet"} data-pending={variant === "bar" ? "" : undefined}>
   {
     options.map((o) => (
       <label>
-        <input type="radio" name="theme" value={o.value} checked={o.value === "system"} />
-        <span class="opt" title={o.label}>
+        <input type="radio" name={`theme-${variant}`} value={o.value} checked={o.value === "system"} />
+        <span class="opt" title={variant === "bar" ? o.label : undefined}>
           <Icon name={o.icon} size={18} />
-          <span class="visually-hidden">{o.label}</span>
+          <span class:list={{ "visually-hidden": variant === "bar" }}>{o.label}</span>
         </span>
       </label>
     ))
@@ -32,15 +35,30 @@ const options = [
 </script>
 
 <style>
+  /* Same outer box as the language switch: 1px border + 3px padding + 38px segments (44px in the sheet). */
   .theme-switch {
     display: inline-flex;
-    gap: 0.125rem;
-    padding: 0.1875rem;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--outline-strong);
     border-radius: var(--radius-pill);
-    background: var(--surface-variant);
+  }
+
+  /* The bar variant keeps its box before the script runs, so nothing around it moves. */
+  .theme-switch[data-pending] {
+    visibility: hidden;
   }
 
   .theme-switch[hidden] {
+    display: none;
+  }
+
+  .theme-switch.sheet {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .theme-switch.sheet[hidden] {
     display: none;
   }
 
@@ -58,13 +76,23 @@ const options = [
   }
 
   .opt {
-    display: grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-sizing: border-box;
+    width: 38px;
+    height: 38px;
     border-radius: var(--radius-pill);
     color: var(--text-secondary);
     cursor: pointer;
+  }
+
+  .sheet .opt {
+    width: 100%;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 600;
   }
 
   .opt:hover {
@@ -79,18 +107,5 @@ const options = [
   input:focus-visible + .opt {
     outline: 3px solid var(--primary);
     outline-offset: 3px;
-  }
-
-  /* Narrow: 44px touch targets, no padding or gap, so the three options take 132px. */
-  @media (max-width: 44.99rem) {
-    .theme-switch {
-      gap: 0;
-      padding: 0;
-    }
-
-    .opt {
-      width: 2.75rem;
-      height: 2.75rem;
-    }
   }
 </style>
