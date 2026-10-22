@@ -34,6 +34,11 @@ const verdictOf = (model: string, ram: number) => {
   return i;
 };
 const gb = (n: number) => `${n.toFixed(2).replace(".", locale === "fr" ? "," : ".")} ${c.fit.unit}`;
+// Synthetic rows ("8B Q4 (Qwen3-8B shape)") stand for a size class, not a model of tensai's list.
+const rowName = (m: string) => {
+  const cls = m.match(/^(\d+B) Q4 \(/)?.[1];
+  return cls ? c.fit.classModel.replace("{n}", cls) : m;
+};
 const steps = c.install.steps;
 const snippet = [
   `sha256sum tensai-${RELEASE.version}.apk`,
@@ -149,7 +154,7 @@ const snippet = [
               {
                 models.map(([model, file]) => (
                   <tr>
-                    <th scope="row">{model}</th>
+                    <th scope="row">{rowName(model)}</th>
                     <td class="mono file-size">{gb(file)}</td>
                     {rams.map((r) => {
                       const v = verdictOf(model, r);
@@ -172,7 +177,7 @@ const snippet = [
         </ul>
       </div>
       <p class="fit-note">{c.fit.rule}</p>
-      <p class="fit-note">{c.fit.caveat}</p>
+      <p class="fit-note">{c.fit.caveat} {c.fit.classNote}</p>
     </section>
 
     <section class="block" aria-labelledby="inst-h">
