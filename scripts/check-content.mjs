@@ -61,6 +61,8 @@ const ALLOWED = [
   // JSON-LD namespace, an identifier that is never fetched.
   /^https:\/\/schema\.org(?=[/"'?#)\s<]|$)/,
   /^https:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0(?=[/"'?#)\s<]|$)/,
+  // Upstream pull requests cited on the llama.kt page, plain links.
+  /^https:\/\/github\.com\/ggml-org\/llama\.cpp\/pull\/\d+(?=[/"'?#)\s<]|$)/,
 ];
 for (const f of walk(dist, [".html", ".css", ".js", ".webmanifest"])) {
   const text = readFileSync(f, "utf8");
