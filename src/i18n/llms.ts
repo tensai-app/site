@@ -2,9 +2,12 @@ import { home } from "./pages/home";
 import { download } from "./pages/download";
 import { llamakt } from "./pages/llamakt";
 import { changelog } from "./pages/changelog";
+import { docs, routes, slugs, type Article } from "./pages/docs";
+import { docsFit } from "../data/fit";
 import { privacy } from "./pages/privacy";
 import { legal } from "./pages/legal";
 import { releases } from "../data/changelog";
+import { measuredRows } from "../data/measured";
 import { localizePath, type Locale } from "./index";
 import { absolute, pages, type Page } from "./seo";
 
@@ -42,7 +45,54 @@ function walk(value: unknown, level: number, out: string[]): void {
   }
 }
 
+/** An inline docs link as markdown with an absolute URL. */
+const docsInline = (s: string, locale: Locale) =>
+  s.replace(/\[([^\]]+)\]\((\/[^)]*)\)/g, (_, label: string, href: string) => {
+    const [path, hash] = href.split("#");
+    return `[${label}](${absolute(localizePath(path!, locale))}${hash ? "#" + hash : ""})`;
+  });
+
+function docsArticle(page: Page, locale: Locale): Article {
+  const slug = slugs.find((s) => routes[s] === page.path)!;
+  return docs[locale].articles[slug];
+}
+
+function docsBody(page: Page, locale: Locale): string {
+  const a = docsArticle(page, locale);
+  const c = docs[locale].chrome;
+  const md = (s: string) => docsInline(s, locale);
+  const out: string[] = [md(a.lead), ""];
+  for (const s of a.sections) {
+    if (!s.blocks.some((b) => b.t === "faq")) out.push(`## ${s.h}`, "");
+    for (const b of s.blocks) {
+      if (b.t === "p") out.push(md(b.x), "");
+      else if (b.t === "ul") out.push(...b.items.map((i) => `- ${md(i)}`), "");
+      else if (b.t === "ol") out.push(...b.items.map((i, n) => `${n + 1}. ${md(i)}`), "");
+      else if (b.t === "note") out.push(`> ${b.title}: ${md(b.x)}`, "");
+      else if (b.t === "code") out.push("```", b.text, "```", "");
+      else if (b.t === "dl") out.push(...b.items.map(([k, v]) => `- ${k}: ${md(v)}`), "");
+      else if (b.t === "h3") out.push(`### ${b.x}`, "");
+      else if (b.t === "faq") for (const i of b.items) out.push(`### ${i.q}`, "", md(i.a), "");
+      else if (b.t === "fit") {
+        out.push(`| ${c.fit.model} | ${c.fit.file} (${c.fit.unit}) | ${docsFit.rams.map((r) => `${r} ${c.fit.unit}`).join(" | ")} |`);
+        out.push(`|---|---|${docsFit.rams.map(() => "---").join("|")}|`);
+        for (const m of docsFit.models) out.push(`| ${m.cls ? c.fit.classModel.replace("{n}", m.cls) : m.label} | ${m.file} | ${m.verdicts.map((v) => c.fit.labels[v]).join(" | ")} |`);
+        out.push("");
+      } else if (b.t === "measured") {
+        out.push(llamakt[locale].measured.setup, "");
+        out.push("| model | quant | backend | pp | tg |", "|---|---|---|---|---|");
+        for (const [model, quant, backends] of measuredRows) for (const [backend, pp, tg] of backends) out.push(`| ${model} | ${quant} | ${backend} | ${pp} | ${tg} |`);
+        out.push("");
+      } else if (b.t === "numbers") {
+        out.push(home[locale].numbers.setup, "", ...home[locale].numbers.rows.map((r) => `- ${r.label}: ${r.value}`), "", home[locale].numbers.note, "");
+      }
+    }
+  }
+  return out.join("\n");
+}
+
 function body(page: Page, locale: Locale): string {
+  if (page.kind === "docs") return docsBody(page, locale);
   const dict = (dicts[page.kind] as Record<Locale, Record<string, unknown>>)[locale];
   const out: string[] = [];
   walk(dict, 0, out);
@@ -56,9 +106,9 @@ function body(page: Page, locale: Locale): string {
 }
 
 const pageTitle = (page: Page, locale: Locale) =>
-  ((dicts[page.kind] as Record<Locale, { title: string }>)[locale].title).replace(/ · tensai$/, "");
+  page.kind === "docs" ? docsArticle(page, locale).title : ((dicts[page.kind] as Record<Locale, { title: string }>)[locale].title).replace(/ · tensai$/, "");
 const pageDescription = (page: Page, locale: Locale) =>
-  (dicts[page.kind] as Record<Locale, { description: string }>)[locale].description;
+  page.kind === "docs" ? docsArticle(page, locale).description : (dicts[page.kind] as Record<Locale, { description: string }>)[locale].description;
 
 const SUMMARY =
   `tensai is an open-source Android app (Apache 2.0) that runs GGUF language models on the phone with llama.cpp (CPU, Vulkan). It offers chat with reasoning and an agent with on-phone tools and phone actions such as setting a timer or drafting a message, which open the right app and ask before sending. Anything that sends or deletes asks for confirmation, and Internet tools are off by default. Not public yet: the first public release is 1.0 (current version ${releases[0]!.version}, Android 10+, arm64, free). The engine, llama.kt, is already public.`;

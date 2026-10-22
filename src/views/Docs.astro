@@ -1,0 +1,930 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import Inline from "../components/Inline.astro";
+import DocsNav from "../components/DocsNav.astro";
+import Shot from "../components/Shot.astro";
+import { docs, nav, order, routes, type Block, type Slug } from "../i18n/pages/docs";
+import { home } from "../i18n/pages/home";
+import { llamakt } from "../i18n/pages/llamakt";
+import { privacy } from "../i18n/pages/privacy";
+import { docsFit } from "../data/fit";
+import { measuredRows } from "../data/measured";
+import { DOCS_EDIT_LINK, DOCS_SOURCE } from "../i18n/site";
+import { localizePath, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  slug: Slug;
+}
+const { locale, slug } = Astro.props;
+const c = docs[locale];
+const a = c.articles[slug];
+const ch = c.chrome;
+const isFaq = slug === "faq";
+
+const group = nav.find((e) => "group" in e && e.items.includes(slug));
+const groupLabel = group && "group" in group ? ch.groups[group.group as "start" | "models"] : undefined;
+
+// "On this page": the h2 of each section and the h3 blocks inside them. The FAQ has none, its questions are the page.
+const toc = isFaq
+  ? []
+  : a.sections.flatMap((s) => [
+      { id: s.id, text: s.h, level: 2 },
+      ...s.blocks.flatMap((b) => (b.t === "h3" ? [{ id: b.id, text: b.x, level: 3 }] : [])),
+    ]);
+
+// Previous and next in reading order. "privacy" is the existing privacy page.
+const entry = (s: Slug | "privacy") => ({
+  label: s === "privacy" ? privacy[locale].heading : c.articles[s].title,
+  href: localizePath(s === "privacy" ? "/privacy/" : routes[s], locale),
+});
+const at = order.indexOf(slug);
+const prev = at > 0 ? entry(order[at - 1]!) : undefined;
+const next = at < order.length - 1 ? entry(order[at + 1]!) : undefined;
+
+const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
+const gb = (n: number) => `${n.toFixed(2).replace(".", locale === "fr" ? "," : ".")} ${ch.fit.unit}`;
+const rowName = (m: (typeof docsFit.models)[number]) => (m.cls ? ch.fit.classModel.replace("{n}", m.cls) : m.label);
+const classRow = docsFit.models.find((m) => m.cls);
+const dots = ["dot-success", "dot-warning", "dot-error"];
+const llamaSetup = llamakt[locale].measured.setup;
+const numbers = home[locale].numbers;
+
+const hasCode = a.sections.some((s) => s.blocks.some((b) => b.t === "code"));
+const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.accent) : [b.text]);
+---
+
+<BaseLayout title={`${a.title} · tensai`} description={a.description}>
+  <div class="docs-wrap">
+    <details class="menu-m">
+      <summary>
+        <span class="visually-hidden">{ch.menu}: </span>
+        <span class="crumb-m">
+          {groupLabel && <span>{groupLabel}</span>}
+          {groupLabel && <span aria-hidden="true">/</span>}
+          <span class="here">{a.title}</span>
+        </span>
+        <Icon name="expand_more" size={18} />
+      </summary>
+      <nav class="panel" aria-label={ch.menu}>
+        <DocsNav locale={locale} slug={slug} />
+      </nav>
+    </details>
+
+    <div class="layout" data-rail={toc.length ? "" : undefined}>
+      <aside class="side">
+        <nav aria-label={ch.sectionsLabel}>
+          <DocsNav locale={locale} slug={slug} />
+        </nav>
+      </aside>
+
+      <article class="article">
+        <p class="crumb">
+          <span>{ch.docs}</span>
+          {groupLabel && <span aria-hidden="true">/</span>}
+          {groupLabel && <span>{groupLabel}</span>}
+        </p>
+        <h1>{a.title}</h1>
+        <p class="lead">{a.lead}</p>
+
+        {
+          a.sections.map((s) => (
+            <section aria-labelledby={isFaq ? undefined : s.id} aria-label={isFaq ? a.title : undefined}>
+              {!isFaq && <h2 id={s.id}>{s.h}</h2>}
+              {s.blocks.map((b) => {
+                if (b.t === "p") return <p><Inline text={b.x} locale={locale} /></p>;
+                if (b.t === "ul") return <ul>{b.items.map((i) => <li><Inline text={i} locale={locale} /></li>)}</ul>;
+                if (b.t === "ol") return <ol>{b.items.map((i) => <li><Inline text={i} locale={locale} /></li>)}</ol>;
+                if (b.t === "h3") return <h3 id={b.id}>{b.x}</h3>;
+                if (b.t === "note")
+                  return (
+                    <aside class="note">
+                      <Icon name="info" size={20} />
+                      <div>
+                        <p class="note-title">{b.title}</p>
+                        <p><Inline text={b.x} locale={locale} /></p>
+                      </div>
+                    </aside>
+                  );
+                if (b.t === "dl")
+                  return (
+                    <dl class:list={{ terms: b.mono }}>
+                      {b.items.map(([k, v]) => (
+                        <>
+                          <dt>{k}</dt>
+                          <dd><Inline text={v} locale={locale} /></dd>
+                        </>
+                      ))}
+                    </dl>
+                  );
+                if (b.t === "code")
+                  return (
+                    <div class="code">
+                      <div class="code-bar">
+                        <span class="mono code-label">{b.label}</span>
+                        <button class="copy" type="button" data-copy data-copy-value={b.text} data-done={ch.copied} hidden>
+                          <Icon name="content_copy" size={22} />
+                          <span class="visually-hidden">{ch.copy}: {b.label}</span>
+                        </button>
+                      </div>
+                      <pre tabindex="0" role="region" aria-label={b.label}><code>{parts(b).map((p, i) => (i === 0 ? p : <><span class="accent">{b.accent}</span>{p}</>))}</code></pre>
+                    </div>
+                  );
+                if (b.t === "fit")
+                  return (
+                    <>
+                    <div class="card scroll" role="region" aria-label={ch.fit.region} tabindex="0">
+                      <table>
+                        <caption class="visually-hidden">{ch.fit.region}</caption>
+                        <thead>
+                          <tr>
+                            <th scope="col">{ch.fit.model}</th>
+                            <th scope="col">{ch.fit.file}</th>
+                            {docsFit.rams.map((r) => <th scope="col"><span class="mono">{r} {ch.fit.unit}</span> RAM</th>)}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {docsFit.models.map((m) => (
+                            <tr>
+                              <th scope="row">{rowName(m)}</th>
+                              <td class="mono muted nowrap">{gb(m.file)}</td>
+                              {m.verdicts.map((v) => (
+                                <td><span class="verdict"><span class={`dot ${dots[v]}`} aria-hidden="true" />{ch.fit.labels[v]}</span></td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    {classRow?.cls && <p class="small">{ch.fit.classNote.replace("{n}", classRow.cls)}</p>}
+                    </>
+                  );
+                if (b.t === "measured")
+                  return (
+                    <>
+                      <p class="setup mono">{llamaSetup}</p>
+                      <div class="card scroll" role="region" aria-label={ch.measured.caption} tabindex="0">
+                        <table>
+                          <caption class="visually-hidden">{ch.measured.caption}</caption>
+                          <thead>
+                            <tr>
+                              <th scope="col">{ch.measured.model}</th>
+                              <th scope="col">{ch.measured.backend}</th>
+                              <th scope="col" class="num">{ch.measured.pp}</th>
+                              <th scope="col" class="num">{ch.measured.tg}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {measuredRows.map(([model, quant, backends]) =>
+                              backends.map(([backend, pp, tg, fast], i) => (
+                                <tr class:list={{ first: i === 0 }}>
+                                  {i === 0 && <th scope="row" rowspan={backends.length}>{model} <span class="mono muted">{quant}</span></th>}
+                                  <td class:list={{ win: fast }}>
+                                    {backend}
+                                    {fast && (
+                                      <>
+                                        <span class="dot dot-success" aria-hidden="true" />
+                                        <span class="visually-hidden">({ch.measured.faster})</span>
+                                      </>
+                                    )}
+                                  </td>
+                                  <td class="num mono">{num(pp)}</td>
+                                  <td class:list={["num mono", { win: fast }]}>{num(tg)}</td>
+                                </tr>
+                              )),
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </>
+                  );
+                if (b.t === "numbers")
+                  return (
+                    <>
+                      <p class="setup mono">{numbers.setup}</p>
+                      <dl class="stats">
+                        {numbers.rows.map((r) => (
+                          <div class="stat card">
+                            <dt>{r.label}</dt>
+                            <dd class="mono">{r.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                      <p class="small">{numbers.note}</p>
+                    </>
+                  );
+                if (b.t === "shot")
+                  return (
+                    <figure>
+                      <div class="fig-img">
+                        <Shot name={b.name} alt={b.alt} sizes="(min-width: 40rem) 254px, 220px" />
+                      </div>
+                      <figcaption>{b.caption}</figcaption>
+                    </figure>
+                  );
+                if (b.t === "faq")
+                  return (
+                    <div class="faq">
+                      {b.items.map((i) => (
+                        <details>
+                          <summary>
+                            <h2>{i.q}</h2>
+                            <Icon name="expand_more" size={20} />
+                          </summary>
+                          <p><Inline text={i.a} locale={locale} /></p>
+                        </details>
+                      ))}
+                    </div>
+                  );
+                return null;
+              })}
+            </section>
+          ))
+        }
+
+        {hasCode && <span class="visually-hidden" role="status" aria-live="polite" data-copy-status />}
+
+        <footer class="pager">
+          <div class="pager-links">
+            {
+              prev && (
+                <a class="pager-link" href={prev.href} rel="prev">
+                  <span class="dir"><Icon name="arrow_back" size={14} />{ch.previous}</span>
+                  <span class="name">{prev.label}</span>
+                </a>
+              )
+            }
+            {
+              next && (
+                <a class="pager-link end" href={next.href} rel="next">
+                  <span class="dir">{ch.next}<Icon name="arrow_right" size={14} /></span>
+                  <span class="name">{next.label}</span>
+                </a>
+              )
+            }
+          </div>
+          {DOCS_EDIT_LINK && <a class="edit" href={DOCS_SOURCE}>{ch.edit}</a>}
+        </footer>
+      </article>
+
+      {
+        toc.length > 0 && (
+          <aside class="rail">
+            <nav aria-label={ch.onThisPage}>
+              <p class="rail-title mono">{ch.onThisPage}</p>
+              <ul>
+                {toc.map((t, i) => (
+                  <li>
+                    <a class:list={{ sub: t.level === 3 }} href={`#${t.id}`} aria-current={i === 0 ? "location" : undefined}>{t.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+{hasCode && <script>import "../scripts/copy";</script>}
+{toc.length > 0 && <script>import "../scripts/docs-spy";</script>}
+
+<style>
+  .docs-wrap {
+    width: 100%;
+    max-width: calc(1280px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding: 1.5rem var(--gutter) 5rem;
+  }
+
+  /* Mobile: the section menu replaces the sidebar. */
+  .menu-m {
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-m summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--outline-strong);
+    border-radius: 16px;
+    background: var(--surface);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .menu-m summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu-m summary :global(svg) {
+    flex: none;
+    color: var(--text-secondary);
+  }
+
+  .menu-m[open] summary :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .crumb-m {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .crumb-m .here {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .panel {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--outline);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+
+  .side,
+  .rail {
+    display: none;
+  }
+
+  .article {
+    max-width: 700px;
+    min-width: 0;
+  }
+
+  .crumb {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  h1 {
+    margin-bottom: 0;
+    font-size: clamp(2rem, 6vw, 2.75rem);
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+  }
+
+  .lead {
+    margin: 1.25rem 0 0;
+    color: var(--text-secondary);
+    font-size: clamp(1.125rem, 2.4vw, 1.25rem);
+    line-height: 1.55;
+  }
+
+  section > h2 {
+    margin: 3.5rem 0 0.875rem;
+    font-size: clamp(1.5rem, 3vw, 1.75rem);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    scroll-margin-top: 1.5rem;
+  }
+
+  section:first-of-type > h2 {
+    margin-top: 3rem;
+  }
+
+  h3 {
+    margin: 2rem 0 0.625rem;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 1.5rem;
+  }
+
+  p,
+  li {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+
+  p {
+    margin: 0 0 1rem;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 1rem;
+    padding-inline-start: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  code {
+    padding: 1px 6px;
+    border-radius: 6px;
+    background: var(--surface-variant);
+    font-size: 0.9em;
+  }
+
+  .note {
+    display: flex;
+    gap: 14px;
+    margin: 1.75rem 0;
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid var(--primary);
+    border-radius: 0 16px 16px 0;
+    background: var(--surface-variant);
+  }
+
+  .note :global(svg) {
+    flex: none;
+    margin-top: 1px;
+    color: var(--primary);
+  }
+
+  .note p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .note .note-title {
+    margin-bottom: 0.375rem;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0 0 1.25rem;
+    border-top: 1px solid var(--outline);
+  }
+
+  dt {
+    padding-top: 0.875rem;
+    font-size: 0.96875rem;
+    font-weight: 600;
+  }
+
+  dl.terms dt {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+  }
+
+  dd {
+    margin: 0;
+    padding-block: 0.15rem 0.875rem;
+    border-bottom: 1px solid var(--outline);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .code {
+    margin: 1.25rem 0 0.5rem;
+    overflow: hidden;
+    border: 1px solid var(--outline);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px 4px 18px;
+    border-bottom: 1px solid var(--outline);
+  }
+
+  .code-label {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+  }
+
+  .copy {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .copy[hidden] {
+    display: none;
+  }
+
+  .copy:hover {
+    background: var(--primary-08);
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.125rem 1.25rem;
+    overflow-x: auto;
+  }
+
+  pre code {
+    padding: 0;
+    background: none;
+    font-size: 0.97rem;
+  }
+
+  .accent {
+    color: var(--primary);
+  }
+
+  .card {
+    border: 1px solid var(--outline);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+
+  .scroll {
+    margin: 1.25rem 0 0.5rem;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  thead th {
+    padding: 0.875rem 1.125rem;
+    border-bottom: 1px solid var(--outline);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  thead th .mono {
+    font-weight: 400;
+  }
+
+  tbody th,
+  tbody td {
+    padding: 0.9375rem 1.125rem;
+    font-weight: 400;
+    text-align: start;
+    vertical-align: top;
+  }
+
+  tbody th {
+    font-weight: 600;
+  }
+
+  tbody tr + tr th,
+  tbody tr + tr td {
+    border-top: 1px solid var(--outline);
+  }
+
+  tbody tr.first:not(:first-child) th,
+  tbody tr.first:not(:first-child) td {
+    border-top: 1px solid var(--outline);
+  }
+
+  tbody tr:not(.first) th,
+  tbody tr:not(.first) td {
+    border-top: 0;
+  }
+
+  .muted {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .nowrap,
+  .verdict {
+    white-space: nowrap;
+  }
+
+  .verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .num {
+    text-align: end;
+  }
+
+  thead th.num {
+    font-family: var(--font-sans);
+  }
+
+  td.win {
+    font-weight: 700;
+  }
+
+  td.win .dot {
+    margin-inline-start: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .setup {
+    margin: 1rem 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.75rem;
+    border-top: 0;
+  }
+
+  .stat {
+    padding: 1rem 1.25rem;
+  }
+
+  .stat dt {
+    padding: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
+  .stat dd {
+    padding: 0.25rem 0 0;
+    border: 0;
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .small {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  figure {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .fig-img {
+    flex: none;
+    width: min(220px, 62vw);
+  }
+
+  figcaption {
+    max-width: 300px;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .faq {
+    margin-top: 2rem;
+    border-top: 1px solid var(--outline);
+  }
+
+  .faq details {
+    border-bottom: 1px solid var(--outline);
+  }
+
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.5rem;
+    padding-block: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq summary h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .faq summary :global(svg) {
+    flex: none;
+    color: var(--text-secondary);
+    transform: rotate(-90deg);
+  }
+
+  .faq details[open] summary :global(svg) {
+    transform: none;
+  }
+
+  .faq details p {
+    margin: 0 0 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  .pager {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 4rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--outline);
+  }
+
+  .pager-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 0.875rem;
+  }
+
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--outline);
+    border-radius: 16px;
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .pager-link:hover {
+    background: var(--primary-08);
+  }
+
+  .pager-link.end {
+    align-items: flex-end;
+    text-align: end;
+  }
+
+  .dir {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  .name {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .edit {
+    align-self: flex-start;
+    padding: 6px 2px;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  @media (min-width: 40rem) {
+    dl {
+      grid-template-columns: minmax(7rem, 13rem) minmax(0, 1fr);
+    }
+
+    dl.stats {
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    }
+
+    dt,
+    dd {
+      padding-block: 0.875rem;
+      border-bottom: 1px solid var(--outline);
+    }
+
+    dd {
+      padding-inline-start: 1.25rem;
+    }
+
+    .stat dt,
+    .stat dd {
+      border: 0;
+      padding-inline: 0;
+    }
+
+    .stat dd {
+      padding-block: 0.25rem 0;
+    }
+
+    figure {
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .fig-img {
+      width: 254px;
+    }
+  }
+
+  @media (min-width: 56rem) {
+    .docs-wrap {
+      padding-top: 3rem;
+    }
+
+    .menu-m {
+      display: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .side {
+      display: block;
+      position: sticky;
+      top: 1.5rem;
+      max-height: calc(100dvh - 3rem);
+      overflow-y: auto;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .layout[data-rail] {
+      grid-template-columns: 248px minmax(0, 1fr) 200px;
+      gap: 4rem;
+    }
+
+    .rail {
+      display: block;
+      position: sticky;
+      top: 1.5rem;
+    }
+
+    .rail-title {
+      margin: 0 0 0.75rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .rail ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-inline-start: 1px solid var(--outline-strong);
+    }
+
+    .rail li {
+      margin: 0;
+    }
+
+    .rail a {
+      display: block;
+      margin-inline-start: -1px;
+      padding: 6px 0 6px 16px;
+      border-inline-start: 2px solid transparent;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.4;
+      text-decoration: none;
+    }
+
+    .rail a.sub {
+      padding-inline-start: 28px;
+    }
+
+    .rail a:hover {
+      color: var(--text);
+    }
+
+    .rail a[aria-current] {
+      border-inline-start-color: var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .faq summary :global(svg),
+    .menu-m summary :global(svg) {
+      transition: transform 150ms;
+    }
+  }
+</style>

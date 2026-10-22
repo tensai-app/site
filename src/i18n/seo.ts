@@ -3,6 +3,7 @@ import { download } from "./pages/download";
 import { llamakt } from "./pages/llamakt";
 import { changelog } from "./pages/changelog";
 import { privacy } from "./pages/privacy";
+import { docs, routes, slugs } from "./pages/docs";
 import { legal } from "./pages/legal";
 import { useT, localizePath, type Locale } from "./index";
 import { APACHE_LICENSE, APP_VERSION, GITHUB_ORG, LAUNCHED, LLAMA_KT_REPO, SITE_URL } from "./site";
@@ -10,7 +11,7 @@ import { APACHE_LICENSE, APP_VERSION, GITHUB_ORG, LAUNCHED, LLAMA_KT_REPO, SITE_
 /** Open Graph image size, fixed by the endpoint in src/pages/og. */
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
-type Kind = "home" | "download" | "changelog" | "llama-kt" | "privacy" | "legal";
+type Kind = "home" | "download" | "docs" | "changelog" | "llama-kt" | "privacy" | "legal";
 
 export interface Page {
   kind: Kind;
@@ -42,6 +43,13 @@ export const pages: Page[] = [
     og: both((l) => ({ title: download[l].heading })),
     name: both((l) => download[l].heading),
   },
+  ...slugs.map((s): Page => ({
+    kind: "docs",
+    path: routes[s],
+    slug: s === "install" ? "docs" : `docs-${s}`,
+    og: both((l) => ({ label: docs[l].chrome.docs, title: docs[l].articles[s].title })),
+    name: both((l) => docs[l].articles[s].title),
+  })),
   {
     kind: "changelog",
     path: "/changelog/",
@@ -71,6 +79,9 @@ export const pages: Page[] = [
     name: both((l) => legal[l].heading),
   },
 ];
+
+/** Inline docs markup (`code`, [label](path)) as plain text. */
+export const plain = (s: string) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/`/g, "");
 
 export function pageFor(path: string): Page | undefined {
   return pages.find((p) => p.path === path);
@@ -143,12 +154,24 @@ export function jsonLd(page: Page, locale: Locale, description: string) {
   }
 
   if (page.kind !== "home") {
+    // Docs: Home > Docs > article. The docs home is the install article, so it is just Home > Docs.
+    const docsHome = page.kind === "docs" && page.path === routes.install;
+    const crumbs = [
+      { name: t.siteName, item: absolute(localizePath("/", locale)) },
+      ...(page.kind === "docs" && !docsHome ? [{ name: docs[locale].chrome.docs, item: absolute(localizePath(routes.install, locale)) }] : []),
+      { name: docsHome ? docs[locale].chrome.docs : page.name[locale], item: url },
+    ];
     graph.push({
       "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: t.siteName, item: absolute(localizePath("/", locale)) },
-        { "@type": "ListItem", position: 2, name: page.name[locale], item: url },
-      ],
+      itemListElement: crumbs.map((c, i) => ({ "@type": "ListItem", position: i + 1, ...c })),
+    });
+  }
+
+  if (page.kind === "docs" && page.path === routes.faq) {
+    const items = docs[locale].articles.faq.sections.flatMap((s) => s.blocks).flatMap((b) => (b.t === "faq" ? b.items : []));
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: items.map((i) => ({ "@type": "Question", name: i.q, acceptedAnswer: { "@type": "Answer", text: plain(i.a) } })),
     });
   }
 

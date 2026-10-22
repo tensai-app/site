@@ -1,0 +1,25 @@
+---
+import { localizePath, type Locale } from "../i18n";
+
+interface Props {
+  /** Docs inline markup: `code` and [label](/locale-less/path/#anchor). Nothing else, and no HTML. */
+  text: string;
+  locale: Locale;
+}
+const { text, locale } = Astro.props;
+
+const href = (h: string) => {
+  const [path, hash] = h.split("#");
+  return localizePath(path!, locale) + (hash ? `#${hash}` : "");
+};
+const parts = text
+  .split(/(`[^`]+`|\[[^\]]+\]\([^)]+\))/)
+  .filter(Boolean)
+  .map((p) => {
+    if (p.startsWith("`")) return { k: "c", v: p.slice(1, -1) } as const;
+    const m = p.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    return m ? ({ k: "a", v: m[1]!, href: href(m[2]!) } as const) : ({ k: "t", v: p } as const);
+  });
+---
+
+{parts.map((p) => (p.k === "c" ? <code>{p.v}</code> : p.k === "a" ? <a href={p.href}>{p.v}</a> : p.v))}

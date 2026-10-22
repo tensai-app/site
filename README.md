@@ -31,6 +31,7 @@ pnpm test:lhci      # Lighthouse CI, budgets in lighthouserc.json (needs Chrome,
 | `src/layouts/BaseLayout.astro` | head (meta, hreflang, OG), inline theme script, header/footer |
 | `src/i18n/` | dictionary per locale (`en.ts` is the type source), path helpers |
 | `src/scripts/theme-init.js` | inline in `<head>`, no flash of wrong theme. Its sha256 is in `public/_headers` |
+| `src/i18n/pages/docs.ts` | the docs (EN and FR): one article per page, written from the app's code and strings. Routes, nav and reading order are in the same file. `DOCS_EDIT_LINK` in `src/i18n/site.ts` shows "Edit on GitHub" once the repo is public |
 | `public/fonts/` | self-hosted woff2 (Figtree, JetBrains Mono, 天 only from Noto Serif JP), OFL texts |
 | `scripts/build-fonts.mjs` | regenerates the fonts: `pnpm fonts <dir>` (needs `pip install fonttools brotli`) |
 

@@ -15,6 +15,8 @@ const { locale, reduced = false } = Astro.props;
 const t = useT(locale);
 const path = stripLocale(Astro.url.pathname);
 
+const isCurrent = (p: string) => path === p || (p === "/docs/" && path.startsWith("/docs/"));
+
 const links = [
   { path: "/download/", href: localizePath("/download/", locale), label: t.nav.download },
   { path: "/docs/", href: localizePath("/docs/", locale), label: t.nav.docs },
@@ -36,7 +38,7 @@ const links = [
         <nav class="nav-wide" aria-label={t.nav.label}>
           <ul>
             {links.map((l) => (
-              <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
+              <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={isCurrent(l.path) ? "page" : undefined}>{l.label}</a></li>
             ))}
           </ul>
         </nav>
@@ -73,7 +75,7 @@ const links = [
             <nav aria-label={t.nav.label}>
               <ul>
                 {links.map((l) => (
-                  <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={path === l.path ? "page" : undefined}>{l.label}</a></li>
+                  <li><a class:list={{ mono: l.path === "/llama-kt/" }} href={l.href} aria-current={isCurrent(l.path) ? "page" : undefined}>{l.label}</a></li>
                 ))}
               </ul>
             </nav>

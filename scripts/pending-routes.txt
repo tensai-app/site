@@ -1,3 +1,1 @@
 # Not built yet: the layout hides links to these (src/i18n/routes.ts) and test:links fails on any link to them. Remove a line when the page ships.
-/docs/
-/fr/docs/

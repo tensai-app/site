@@ -10,6 +10,12 @@ export const APP_VERSION = "0.3.3";
 export const LAUNCHED: boolean = false;
 export const GITHUB_ORG = "https://github.com/tensai-app";
 export const TENSAI_RELEASES = `${GITHUB_ORG}/tensai/releases`;
+/**
+ * Show "Edit on GitHub" under the docs. Off until the site repo is public (v1.0): the link would 404 for everyone else.
+ * Flip it with LAUNCHED.
+ */
+export const DOCS_EDIT_LINK = false;
+export const DOCS_SOURCE = `${GITHUB_ORG}/site/edit/main/src/i18n/pages/docs.ts`;
 export const LLAMA_KT_REPO = `${GITHUB_ORG}/llama.kt`;
 export const CONTACT_EMAIL = "contact@tensai.page";
 

@@ -26,7 +26,10 @@ interface Props {
     | "stream"
     | "verified_user"
     | "wifi_off"
-    | "check";
+    | "check"
+    | "chevron_right"
+    | "expand_more"
+    | "info";
   size?: number;
 }
 const { name, size = 20 } = Astro.props;
@@ -73,6 +76,16 @@ const { name, size = 20 } = Astro.props;
     </>
   )}
   {name === "check" && <path d="M5 12.5l4.5 4.5L19 7.5" />}
+  {name === "chevron_right" && <path d="M9 6l6 6-6 6" />}
+  {name === "expand_more" && <path d="M6 9l6 6 6-6" />}
+  {
+    name === "info" && (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 11v5M12 8h.01" />
+      </>
+    )
+  }
   {name === "download" && <path d="M12 4v11M7 11l5 5 5-5M5 20h14" />}
   {
     name === "clock" && (

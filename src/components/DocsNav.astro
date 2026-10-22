@@ -1,0 +1,136 @@
+---
+import Icon from "./Icon.astro";
+import { docs, nav, routes, type Slug } from "../i18n/pages/docs";
+import { privacy } from "../i18n/pages/privacy";
+import { localizePath, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  /** The article being read. */
+  slug: Slug;
+}
+const { locale, slug } = Astro.props;
+const c = docs[locale];
+const label = (s: Slug | "privacy") => (s === "privacy" ? privacy[locale].heading : c.articles[s].title);
+const href = (s: Slug | "privacy") => localizePath(s === "privacy" ? "/privacy/" : routes[s], locale);
+---
+
+<ul class="docs-nav">
+  {
+    nav.map((e) =>
+      "group" in e ? (
+        <li>
+          <details open={e.items.includes(slug)}>
+            <summary>
+              <span>{c.chrome.groups[e.group as "start" | "models"]}</span>
+              <Icon name="expand_more" size={16} />
+            </summary>
+            <ul>
+              {e.items.map((s) => (
+                <li>
+                  <a href={href(s)} aria-current={s === slug ? "page" : undefined}>{label(s)}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </li>
+      ) : (
+        <li>
+          <a class="leaf" href={href(e.item)} aria-current={e.item === slug ? "page" : undefined}>
+            <span>{label(e.item)}</span>
+            <Icon name="chevron_right" size={16} />
+          </a>
+        </li>
+      ),
+    )
+  }
+</ul>
+
+<style>
+  .docs-nav,
+  .docs-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .docs-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  summary,
+  .leaf {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--text);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  summary {
+    font-weight: 600;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .leaf {
+    font-weight: 500;
+  }
+
+  summary :global(svg),
+  .leaf :global(svg) {
+    flex: none;
+    color: var(--text-secondary);
+  }
+
+  details[open] > summary :global(svg) {
+    transform: none;
+  }
+
+  details:not([open]) > summary :global(svg) {
+    transform: rotate(-90deg);
+  }
+
+  summary:hover,
+  .leaf:hover {
+    background: var(--primary-08);
+  }
+
+  details ul {
+    margin: 0 0 6px;
+    padding-inline-start: 0.75rem;
+  }
+
+  details a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    font-size: 0.90625rem;
+    text-decoration: none;
+  }
+
+  details a:hover {
+    background: var(--primary-08);
+    color: var(--text);
+  }
+
+  a[aria-current="page"] {
+    background: var(--primary-12);
+    color: var(--primary);
+    font-weight: 600;
+  }
+</style>
