@@ -205,3 +205,48 @@
 :root[data-theme="light"] .shot-light {
   display: block;
 }
+
+/* Copy buttons (src/scripts/copy.ts): the icon swaps to a check on success, a failure turns the button red. Each view
+   sizes and places its own .copy; the two icons share one grid cell. */
+.copy > svg {
+  grid-area: 1 / 1;
+}
+
+.copy .ic-check {
+  opacity: 0;
+}
+
+.copy.done .ic-copy {
+  opacity: 0;
+}
+
+.copy.done .ic-check {
+  opacity: 1;
+}
+
+/* !important: the views' own :hover backgrounds must not hide the state. */
+.copy.done {
+  background: color-mix(in srgb, var(--success) 16%, transparent) !important;
+  color: var(--success) !important;
+}
+
+.copy.failed {
+  background: color-mix(in srgb, var(--error) 16%, transparent) !important;
+  color: var(--error) !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .copy,
+  .copy svg {
+    transition: background-color 180ms, color 180ms, opacity 180ms, transform 180ms;
+  }
+
+  .copy .ic-check,
+  .copy.done .ic-copy {
+    transform: scale(0.5);
+  }
+
+  .copy.done .ic-check {
+    transform: none;
+  }
+}

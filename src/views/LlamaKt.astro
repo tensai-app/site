@@ -111,8 +111,9 @@ const num = (n: string) => (locale === "fr" ? n.replace(".", ",") : n);
           {
             snippets.map((lines, i) => (
               <div class={`panel panel-${i}`}>
-                <button class="copy" type="button" data-copy data-done={c.code.copied} hidden>
-                  <Icon name="content_copy" size={20} />
+                <button class="copy" type="button" data-copy data-done={c.code.copied} data-failed={c.code.copyFailed} hidden>
+                  <Icon name="content_copy" size={20} class="ic-copy" />
+                  <Icon name="check" size={20} class="ic-check" />
                   <span class="visually-hidden">{c.code.copy}</span>
                 </button>
                 <pre tabindex="0" role="region" aria-label={c.code.langs[i]}><code>{lines.map((l) => <span class="line">{highlight(l, grammars[i]!).map((t) => (t.kind ? <span class={`tok-${t.kind}`}>{t.text}</span> : t.text))}{l ? "" : " "}</span>)}</code></pre>

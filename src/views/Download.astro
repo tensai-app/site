@@ -80,8 +80,9 @@ const snippet = [
                 <span class="hash-label">{label}</span>
                 <div class="hash-row">
                   <code class="mono">{value}</code>
-                  <button class="copy" type="button" data-copy data-copy-value={value} data-done={c.release.copied} hidden>
-                    <Icon name="content_copy" size={22} />
+                  <button class="copy" type="button" data-copy data-copy-value={value} data-done={c.release.copied} data-failed={c.release.copyFailed} hidden>
+                    <Icon name="content_copy" size={22} class="ic-copy" />
+                    <Icon name="check" size={22} class="ic-check" />
                     <span class="visually-hidden">{copy}</span>
                   </button>
                 </div>
@@ -206,8 +207,9 @@ const snippet = [
           <h2 id="verify">{c.release.howToHeading}</h2>
           <p class="fit-note">{c.release.howToText}</p>
           <div class="snippet">
-            <button class="copy" type="button" data-copy data-done={c.release.copied} hidden>
-              <Icon name="content_copy" size={20} />
+            <button class="copy" type="button" data-copy data-done={c.release.copied} data-failed={c.release.copyFailed} hidden>
+              <Icon name="content_copy" size={20} class="ic-copy" />
+              <Icon name="check" size={20} class="ic-check" />
               <span class="visually-hidden">{c.release.copySnippet}</span>
             </button>
             <pre tabindex="0" role="region" aria-label={c.release.snippetLabel}><code>{snippet.map((l) => <span class="line">{l}</span>)}</code></pre>
@@ -644,6 +646,22 @@ const snippet = [
     .steps {
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1.5rem;
+    }
+
+    /* One row track per part (number, title, text, screenshot) shared by the four steps: the numbers, the titles,
+       the texts and the phones line up whatever the length of a title or a text. */
+    @supports (grid-template-rows: subgrid) {
+      .steps {
+        row-gap: 0;
+      }
+
+      .steps li {
+        display: grid;
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+        justify-items: start;
+        row-gap: 0.5rem;
+      }
     }
   }
 </style>

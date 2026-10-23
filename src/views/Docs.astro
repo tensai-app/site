@@ -135,8 +135,9 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
                     <div class="code">
                       <div class="code-bar">
                         <span class="mono code-label">{b.label}</span>
-                        <button class="copy" type="button" data-copy data-copy-value={b.text} data-done={ch.copied} hidden>
-                          <Icon name="content_copy" size={22} />
+                        <button class="copy" type="button" data-copy data-copy-value={b.text} data-done={ch.copied} data-failed={ch.copyFailed} hidden>
+                          <Icon name="content_copy" size={22} class="ic-copy" />
+                          <Icon name="check" size={22} class="ic-check" />
                           <span class="visually-hidden">{ch.copy}: {b.label}</span>
                         </button>
                       </div>
@@ -569,10 +570,9 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
   }
 
   .copy {
-    display: inline-flex;
+    display: grid;
     flex: none;
-    align-items: center;
-    justify-content: center;
+    place-items: center;
     width: 44px;
     height: 44px;
     border: 0;
