@@ -328,7 +328,7 @@ const en: DocsLocale = {
           h: "What asks first",
           blocks: [
             { t: "ul", items: ["Deleting a fact from memory and opening a link ask for your answer in the chat, with Deny and Allow. Stop cancels the whole turn.", "A phone action opens the other app with a draft, and you validate there. tensai never sends a message itself.", "Remembering a fact or listing the memory does not ask, but every call is shown. You can forget everything in Settings, Memory.", "A tool you turned off is not offered to the model at all."] },
-            { t: "shot", name: "tool", alt: "A confirmation card in the chat: tensai wants to delete a fact from memory, with the action and the id, and Deny and Allow", caption: "tensai asks before it deletes. Deny, or Allow." },
+            { t: "shot", name: "tool", alt: "A confirmation card in the chat: tensai wants to forget the fact “my favourite tea is genmaicha”, with Deny and Allow", caption: "tensai asks before it deletes, and names what goes. Deny, or Allow." },
           ],
         },
         {
@@ -709,7 +709,7 @@ const fr: DocsLocale = {
           h: "Ce qui demande d'abord",
           blocks: [
             { t: "ul", items: ["Supprimer un fait de la mémoire et ouvrir un lien demandent ta réponse dans le chat, avec Refuser et Autoriser. Stop annule tout le tour.", "Une action du téléphone ouvre l'autre appli avec un brouillon, et tu valides là-bas. tensai n'envoie jamais un message lui-même.", "Retenir un fait ou lister la mémoire ne demande rien, mais chaque appel est affiché. Tu peux tout oublier dans Paramètres, Mémoire.", "Un outil que tu as désactivé n'est pas du tout proposé au modèle."] },
-            { t: "shot", name: "tool", alt: "Une carte de confirmation dans le chat : tensai veut supprimer un fait de la mémoire, avec l'action et l'identifiant, et Refuser et Autoriser", caption: "tensai demande avant de supprimer. Refuser, ou Autoriser." },
+            { t: "shot", name: "tool", alt: "Une carte de confirmation dans le chat : tensai veut oublier le fait « my favourite tea is genmaicha », avec Refuser et Autoriser", caption: "tensai demande avant de supprimer, et dit ce qui part. Refuser, ou Autoriser." },
           ],
         },
         {

@@ -46,12 +46,12 @@ const en = {
       },
       {
         key: "reasoning",
-        alt: "A chat where the model is reasoning: the Thinking block is open under the question about whether 391 is a prime number",
+        alt: "A chat where the model has reasoned about whether 391 is a prime number: the Reasoning block is open, with products like 17*23 checked step by step, and the answer below",
         caption: "Read the model's reasoning, or fold it away.",
       },
       {
         key: "tool",
-        alt: "A tool call waiting for confirmation: tensai wants to delete a fact from memory, with Deny and Allow",
+        alt: "A tool call waiting for confirmation: tensai wants to forget the fact “my favourite tea is genmaicha”, with Deny and Allow",
         caption: "Anything that deletes or sends waits for your answer.",
       },
       {
@@ -131,12 +131,12 @@ const fr: typeof en = {
       },
       {
         key: "reasoning",
-        alt: "Un chat où le modèle raisonne : le bloc de réflexion est ouvert sous la question sur la primalité de 391",
+        alt: "Un chat où le modèle a raisonné sur la primalité de 391 : le bloc de réflexion est ouvert, avec des produits comme 17*23 vérifiés pas à pas, et la réponse dessous",
         caption: "Lire le raisonnement du modèle, ou le replier.",
       },
       {
         key: "tool",
-        alt: "Un appel d'outil en attente de confirmation : tensai veut supprimer un fait de la mémoire, avec Refuser et Autoriser",
+        alt: "Un appel d'outil en attente de confirmation : tensai veut oublier le fait « my favourite tea is genmaicha », avec Refuser et Autoriser",
         caption: "Tout ce qui supprime ou envoie attend une réponse.",
       },
       {
