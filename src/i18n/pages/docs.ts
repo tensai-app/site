@@ -313,7 +313,7 @@ const en: DocsLocale = {
             {
               t: "dl",
               items: [
-                ["On this phone (on by default)", "Date and time, calculator, unit converter, time zones, device info, search in your chats, memory, ask you a question, clipboard, torch. No network, no permission."],
+                ["On this phone (on by default)", "Date and time (also in another place: \"what time is it in Tokyo\"), calculator, unit converter, time zones, device info, search in your chats, memory, ask you a question, clipboard, torch. No network, no permission."],
                 ["Phone actions (on by default)", "Opens the right app with the result ready: a timer or an alarm in Clock, an event in Calendar, a draft in Messages or in your mail app, another app, a link, the media player. Also reads your contacts, your calendar and your approximate location when you ask, which needs Android permissions."],
                 ["Internet (off by default)", "Web search, reading one web page, weather, Wikipedia."],
               ],
@@ -324,11 +324,37 @@ const en: DocsLocale = {
           ],
         },
         {
+          id: "when",
+          h: "When the model gets tools",
+          blocks: [
+            { t: "p", x: "When the first message asks for creative writing (a story, poem, song, essay, dialogue), the model answers without tools. Every other message gets the tools you enabled. It is a word rule, in English and in French, not a model's guess." },
+            { t: "p", x: "After two tool steps in a row fail or are refused, tensai stops offering tools for that reply." },
+            { t: "p", x: "With thinking on, the reasoning budget follows the message: a simple one gets a short budget (256 tokens), a multi-step problem, like a long message with numbers, gets the full one (1024). With thinking off, nothing changes." },
+          ],
+        },
+        {
           id: "asks",
           h: "What asks first",
           blocks: [
             { t: "ul", items: ["Deleting a fact from memory and opening a link ask for your answer in the chat, with Deny and Allow. Stop cancels the whole turn.", "A phone action opens the other app with a draft, and you validate there. tensai never sends a message itself.", "Remembering a fact or listing the memory does not ask, but every call is shown. You can forget everything in Settings, Memory.", "A tool you turned off is not offered to the model at all."] },
             { t: "shot", name: "tool", alt: "A confirmation card in the chat: tensai wants to forget the fact “my favourite tea is genmaicha”, with Deny and Allow", caption: "tensai asks before it deletes, and names what goes. Deny, or Allow." },
+          ],
+        },
+        {
+          id: "instructions",
+          h: "Your instructions",
+          blocks: [
+            { t: "p", x: "Settings, Your instructions is free text applied to every chat, up to 300 tokens. It is added after tensai's base prompt and before a chat's own instructions. Settings, Base prompt shows what tensai tells the model first, read-only." },
+            { t: "shot", name: "global-instructions", alt: "Settings with the Your instructions sheet open: the text Keep answers short. Use metric units. Call me Sam., and the counter ~13 / 300 tokens", caption: "Settings, Your instructions: applied to every chat." },
+            { t: "p", x: "Each chat can also have its own instructions, in its Conversation settings." },
+          ],
+        },
+        {
+          id: "delete",
+          h: "Delete a chat",
+          blocks: [
+            { t: "p", x: "Swipe a chat left in the Chats list to delete it. Chat deleted shows for 5 seconds with Undo." },
+            { t: "shot", name: "swipe-delete", alt: "The Chats list after a swipe, with the Chat deleted snackbar and its Undo button", caption: "Swipe a chat left to delete it, Undo for 5 seconds." },
           ],
         },
         {
@@ -404,6 +430,7 @@ const en: DocsLocale = {
                 ["Too big", "If a size is too much for the phone, tensai says it starts at a smaller one. It first tries a more compact cache, then smaller contexts."],
               ],
             },
+            { t: "p", x: "On CPU loads the memory cache is q8_0: replies are faster in chats with tools (4.7 to 6.3 tok/s), but reading a long new text is slower." },
             { t: "p", x: "Changing the context clears the saved sessions of the models it applies to. The conversations stay." },
             { t: "shot", name: "context-length", alt: "The Context length dialog for a model: Auto with its token count, then 4K, 8K, 16K, 32K and Max, each with its cache size and total memory against the phone's", caption: "Context length: for each choice, the cache and the total memory against this phone's." },
             { t: "shot", name: "context", alt: "The context sheet: how much of the window is used, the runtime (model, backend, context length, KV cache, last reply) and the agent's tool calls", caption: "The context sheet, from the ring in the chat header: what fills the window, the runtime, and the agent's activity." },
@@ -413,7 +440,7 @@ const en: DocsLocale = {
           id: "slow",
           h: "When it is slow",
           blocks: [
-            { t: "ul", items: ["Pick a smaller model. A Tight fit model is slower by nature, see [the fit check](/docs/first-model/#fit-check).", "Look at the backend of the model in the picker, and try CPU or Vulkan by hand.", "Lower the context length, or the memory share of Auto.", "Close what you do not need: the verdict also softens to Tight fit when the phone is short of free memory.", "After a model loads, tensai prepares its tool list in the background: the first message of a new chat can wait for it."] },
+            { t: "ul", items: ["Pick a smaller model. A Tight fit model is slower by nature, see [the fit check](/docs/first-model/#fit-check).", "Look at the backend of the model in the picker, and try CPU or Vulkan by hand.", "Lower the context length, or the memory share of Auto.", "Close what you do not need: the verdict also softens to Tight fit when the phone is short of free memory.", "After a model loads, tensai prepares its tool list in the background: the first message of a new chat can wait for it.", "The first message after a creative reply, which runs without tools, no longer waits for a full re-read of the tools prefix: about 2 minutes before, 1 to 2 s now (Dimensity 900, Qwen3-1.7B on CPU), also after reopening the app."] },
           ],
         },
       ],
@@ -694,7 +721,7 @@ const fr: DocsLocale = {
             {
               t: "dl",
               items: [
-                ["Sur ce téléphone (activé par défaut)", "Date et heure, calculatrice, convertisseur d'unités, fuseaux horaires, infos de l'appareil, recherche dans tes chats, mémoire, te poser une question, presse-papiers, lampe torche. Pas de réseau, pas de permission."],
+                ["Sur ce téléphone (activé par défaut)", "Date et heure (aussi pour un autre endroit : « quelle heure est-il à Tokyo »), calculatrice, convertisseur d'unités, fuseaux horaires, infos de l'appareil, recherche dans tes chats, mémoire, te poser une question, presse-papiers, lampe torche. Pas de réseau, pas de permission."],
                 ["Actions du téléphone (activé par défaut)", "Ouvre la bonne appli avec le résultat prêt : un minuteur ou une alarme dans Horloge, un évènement dans Agenda, un brouillon dans Messages ou dans ton appli de mail, une autre appli, un lien, le lecteur multimédia. Lit aussi tes contacts, ton agenda et ta position approximative quand tu le demandes, ce qui passe par des permissions Android."],
                 ["Internet (désactivé par défaut)", "Recherche web, lecture d'une page web, météo, Wikipédia."],
               ],
@@ -705,11 +732,37 @@ const fr: DocsLocale = {
           ],
         },
         {
+          id: "when",
+          h: "Quand le modèle a des outils",
+          blocks: [
+            { t: "p", x: "Quand le premier message demande de l'écriture créative (une histoire, un poème, une chanson, un essai, un dialogue), le modèle répond sans outils. Tout autre message reçoit les outils que tu as activés. C'est une règle sur les mots, en anglais et en français, pas une décision du modèle." },
+            { t: "p", x: "Après deux étapes d'outils de suite qui échouent ou sont refusées, tensai arrête de proposer des outils pour cette réponse." },
+            { t: "p", x: "Avec la réflexion activée, le budget de raisonnement suit le message : un message simple reçoit un budget court (256 tokens), un problème en plusieurs étapes, comme un long message avec des chiffres, le budget complet (1024). Avec la réflexion désactivée, rien ne change." },
+          ],
+        },
+        {
           id: "asks",
           h: "Ce qui demande d'abord",
           blocks: [
             { t: "ul", items: ["Supprimer un fait de la mémoire et ouvrir un lien demandent ta réponse dans le chat, avec Refuser et Autoriser. Stop annule tout le tour.", "Une action du téléphone ouvre l'autre appli avec un brouillon, et tu valides là-bas. tensai n'envoie jamais un message lui-même.", "Retenir un fait ou lister la mémoire ne demande rien, mais chaque appel est affiché. Tu peux tout oublier dans Paramètres, Mémoire.", "Un outil que tu as désactivé n'est pas du tout proposé au modèle."] },
             { t: "shot", name: "tool", alt: "Une carte de confirmation dans le chat : tensai veut oublier le fait « my favourite tea is genmaicha », avec Refuser et Autoriser", caption: "tensai demande avant de supprimer, et dit ce qui part. Refuser, ou Autoriser." },
+          ],
+        },
+        {
+          id: "instructions",
+          h: "Vos instructions",
+          blocks: [
+            { t: "p", x: "Paramètres, Vos instructions est un texte libre appliqué à chaque chat, jusqu'à 300 tokens. Il s'ajoute après le prompt de base de tensai et avant les instructions propres au chat. Paramètres, Prompt de base montre ce que tensai dit au modèle en premier, en lecture seule." },
+            { t: "shot", name: "global-instructions", alt: "Paramètres avec la feuille Vos instructions ouverte : le texte Keep answers short. Use metric units. Call me Sam., et le compteur ~13 / 300 tokens", caption: "Paramètres, Vos instructions : appliquées à chaque chat." },
+            { t: "p", x: "Chaque chat peut aussi avoir ses propres instructions, dans ses Paramètres de la conversation." },
+          ],
+        },
+        {
+          id: "delete",
+          h: "Supprimer un chat",
+          blocks: [
+            { t: "p", x: "Glisse un chat vers la gauche dans la liste des chats pour le supprimer. Discussion supprimée s'affiche 5 secondes, avec Annuler." },
+            { t: "shot", name: "swipe-delete", alt: "La liste des chats après un glissement, avec la barre Discussion supprimée et son bouton Annuler", caption: "Glisse un chat vers la gauche pour le supprimer, Annuler pendant 5 secondes." },
           ],
         },
         {
@@ -785,6 +838,7 @@ const fr: DocsLocale = {
                 ["Trop grand", "Si une taille est trop lourde pour le téléphone, tensai dit qu'il démarre plus bas. Il essaie d'abord un cache plus compact, puis des contextes plus petits."],
               ],
             },
+            { t: "p", x: "Sur les chargements CPU, le cache mémoire est en q8_0 : les réponses sont plus rapides dans les chats avec outils (4,7 à 6,3 tok/s), mais la lecture d'un long texte nouveau est plus lente." },
             { t: "p", x: "Changer le contexte efface les sessions sauvegardées des modèles concernés. Les conversations restent." },
             { t: "shot", name: "context-length", alt: "La boîte Longueur de contexte d'un modèle : Auto avec son nombre de tokens, puis 4K, 8K, 16K, 32K et Max, chacun avec la taille du cache et la mémoire totale face à celle du téléphone", caption: "Longueur de contexte : pour chaque choix, le cache et la mémoire totale face à celle de ce téléphone." },
             { t: "shot", name: "context", alt: "La feuille Contexte : la part de fenêtre utilisée, l'exécution (modèle, backend, longueur de contexte, cache KV, dernière réponse) et les appels d'outils de l'agent", caption: "La feuille Contexte, depuis l'anneau de l'en-tête du chat : ce qui remplit la fenêtre, l'exécution, et l'activité de l'agent." },
@@ -794,7 +848,7 @@ const fr: DocsLocale = {
           id: "slow",
           h: "Quand c'est lent",
           blocks: [
-            { t: "ul", items: ["Prends un modèle plus petit. Un modèle Juste est plus lent par nature, voir [le test d'adéquation](/docs/first-model/#fit-check).", "Regarde le backend du modèle dans le sélecteur, et essaie CPU ou Vulkan à la main.", "Baisse la longueur de contexte, ou la part de mémoire d'Auto.", "Ferme ce dont tu n'as pas besoin : le verdict passe aussi à Juste quand le téléphone manque de mémoire libre.", "Après le chargement d'un modèle, tensai prépare sa liste d'outils en arrière-plan : le premier message d'un nouveau chat peut l'attendre."] },
+            { t: "ul", items: ["Prends un modèle plus petit. Un modèle Juste est plus lent par nature, voir [le test d'adéquation](/docs/first-model/#fit-check).", "Regarde le backend du modèle dans le sélecteur, et essaie CPU ou Vulkan à la main.", "Baisse la longueur de contexte, ou la part de mémoire d'Auto.", "Ferme ce dont tu n'as pas besoin : le verdict passe aussi à Juste quand le téléphone manque de mémoire libre.", "Après le chargement d'un modèle, tensai prépare sa liste d'outils en arrière-plan : le premier message d'un nouveau chat peut l'attendre.", "Le premier message après une réponse créative, qui tourne sans outils, n'attend plus une relecture complète du préfixe des outils : environ 2 minutes avant, 1 à 2 s maintenant (Dimensity 900, Qwen3-1.7B sur CPU), y compris après la réouverture de l'app."] },
           ],
         },
       ],
