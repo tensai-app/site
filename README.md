@@ -1,6 +1,6 @@
 # tensai.page
 
-Static site for [tensai](https://github.com/tensai-app/tensai): marketing + docs. Astro, TypeScript strict, no UI framework, no third-party request. EN at `/`, FR at `/fr/`.
+Source of [tensai.page](https://tensai.page), the site of [tensai](https://github.com/tensai-app/tensai): landing page, docs, changelog. Public repo, live, deployed to Cloudflare by the `Deploy` workflow on every push to `main`. Astro, TypeScript strict, no UI framework, no third-party request. EN at `/`, FR at `/fr/`.
 
 ## Dev
 
@@ -75,7 +75,7 @@ Worker `tensai-site` serves `dist` (assets only, no script), config in `wrangler
 
 ## Design
 
-Claude Design project "Tensai Android App Design System", files `tensai.page *.dc.html`. Palette and type are the same as the app.
+Palette and type are the same as the app. The design source lives in the private brand repo.
 
 ## Licence
 
