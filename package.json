@@ -34,7 +34,13 @@
     "@astrojs/check": "0.9.12",
     "@capsizecss/metrics": "4.4.0",
     "@capsizecss/unpack": "4.0.1",
-    "@lhci/cli": "0.15.1",
+    "@lhci/cli": "0.16.0",
     "typescript": "6.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "fflate@>=0.7.0 <0.7.5": "0.7.5",
+      "basic-ftp@<6.2.1": "6.2.1"
+    }
   }
 }
