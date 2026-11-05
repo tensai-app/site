@@ -31,7 +31,7 @@ pnpm test:lhci      # Lighthouse CI, budgets in lighthouserc.json (needs Chrome,
 | `src/layouts/BaseLayout.astro` | head (meta, hreflang, OG), inline theme script, header/footer |
 | `src/i18n/` | dictionary per locale (`en.ts` is the type source), path helpers |
 | `src/scripts/theme-init.js` | inline in `<head>`, no flash of wrong theme. Its sha256 is in `public/_headers` |
-| `src/i18n/pages/docs.ts` | the docs (EN and FR): one article per page, written from the app's code and strings. Routes, nav and reading order are in the same file. `DOCS_EDIT_LINK` in `src/i18n/site.ts` shows "Edit on GitHub" once the repo is public |
+| `src/i18n/pages/docs.ts` | the docs (EN and FR): one article per page, written from the app's code and strings. Routes, nav and reading order are in the same file. `DOCS_EDIT_LINK` in `src/i18n/site.ts` shows "Edit on GitHub" under the docs (the site repo is public) |
 | `public/fonts/` | self-hosted woff2 (Figtree, JetBrains Mono, 天 only from Noto Serif JP), OFL texts |
 | `scripts/build-fonts.mjs` | regenerates the fonts: `pnpm fonts <dir>` (needs `pip install fonttools brotli`) |
 
@@ -49,12 +49,29 @@ Changelog: when the app ships a release, run `pnpm sync:changelog` (copies the a
 - `robots.txt` allows every crawler, AI crawlers included (GPTBot, ClaudeBot, PerplexityBot, Google-Extended): the content is public and meant to be read, so no per-bot rule.
 - Sitemap: `@astrojs/sitemap`, hreflang alternates, `lastmod` = build date, 404 and routes in `scripts/pending-routes.txt` excluded.
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Worker, static assets)
 
-- Build command `pnpm build`, output `dist`, `NODE_VERSION=24`.
-- Headers and CSP come from `public/_headers`.
+Worker `tensai-site` serves `dist` (assets only, no script), config in `wrangler.jsonc`.
+
+- `.github/workflows/deploy.yml`: on push to `main` and `workflow_dispatch`, runs the CI (`ci.yml` via `workflow_call`), then `pnpm build` and `wrangler deploy` through `cloudflare/wrangler-action` (pinned by SHA, wrangler 4.158.0). Environment `production`, one deploy at a time, never on pull requests.
+- Local check, no auth: `pnpm build && npx wrangler@4.158.0 deploy --dry-run`. Local serve: `npx wrangler@4.158.0 dev`.
+- Headers and CSP come from `public/_headers` (copied into `dist`, supported natively by Workers static assets: 100 rules max, 2000 chars per line). No `_redirects` file.
+- `not_found_handling: "404-page"` serves `dist/404.html` with a 404 status.
+- Custom domains `tensai.page` and `www.tensai.page` are declared in `routes` (`custom_domain: true`): the first deploy creates the DNS records and certificates. The zone `tensai.page` must be on the Cloudflare account, and no existing DNS record may sit on those two names (delete the old Pages custom domains / records first).
+- www -> apex is a Cloudflare redirect rule (Rules > Redirect Rules, host equals `www.tensai.page` => `https://tensai.page${uri}`, 301, keep query string). `_redirects` cannot match on host, so nothing in this repo. Redirect rules run before the Worker.
 - `public/.well-known/security.txt` expires 2027-10-01: renew it (new `Expires`, under a year ahead) before then.
-- www -> apex (`www.tensai.page` -> `tensai.page`) is a Cloudflare redirect rule, nothing in this repo.
+
+### One-time setup
+
+1. Cloudflare > My Profile > API Tokens > Create Token (custom), name `tensai-site-deploy`, permissions:
+   - Account > Workers Scripts > Edit
+   - Zone > Workers Routes > Edit (zone resource: `tensai.page` only)
+   - Zone > DNS > Edit (same zone, needed to create the custom domain records)
+   - Account resources: the one account only.
+2. GitHub repo > Settings > Environments > `production` (add required reviewers if wanted), then add as environment secrets (or repo secrets):
+   - `CLOUDFLARE_API_TOKEN`: the token above
+   - `CLOUDFLARE_ACCOUNT_ID`: Cloudflare dashboard > Workers & Pages > Account ID
+3. Add the www redirect rule (above), then run the `Deploy` workflow once by hand.
 
 ## Design
 
