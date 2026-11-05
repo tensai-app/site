@@ -2,19 +2,18 @@
 export const SITE_URL = "https://tensai.page";
 export const APACHE_LICENSE = "https://www.apache.org/licenses/LICENSE-2.0";
 /** Current app version, shown in structured data only once the app can be obtained. */
-export const APP_VERSION = "0.3.3";
+export const APP_VERSION = "0.3.6";
 /**
- * Flip to true at the public release. While false, the structured data carries no offers, version or
+ * True once the app can be downloaded from the GitHub releases. While false, the structured data carries no offers, version or
  * download URL (an Offer tells Google the app can be obtained), and scripts/check-seo.mjs fails if they appear.
  */
-export const LAUNCHED: boolean = false;
+export const LAUNCHED: boolean = true;
 export const GITHUB_ORG = "https://github.com/tensai-app";
 export const TENSAI_RELEASES = `${GITHUB_ORG}/tensai/releases`;
 /**
- * Show "Edit on GitHub" under the docs. Off until the site repo is public (v1.0): the link would 404 for everyone else.
- * Flip it with LAUNCHED.
+ * Show "Edit on GitHub" under the docs. Needs the site repo to be public, or the link 404s for everyone else.
  */
-export const DOCS_EDIT_LINK = false;
+export const DOCS_EDIT_LINK = true;
 export const DOCS_SOURCE = `${GITHUB_ORG}/site/edit/main/src/i18n/pages/docs.ts`;
 export const LLAMA_KT_REPO = `${GITHUB_ORG}/llama.kt`;
 export const CONTACT_EMAIL = "contact@tensai.page";

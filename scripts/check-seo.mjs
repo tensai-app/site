@@ -154,9 +154,9 @@ for (const file of walk(dist)) {
             for (const need of ["offers", "softwareVersion"]) if (!(need in app)) fail(where, `JSON-LD SoftwareApplication: missing ${need} (LAUNCHED)`);
             if (app.offers?.price !== "0" || !app.offers?.priceCurrency) fail(where, "JSON-LD offers needs price 0 and a currency");
             for (const bad of ["aggregateRating", "review"]) if (bad in app) fail(where, `JSON-LD must not carry invented ${bad}`);
+            if (!app.downloadUrl) fail(where, "JSON-LD SoftwareApplication: missing downloadUrl (LAUNCHED)");
           } else {
             for (const bad of forbidden) if (bad in app) fail(where, `JSON-LD must not carry ${bad} before launch (LAUNCHED=false)`);
-            if (!/1\.0/.test(app.description ?? "")) fail(where, "JSON-LD description must say the first public release is 1.0");
           }
         }
       } else if (byType("SoftwareApplication").length) fail(where, "JSON-LD SoftwareApplication outside home and download");

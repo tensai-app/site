@@ -30,7 +30,7 @@ export const fr: Dict = {
     motto: "Made to run free",
   },
   banner: {
-    text: "tensai n'est pas encore public. La première version publique sera la 1.0.",
+    text: "tensai est en pré-1.0 : attends-toi à des changements.",
     link: "Suivre le changelog",
   },
   notFound: {

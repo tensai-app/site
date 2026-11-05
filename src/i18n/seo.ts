@@ -6,7 +6,7 @@ import { privacy } from "./pages/privacy";
 import { docs, routes, slugs } from "./pages/docs";
 import { legal } from "./pages/legal";
 import { useT, localizePath, type Locale } from "./index";
-import { APACHE_LICENSE, APP_VERSION, GITHUB_ORG, LAUNCHED, LLAMA_KT_REPO, SITE_URL } from "./site";
+import { APACHE_LICENSE, APP_VERSION, GITHUB_ORG, LAUNCHED, LLAMA_KT_REPO, SITE_URL, TENSAI_RELEASES } from "./site";
 
 /** Open Graph image size, fixed by the endpoint in src/pages/og. */
 export const OG_SIZE = { width: 1200, height: 630 } as const;
@@ -123,7 +123,6 @@ export function jsonLd(page: Page, locale: Locale, description: string) {
       "@id": `${SITE_URL}/#app`,
       name: "tensai",
       url: absolute("/"),
-      // The page descriptions say the first public release is 1.0: that is the availability statement.
       description,
       operatingSystem: "Android 10+",
       applicationCategory: "MobileApplication",
@@ -133,6 +132,7 @@ export function jsonLd(page: Page, locale: Locale, description: string) {
       publisher: { "@id": ORG_ID },
       ...(LAUNCHED ? {
         softwareVersion: APP_VERSION,
+        downloadUrl: `${TENSAI_RELEASES}/latest`,
         offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
       } : {}),
     });

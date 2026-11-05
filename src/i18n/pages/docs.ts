@@ -97,14 +97,14 @@ const en: DocsLocale = {
   articles: {
     install: {
       title: "Install",
-      description: "Install tensai on Android 10 or newer from the signed APK, and what the first launch asks. Not public yet: the first public release is 1.0.",
-      lead: "tensai is not public yet. This is how installing will work at 1.0, and what the first launch does.",
+      description: "Install tensai on Android 10 or newer from the signed APK, and what the first launch asks. Pre-1.0, so expect changes between versions.",
+      lead: "How to install tensai, and what the first launch does. It is pre-1.0: expect changes.",
       sections: [
         {
           id: "before",
           h: "Before you start",
           blocks: [
-            { t: "note", title: "Not public yet", x: "The first public release is 1.0. Follow the [changelog](/changelog/) to know when it lands. The engine, llama.kt, is already on GitHub." },
+            { t: "note", title: "Pre-1.0", x: "tensai is not at 1.0 yet: features and screens still change between versions. Follow the [changelog](/changelog/)." },
             { t: "ul", items: ["Android 10 or newer.", "A 64-bit ARM phone (`arm64-v8a`).", "Storage for the models you choose. The ones tensai recommends are files from about 0.5 GB to 2.5 GB each."] },
           ],
         },
@@ -112,7 +112,7 @@ const en: DocsLocale = {
           id: "install",
           h: "Install the APK",
           blocks: [
-            { t: "ol", items: ["Get the APK from the [download page](/download/) or from the GitHub releases. At 1.0 it will be on both.", "Android asks once to allow installs from your browser or file manager. Allow it.", "Open tensai."] },
+            { t: "ol", items: ["Get the APK from the [download page](/download/) or from the GitHub releases. Both have the same file.", "Android asks once to allow installs from your browser or file manager. Allow it.", "Open tensai."] },
             { t: "p", x: "The APK is signed. The download page gives its SHA-256 and the signing certificate fingerprint, with the commands to check them." },
           ],
         },
@@ -475,7 +475,7 @@ const en: DocsLocale = {
                 },
                 {
                   q: "Why not the Play Store?",
-                  a: "Not for now. At 1.0, tensai comes as a signed APK from [this site](/download/) and GitHub releases, with F-Droid later. The official stores may follow one day, with no date.",
+                  a: "Not for now. tensai comes as a signed APK from [this site](/download/) and GitHub releases, with F-Droid later. The official stores may follow one day, with no date.",
                 },
               ],
             },
@@ -505,14 +505,14 @@ const fr: DocsLocale = {
   articles: {
     install: {
       title: "Installer",
-      description: "Installer tensai sur Android 10 ou plus depuis l'APK signé, et ce que fait le premier lancement. Pas encore public : première version publique prévue en 1.0.",
-      lead: "tensai n'est pas encore public. Voici comment l'installation se passera à la 1.0, et ce que fait le premier lancement.",
+      description: "Installer tensai sur Android 10 ou plus depuis l'APK signé, et ce que fait le premier lancement. Pré-1.0 : attends-toi à des changements.",
+      lead: "Comment installer tensai, et ce que fait le premier lancement. Il est en pré-1.0 : attends-toi à des changements.",
       sections: [
         {
           id: "before",
           h: "Avant de commencer",
           blocks: [
-            { t: "note", title: "Pas encore public", x: "La première version publique sera la 1.0. Suis le [changelog](/changelog/) pour savoir quand elle sort. Le moteur, llama.kt, est déjà sur GitHub." },
+            { t: "note", title: "Pré-1.0", x: "tensai n'est pas encore à la 1.0 : fonctions et écrans bougent encore d'une version à l'autre. Suis le [changelog](/changelog/)." },
             { t: "ul", items: ["Android 10 ou plus.", "Un téléphone ARM 64 bits (`arm64-v8a`).", "De la place pour les modèles que tu choisis. Ceux que tensai recommande sont des fichiers d'environ 0,5 Go à 2,5 Go chacun."] },
           ],
         },
@@ -520,7 +520,7 @@ const fr: DocsLocale = {
           id: "install",
           h: "Installer l'APK",
           blocks: [
-            { t: "ol", items: ["Récupère l'APK sur la [page de téléchargement](/download/) ou sur les releases GitHub. À la 1.0 il sera aux deux endroits.", "Android demande une fois d'autoriser les installations depuis ton navigateur ou ton gestionnaire de fichiers. Autorise.", "Ouvre tensai."] },
+            { t: "ol", items: ["Récupère l'APK sur la [page de téléchargement](/download/) ou sur les releases GitHub. C'est le même fichier.", "Android demande une fois d'autoriser les installations depuis ton navigateur ou ton gestionnaire de fichiers. Autorise.", "Ouvre tensai."] },
             { t: "p", x: "L'APK est signé. La page de téléchargement donne son SHA-256 et l'empreinte du certificat de signature, avec les commandes pour les vérifier." },
           ],
         },
@@ -883,7 +883,7 @@ const fr: DocsLocale = {
                 },
                 {
                   q: "Pourquoi pas le Play Store ?",
-                  a: "Pas pour l'instant. À la 1.0, tensai arrive en APK signé depuis [ce site](/download/) et les releases GitHub, avec F-Droid plus tard. Les stores officiels pourront suivre un jour, sans date.",
+                  a: "Pas pour l'instant. tensai arrive en APK signé depuis [ce site](/download/) et les releases GitHub, avec F-Droid plus tard. Les stores officiels pourront suivre un jour, sans date.",
                 },
               ],
             },

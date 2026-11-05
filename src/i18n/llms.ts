@@ -111,7 +111,7 @@ const pageDescription = (page: Page, locale: Locale) =>
   page.kind === "docs" ? docsArticle(page, locale).description : (dicts[page.kind] as Record<Locale, { description: string }>)[locale].description;
 
 const SUMMARY =
-  `tensai is an open-source Android app (Apache 2.0) that runs GGUF language models on the phone with llama.cpp (CPU, Vulkan). It offers chat with reasoning and an agent with on-phone tools and phone actions such as setting a timer or drafting a message, which open the right app and ask before sending. Anything that sends or deletes asks for confirmation, and Internet tools are off by default. Not public yet: the first public release is 1.0 (current version ${releases[0]!.version}, Android 10+, arm64, free). The engine, llama.kt, is already public.`;
+  `tensai is an open-source Android app (Apache 2.0) that runs GGUF language models on the phone with llama.cpp (CPU, Vulkan). It offers chat with reasoning and an agent with on-phone tools and phone actions such as setting a timer or drafting a message, which open the right app and ask before sending. Anything that sends or deletes asks for confirmation, and Internet tools are off by default. Pre-1.0, expect changes (current version ${releases[0]!.version}, Android 10+, arm64, free). The app and the engine, llama.kt, are on GitHub.`;
 
 /** llmstxt.org format: H1, blockquote summary, sections of links. English first, French as optional. */
 export function llmsTxt(): string {

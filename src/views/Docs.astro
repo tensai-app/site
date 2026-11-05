@@ -11,7 +11,7 @@ import { llamakt } from "../i18n/pages/llamakt";
 import { privacy } from "../i18n/pages/privacy";
 import { docsFit } from "../data/fit";
 import { measuredRows } from "../data/measured";
-import { DOCS_EDIT_LINK, DOCS_SOURCE, LAUNCHED } from "../i18n/site";
+import { DOCS_EDIT_LINK, DOCS_SOURCE } from "../i18n/site";
 import { localizePath, type Locale } from "../i18n";
 
 interface Props {
@@ -57,13 +57,9 @@ const parts = (b: Extract<Block, { t: "code" }>) => (b.accent ? b.text.split(b.a
 ---
 
 <BaseLayout title={`${a.title} · tensai`} description={a.description}>
-  {
-    !LAUNCHED && (
-      <div class="banner-row">
-        <PrereleaseBanner locale={locale} />
-      </div>
-    )
-  }
+  <div class="banner-row">
+    <PrereleaseBanner locale={locale} />
+  </div>
   <div class="menu-bar">
     <details class="menu-m">
       <summary>

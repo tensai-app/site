@@ -28,7 +28,7 @@ export const en = {
     motto: "Made to run free",
   },
   banner: {
-    text: "tensai is not public yet. The first public release is 1.0.",
+    text: "tensai is pre-1.0: expect changes.",
     link: "Follow the changelog",
   },
   notFound: {

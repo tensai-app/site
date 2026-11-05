@@ -27,10 +27,10 @@ const c = home[locale];
         <p class="sub">{c.hero.sub}</p>
         <div class="actions">
           <div class="cta">
-            <button class="btn btn-filled btn-lg" type="button" disabled aria-describedby="dl-note">
+            <a class="btn btn-filled btn-lg" href={localizePath("/download/", locale)} aria-describedby="dl-note">
               <Icon name="download" size={19} />
               {c.hero.cta}
-            </button>
+            </a>
             <p class="note" id="dl-note">
               <Icon name="clock" size={14} />
               <span>{c.hero.ctaNote}</span>

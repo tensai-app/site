@@ -1,15 +1,15 @@
 const en = {
   title: "Download · tensai",
-  description: "tensai is not public yet: the first public release is 1.0. Requirements: Android 10 or newer, 64-bit ARM, storage for models. Free, Apache 2.0.",
+  description: "Download the signed tensai APK. Pre-1.0, expect changes. Needs Android 10 or newer, 64-bit ARM, storage for models. Free, Apache 2.0.",
   heading: "Download",
   notice: {
-    text: "tensai is not public yet. The first public release is 1.0.",
+    text: "tensai is pre-1.0: expect changes.",
     changelog: "Follow the changelog",
-    engine: "is already on GitHub",
+    engine: "is on GitHub",
   },
   release: {
     label: "Release",
-    meta: "Android 10+ · arm64-v8a · signed release",
+    meta: "Android 10+ · arm64-v8a · signed release · pre-1.0, expect changes",
     button: "Download APK",
     verify: "Verify",
     sha: "APK SHA-256",
@@ -66,16 +66,16 @@ const en = {
 
 const fr: typeof en = {
   title: "Télécharger · tensai",
-  description: "tensai n'est pas encore public : première version publique prévue en 1.0. Prérequis : Android 10 ou plus, ARM 64 bits, espace pour les modèles. Apache 2.0.",
+  description: "Télécharge l'APK signé de tensai. Pré-1.0, des changements à prévoir. Android 10 ou plus, ARM 64 bits, espace pour les modèles. Apache 2.0.",
   heading: "Télécharger",
   notice: {
-    text: "tensai n'est pas encore public. La première version publique sera la 1.0.",
+    text: "tensai est en pré-1.0 : attends-toi à des changements.",
     changelog: "Suivre le changelog",
-    engine: "est déjà sur GitHub",
+    engine: "est sur GitHub",
   },
   release: {
     label: "Version",
-    meta: "Android 10+ · arm64-v8a · version signée",
+    meta: "Android 10+ · arm64-v8a · version signée · pré-1.0, des changements à prévoir",
     button: "Télécharger l'APK",
     verify: "Vérifier",
     sha: "SHA-256 de l'APK",

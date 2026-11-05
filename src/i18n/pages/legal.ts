@@ -15,9 +15,9 @@ const en = {
   licence: {
     heading: "Licence",
     before:
-      "tensai is open-source software under the Apache License 2.0. Its source code is published with version 1.0. The engine,",
+      "tensai is open-source software under the Apache License 2.0. Its source code is published on GitHub, like this site's. The engine,",
     link: "llama.kt",
-    after: ", is already public under the same licence. Model files are published by third parties under their own licences.",
+    after: ", is published under the same licence. Model files are published by third parties under their own licences.",
   },
 };
 
@@ -38,9 +38,9 @@ const fr: typeof en = {
   licence: {
     heading: "Licence",
     before:
-      "tensai est un logiciel open source sous licence Apache 2.0. Son code source est publié avec la version 1.0. Le moteur,",
+      "tensai est un logiciel open source sous licence Apache 2.0. Son code source est publié sur GitHub, comme celui de ce site. Le moteur,",
     link: "llama.kt",
-    after: ", est déjà public sous la même licence. Les fichiers de modèles sont publiés par des tiers sous leurs propres licences.",
+    after: ", est publié sous la même licence. Les fichiers de modèles sont publiés par des tiers sous leurs propres licences.",
   },
 };
 

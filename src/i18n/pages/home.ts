@@ -1,15 +1,15 @@
 const en = {
   title: "tensai · AI models on your Android phone",
   description:
-    "tensai runs open models on your Android phone: chat, reasoning and an agent that can act. No account, no cloud. Open source, public release with 1.0.",
+    "tensai runs open models on your Android phone: chat, reasoning and an agent that can act. No account, no cloud. Open source, pre-1.0.",
   hero: {
     markLabel: "天, the tensai mark",
     heading: "Your phone, your AI.",
     sub: "tensai runs open models directly on your Android phone. Chat, reasoning and an agent that can act, with nothing leaving the device unless you ask for it.",
-    cta: "Download, soon",
-    ctaNote: "Public release with 1.0",
+    cta: "Download",
+    ctaNote: "Pre-1.0, expect changes",
     how: "How it works",
-    engine: "llama.kt is already public",
+    engine: "llama.kt is open too",
     shotAlt: "A tensai chat: a short reply to a question about phone battery, with its speed stats under the reply",
   },
   pillars: [
@@ -74,10 +74,10 @@ const en = {
   },
   next: {
     heading: "Coming next",
-    items: ["MCP and skills", "1.0: public release", "API server on your network"],
+    items: ["MCP and skills", "1.0: stable release", "API server on your network"],
   },
   band: {
-    text: "Apache 2.0. The engine, llama.kt, is already public.",
+    text: "Apache 2.0. The app and the engine, llama.kt, are on GitHub.",
     github: "llama.kt on GitHub",
     docs: "Read the docs",
   },
@@ -86,15 +86,15 @@ const en = {
 const fr: typeof en = {
   title: "tensai · Des modèles d'IA sur le téléphone Android",
   description:
-    "tensai fait tourner des modèles ouverts sur Android : chat, raisonnement et agent capable d'agir. Sans compte ni cloud. Open source, publique avec la 1.0.",
+    "tensai fait tourner des modèles ouverts sur Android : chat, raisonnement et agent capable d'agir. Sans compte ni cloud. Open source, pré-1.0.",
   hero: {
     markLabel: "天, la marque tensai",
     heading: "Ton téléphone, ton IA.",
     sub: "tensai fait tourner des modèles ouverts directement sur le téléphone Android. Chat, raisonnement et un agent capable d'agir, sans que rien ne quitte l'appareil sauf demande explicite.",
-    cta: "Télécharger, bientôt",
-    ctaNote: "Version publique avec la 1.0",
+    cta: "Télécharger",
+    ctaNote: "Pré-1.0, des changements à prévoir",
     how: "Comment ça marche",
-    engine: "llama.kt est déjà public",
+    engine: "llama.kt est open source aussi",
     shotAlt: "Un chat tensai : une réponse courte à une question sur la batterie du téléphone, avec ses statistiques de vitesse sous la réponse",
   },
   pillars: [
@@ -159,10 +159,10 @@ const fr: typeof en = {
   },
   next: {
     heading: "La suite",
-    items: ["MCP et skills", "1.0 : version publique", "Serveur d'API sur le réseau local"],
+    items: ["MCP et skills", "1.0 : version stable", "Serveur d'API sur le réseau local"],
   },
   band: {
-    text: "Apache 2.0. Le moteur, llama.kt, est déjà public.",
+    text: "Apache 2.0. L'app et le moteur, llama.kt, sont sur GitHub.",
     github: "llama.kt sur GitHub",
     docs: "Lire la doc",
   },

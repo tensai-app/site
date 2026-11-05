@@ -1,11 +1,14 @@
-// Copies the releases of the app's changelog.json into src/data/changelog.json (the app repo is private, CI cannot read it).
+// Copies the releases of the app's changelog.json into src/data/changelog.json (the app repo is public).
 // Usage: pnpm sync:changelog [path/to/changelog.json]
+// Source: the argument, else the sibling checkout tensai/ when it exists, else the file on the app repo's main branch.
 // Drops `_comment`, sorts by semver (newest first), fails on a missing field or on an internal ticket id in the text.
-import { readFileSync, writeFileSync, renameSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const root = new URL("..", import.meta.url);
-const source = process.argv[2] ?? fileURLToPath(new URL("../tensai/app/src/main/assets/changelog.json", root));
+const REMOTE = "https://raw.githubusercontent.com/tensai-app/tensai/main/app/src/main/assets/changelog.json";
+const local = process.argv[2] ?? fileURLToPath(new URL("../tensai/app/src/main/assets/changelog.json", root));
+const source = process.argv[2] || existsSync(local) ? local : REMOTE;
 const target = fileURLToPath(new URL("src/data/changelog.json", root));
 // "TEN-193", "ten 193", "LKT-3": a ticket id with a hyphen or a space.
 const TICKET = /\b(?:TEN|LKT|OPS|WEB)[- ]\d+\b/i;
@@ -27,7 +30,15 @@ const isDate = (v) => {
   return !Number.isNaN(t) && new Date(t).toISOString().slice(0, 10) === v;
 };
 
-const raw = JSON.parse(readFileSync(source, "utf8"));
+let raw;
+if (source === REMOTE) {
+  const res = await fetch(REMOTE);
+  if (!res.ok) {
+    console.error(`${REMOTE}: HTTP ${res.status}`);
+    process.exit(1);
+  }
+  raw = await res.json();
+} else raw = JSON.parse(readFileSync(source, "utf8"));
 if (!Array.isArray(raw.releases) || !raw.releases.length) {
   console.error(`${source}: no "releases" array`);
   process.exit(1);
