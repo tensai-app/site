@@ -44,6 +44,8 @@ const en = {
     ram: "Phone RAM",
     labels: ["Runs well", "Tight fit", "Won't fit"],
     rule: "Rule of thumb, as computed by the app: a model fits if its file plus about 0.7 GB (1 GB for a 4B or larger) stays under your phone's RAM minus roughly 2 to 2.7 GB (the app keeps 1.5 GB for Android and sees a bit less RAM than advertised). Models of 3.5B parameters and up are marked Tight fit even when they fit in memory, because they generate slowly (about 2 tokens/s or less on the phone we measured).",
+    help: "Your phone is not in the table, or the rating looks off?",
+    helpLabel: "Report how tensai runs on it",
     caveat: "The table describes a phone class. The app checks your actual phone and the model before you download it. 4 GB phones are at the limit. A model you import yourself is checked on your phone when you load it.",
   },
   install: {
@@ -110,6 +112,8 @@ const fr: typeof en = {
     ram: "RAM du téléphone",
     labels: ["Fonctionne bien", "Juste", "Ne tiendra pas"],
     rule: "Règle empirique, telle que calculée par l'app : un modèle passe si son fichier plus environ 0,7 Go (1 Go pour un 4B ou plus) reste sous la RAM du téléphone moins environ 2 à 2,7 Go (l'app garde 1,5 Go pour Android et voit un peu moins de RAM que l'annonce). Les modèles de 3,5 milliards de paramètres et plus sont notés Juste même lorsqu'ils tiennent en mémoire, car la génération y est lente (environ 2 tokens/s ou moins sur le téléphone mesuré).",
+    help: "Ton téléphone n'est pas dans le tableau, ou la note te semble fausse ?",
+    helpLabel: "Rapporter comment tensai y tourne",
     caveat: "Le tableau décrit une classe de téléphone. L'app vérifie le téléphone réel et le modèle avant le téléchargement. Les téléphones de 4 Go sont à la limite. Un modèle importé soi-même est vérifié sur le téléphone au moment de le charger.",
   },
   install: {

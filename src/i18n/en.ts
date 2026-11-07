@@ -22,6 +22,7 @@ export const en = {
   },
   footer: {
     org: "GitHub",
+    contribute: "Contribute",
     privacy: "Privacy",
     legal: "Legal notice",
     license: "Apache 2.0",

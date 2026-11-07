@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { contribute } from "../i18n/pages/contribute";
+import { GITHUB_ORG, TENSAI_RELEASES } from "../i18n/site";
+import { RELEASE } from "../data/release";
+import type { Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const c = contribute[locale];
+const issue = (template: string) => `${GITHUB_ORG}/tensai/issues/new?template=${template}.yml`;
+const stepLinks = [TENSAI_RELEASES, undefined, undefined, issue("device_report")];
+const repoNames = ["tensai", "llama.kt", "site"];
+---
+
+<BaseLayout title={c.title} description={c.description}>
+  <div class="container page">
+    <article class="prose">
+      <h1>{c.heading}</h1>
+      <p class="lead">{c.lead}</p>
+
+      <h2 id="test">{c.test.heading}</h2>
+      <p>{c.test.intro}</p>
+      <p class="pending">{c.test.pendingNote.replace("{version}", RELEASE.version)}</p>
+      <ol>
+        {
+          c.test.steps.map((s, i) => (
+            <li>
+              {s.text}
+              {stepLinks[i] && (
+                <>
+                  {" "}
+                  <a class="text-link" href={stepLinks[i]}>
+                    {s.linkLabel}
+                    <Icon name="arrow_up_right" size={16} />
+                  </a>
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+      <p>{c.test.why}</p>
+
+      <h2 id="model">{c.model.heading}</h2>
+      <p>
+        {c.model.text}{" "}
+        <a class="text-link" href={issue("model_request")}>
+          {c.model.linkLabel}
+          <Icon name="arrow_up_right" size={16} />
+        </a>
+      </p>
+
+      <h2 id="code">{c.code.heading}</h2>
+      <p>{c.code.intro}</p>
+      <dl>
+        {
+          c.code.repos.map((r, i) => (
+            <>
+              <dt>{r.term}</dt>
+              <dd>
+                {r.text}{" "}
+                <a class="text-link" href={`${GITHUB_ORG}/${repoNames[i]}/blob/main/CONTRIBUTING.md`}>
+                  {c.code.linkLabel}
+                  <Icon name="arrow_up_right" size={16} />
+                </a>
+              </dd>
+            </>
+          ))
+        }
+      </dl>
+
+      <h2 id="data">{c.data.heading}</h2>
+      {c.data.paragraphs.map((p) => <p>{p}</p>)}
+      <p>{c.data.intro}</p>
+      <ul>{c.data.items.map((i) => <li>{i}</li>)}</ul>
+      <p>{c.data.outro}</p>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .page {
+    padding-block: 3rem 5rem;
+  }
+
+  .prose {
+    --dl-col: 190px;
+  }
+
+  @media (min-width: 40rem) {
+    .page {
+      padding-block: 96px 128px;
+    }
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .lead {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+
+  .pending {
+    padding-left: 1rem;
+    border-left: 3px solid var(--primary);
+  }
+</style>

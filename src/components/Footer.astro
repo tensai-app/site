@@ -13,6 +13,7 @@ const t = useT(locale);
   <div class="container inner">
     <ul>
       <li><a href="https://github.com/tensai-app">{t.footer.org}</a></li>
+      <li><a href={localizePath("/contribute/", locale)}>{t.footer.contribute}</a></li>
       <li><a href={localizePath("/privacy/", locale)}>{t.footer.privacy}</a></li>
       <li><a href={localizePath("/legal/", locale)}>{t.footer.legal}</a></li>
       <li><a href="https://www.apache.org/licenses/LICENSE-2.0">{t.footer.license}</a></li>

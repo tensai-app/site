@@ -5,13 +5,14 @@ import { changelog } from "./pages/changelog";
 import { docs, routes, slugs, type Article } from "./pages/docs";
 import { docsFit } from "../data/fit";
 import { privacy } from "./pages/privacy";
+import { contribute } from "./pages/contribute";
 import { legal } from "./pages/legal";
 import { releases } from "../data/changelog";
 import { measuredRows } from "../data/measured";
 import { localizePath, type Locale } from "./index";
 import { absolute, pages, type Page } from "./seo";
 
-const dicts = { home, download, changelog, "llama-kt": llamakt, privacy, legal };
+const dicts = { home, download, changelog, "llama-kt": llamakt, contribute, privacy, legal };
 
 /** UI strings that are not content: labels, alt texts, ids, buttons. */
 const SKIP = /(^|[a-z])(Label|Alt|Note)$|^(label|alt|key|icon|tabs|langs|columns|status|ref|fit|fitLabels|updated|cta|how|engine|atom|latest|note|changelog|github|readme|docs|faster|legend|setup|more|selection|back)$/;

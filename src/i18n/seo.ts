@@ -3,6 +3,7 @@ import { download } from "./pages/download";
 import { llamakt } from "./pages/llamakt";
 import { changelog } from "./pages/changelog";
 import { privacy } from "./pages/privacy";
+import { contribute } from "./pages/contribute";
 import { docs, routes, slugs } from "./pages/docs";
 import { legal } from "./pages/legal";
 import { useT, localizePath, type Locale } from "./index";
@@ -11,7 +12,7 @@ import { APACHE_LICENSE, APP_VERSION, GITHUB_ORG, LAUNCHED, LLAMA_KT_REPO, SITE_
 /** Open Graph image size, fixed by the endpoint in src/pages/og. */
 export const OG_SIZE = { width: 1200, height: 630 } as const;
 
-type Kind = "home" | "download" | "docs" | "changelog" | "llama-kt" | "privacy" | "legal";
+type Kind = "home" | "download" | "docs" | "changelog" | "llama-kt" | "contribute" | "privacy" | "legal";
 
 export interface Page {
   kind: Kind;
@@ -63,6 +64,13 @@ export const pages: Page[] = [
     slug: "llama-kt",
     og: both((l) => ({ label: "llama.kt", title: llamakt[l].hero.lead })),
     name: both(() => "llama.kt"),
+  },
+  {
+    kind: "contribute",
+    path: "/contribute/",
+    slug: "contribute",
+    og: both((l) => ({ title: contribute[l].heading })),
+    name: both((l) => contribute[l].heading),
   },
   {
     kind: "privacy",

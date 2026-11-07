@@ -24,6 +24,7 @@ export const fr: Dict = {
   },
   footer: {
     org: "GitHub",
+    contribute: "Contribuer",
     privacy: "Confidentialité",
     legal: "Mentions légales",
     license: "Apache 2.0",

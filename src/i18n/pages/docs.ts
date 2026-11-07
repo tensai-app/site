@@ -411,7 +411,7 @@ const en: DocsLocale = {
           id: "measured",
           h: "Measured on a phone",
           blocks: [
-            { t: "p", x: "Your phone will differ. These are numbers, not promises." },
+            { t: "p", x: "Your phone will differ. These are numbers, not promises. A report from yours is how they widen: see [Contribute](/contribute/)." },
             { t: "numbers" },
             { t: "p", x: "The ~5.5 tok/s above is measured end to end in the app. This table is the engine's own benchmark, the one on the [llama.kt page](/llama-kt/): Qwen3-1.7B reads 5.9 tok/s on CPU there, so the two differ." },
             { t: "measured" },
@@ -819,7 +819,7 @@ const fr: DocsLocale = {
           id: "measured",
           h: "Mesuré sur un téléphone",
           blocks: [
-            { t: "p", x: "Ton téléphone sera différent. Ce sont des chiffres, pas des promesses." },
+            { t: "p", x: "Ton téléphone sera différent. Ce sont des chiffres, pas des promesses. Un rapport du tien les élargit : voir [Contribuer](/contribute/)." },
             { t: "numbers" },
             { t: "p", x: "Les ~5,5 tok/s ci-dessus sont mesurés de bout en bout dans l'app. Ce tableau est le benchmark du moteur seul, celui de la [page llama.kt](/llama-kt/) : Qwen3-1.7B y fait 5,9 tok/s sur CPU, les deux diffèrent donc." },
             { t: "measured" },
