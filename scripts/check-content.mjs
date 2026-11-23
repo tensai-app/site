@@ -61,6 +61,8 @@ const ALLOWED = [
   // JSON-LD namespace, an identifier that is never fetched.
   /^https:\/\/schema\.org(?=[/"'?#)\s<]|$)/,
   /^https:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0(?=[/"'?#)\s<]|$)/,
+  // Self-hosted Umami, the only third-party script (see the CSP in public/_headers).
+  /^https:\/\/analytics\.minist\.re\/script\.js$/,
   // Upstream pull requests cited on the llama.kt page, plain links.
   /^https:\/\/github\.com\/ggml-org\/llama\.cpp\/pull\/\d+(?=[/"'?#)\s<]|$)/,
 ];

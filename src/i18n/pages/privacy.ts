@@ -85,7 +85,7 @@ const en = {
   website: {
     heading: "This website",
     paragraphs: [
-      "tensai.page sets no cookies and runs no analytics or tracking scripts. Your theme choice is kept in your browser's local storage and never leaves it.",
+      "tensai.page sets no cookies. It counts visits with Umami, a self-hosted analytics tool: no cookies, no cross-site tracking, only aggregate data (pages viewed, referrer, country, browser). If your browser sends Do Not Track, nothing is counted. Your theme choice is kept in your browser's local storage and never leaves it.",
       "The site is hosted by Cloudflare, which processes visitors' IP addresses to deliver the pages and protect the site from abuse.",
     ],
   },
@@ -182,7 +182,7 @@ const fr: typeof en = {
   website: {
     heading: "Ce site",
     paragraphs: [
-      "tensai.page ne dépose aucun cookie et n'exécute aucun script d'analyse ou de suivi. Le choix de thème est conservé dans le stockage local du navigateur et n'en sort pas.",
+      "tensai.page ne dépose aucun cookie. Le site compte les visites avec Umami, un outil d'analyse auto-hébergé : pas de cookie, pas de suivi inter-sites, uniquement des données agrégées (pages vues, origine de la visite, pays, navigateur). Si ton navigateur envoie Do Not Track, rien n'est compté. Le choix de thème est conservé dans le stockage local du navigateur et n'en sort pas.",
       "Le site est hébergé par Cloudflare, qui traite les adresses IP des visiteurs pour délivrer les pages et protéger le site des abus.",
     ],
   },
